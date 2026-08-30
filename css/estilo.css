@@ -1,0 +1,621 @@
+/* ═══════════════════════════════════════════════════════════
+   Seleme Centenaria — hoja única
+   Tokens: material/SISTEMA-DISENO.md (colores sampleados del
+   packaging real, contrastes medidos con assets/contraste.py)
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* superficies oscuras */
+  --selva:        #03200F;
+  --verde-hondo:  #06381C;
+  --verde:        #0D6631;
+  --verde-vivo:   #1FA152;
+  /* superficies claras */
+  --papel:        #F7F5EC;
+  --blanco:       #FFFFFF;
+  --gris-pack:    #E1DCDA;
+  /* tinta */
+  --crema:        #F1EFE2;
+  --tinta:        #062411;
+  --tinta-suave:  #3A5843;
+  /* acción */
+  --oro:          #F8DD00;
+  --oro-hondo:    #806600;
+  /* variedad Azul con Palo */
+  --azul:         #0B2F63;
+  --celeste:      #009ACA;
+  --celeste-claro:#5CC8EA;
+
+  /* escala fluida */
+  --display-1: clamp(2.75rem, 7.2vw, 7rem);
+  --display-2: clamp(2rem, 4.8vw, 4.25rem);
+  --display-3: clamp(1.5rem, 2.9vw, 2.5rem);
+  --dato:      clamp(3.5rem, 13vw, 10rem);
+  --body-lg:   clamp(1.0625rem, 1.15vw, 1.25rem);
+  --etiqueta:  .75rem;
+
+  /* ritmo */
+  --seccion: clamp(5.5rem, 13vh, 11rem);
+  --ancho:   1400px;
+  --gotera:  clamp(1rem, 4vw, 2.5rem);
+  --radio-card: 14px;
+  --radio-chip: 999px;
+  --radio-foto: 4px;
+
+  --sombra: 0 18px 50px -20px rgba(3, 32, 15, .55);
+  --nav-h: 74px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--selva);
+  color: var(--crema);
+  font-family: Montserrat, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1rem;
+  line-height: 1.62;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+::selection { background: var(--oro); color: var(--tinta); }
+
+:focus-visible {
+  outline: 3px solid var(--oro);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.saltar {
+  position: absolute; left: -9999px; top: 0; z-index: 200;
+  background: var(--oro); color: var(--tinta);
+  padding: .8rem 1.2rem; font-weight: 700; text-decoration: none;
+}
+.saltar:focus { left: 0; }
+
+.contenedor { width: min(100% - var(--gotera) * 2, var(--ancho)); margin-inline: auto; }
+
+/* ── tipografía base ───────────────────────────────────── */
+
+.display-1, .display-2, .display-3, .dato,
+h1, h2, .ficha__nombre, .hito__marca, .paso__n, blockquote {
+  font-family: Fraunces, Georgia, "Times New Roman", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  margin: 0;
+}
+
+.display-2 { font-size: var(--display-2); line-height: .98; letter-spacing: -.015em; }
+.display-3 { font-size: var(--display-3); line-height: 1.05; }
+
+.volanta {
+  font-family: Montserrat, sans-serif;
+  font-size: var(--etiqueta);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .28em;
+  color: var(--oro);
+  margin: 0 0 1.4rem;
+  line-height: 1.2;
+}
+.volanta span { opacity: .6; }
+
+p { margin: 0 0 1.1em; }
+p:last-child { margin-bottom: 0; }
+
+a { color: inherit; }
+
+/* ── botones ───────────────────────────────────────────── */
+
+.boton {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 50px;
+  padding: .85rem 1.7rem;
+  border-radius: var(--radio-chip);
+  font-family: Montserrat, sans-serif;
+  font-size: .9375rem; font-weight: 700;
+  letter-spacing: .01em;
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: transform .25s cubic-bezier(.2,.7,.3,1), background-color .25s, color .25s, border-color .25s;
+  will-change: transform;
+}
+.boton:hover { transform: translateY(-2px); }
+.boton:active { transform: translateY(0); }
+
+.boton--oro { background: var(--oro); color: var(--tinta); }        /* 12,09:1 */
+.boton--oro:hover { background: #ffe94d; }
+
+.boton--linea { border-color: var(--crema); color: var(--crema); }  /* sobre oscuro */
+.boton--linea:hover { background: var(--crema); color: var(--tinta); }
+
+.boton--linea-osc { border-color: var(--verde-hondo); color: var(--verde-hondo); } /* sobre papel */
+.boton--linea-osc:hover { background: var(--verde-hondo); color: var(--crema); }
+
+/* ── reveals + respaldo ────────────────────────────────── */
+
+.js [data-reveal],
+.js [data-viaje],
+.js [data-paso] { opacity: 0; }
+.js [data-palabras] .pal,
+.js [data-lineas] .lin { opacity: 0; }
+
+/* si main.js no arrancó a los 2,2 s, o si el usuario pidió menos motion,
+   todo vuelve a ser visible. La página NUNCA queda en negro. */
+.reveal-forzado [data-reveal],
+.reveal-forzado [data-viaje],
+.reveal-forzado [data-paso],
+.reveal-forzado [data-palabras] .pal,
+.reveal-forzado [data-lineas] .lin,
+.sin-motion [data-reveal],
+.sin-motion [data-viaje],
+.sin-motion [data-paso],
+.sin-motion [data-palabras] .pal,
+.sin-motion [data-lineas] .lin {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+.lin-caja { display: block; overflow: hidden; }
+.lin { display: block; will-change: transform; }
+.pal { display: inline-block; will-change: transform; }
+
+/* ── nav ───────────────────────────────────────────────── */
+
+.nav {
+  position: fixed; inset: 0 0 auto 0; z-index: 100;
+  transition: background-color .35s ease, backdrop-filter .35s ease, box-shadow .35s ease;
+}
+.nav--solido {
+  background: rgba(3, 32, 15, .92);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 rgba(241, 239, 226, .12);
+}
+.nav__caja {
+  width: min(100% - var(--gotera) * 2, var(--ancho));
+  margin-inline: auto;
+  min-height: var(--nav-h);
+  display: flex; align-items: center; gap: clamp(1rem, 3vw, 2.5rem);
+}
+.nav__logo { flex: 0 0 auto; line-height: 0; }
+.nav__logo img { width: clamp(112px, 12vw, 148px); }
+.nav__links { display: flex; gap: clamp(1rem, 2vw, 2rem); margin-left: auto; }
+.nav__links a {
+  font-size: .8125rem; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; text-decoration: none; color: var(--crema);
+  padding: .4rem 0; position: relative;
+}
+.nav__links a::after {
+  content: ''; position: absolute; left: 0; right: 100%; bottom: 0;
+  height: 2px; background: var(--oro); transition: right .3s ease;
+}
+.nav__links a:hover::after { right: 0; }
+.nav__cta { min-height: 42px; padding: .5rem 1.25rem; font-size: .8125rem; }
+
+.nav__burger {
+  display: none; margin-left: auto;
+  width: 46px; height: 46px; padding: 0;
+  background: none; border: 0; cursor: pointer;
+  flex-direction: column; justify-content: center; gap: 6px; align-items: center;
+}
+.nav__burger span { display: block; width: 24px; height: 2px; background: var(--crema); transition: transform .3s, opacity .3s; }
+.nav__burger[aria-expanded="true"] span:first-child { transform: translateY(4px) rotate(45deg); }
+.nav__burger[aria-expanded="true"] span:last-child { transform: translateY(-4px) rotate(-45deg); }
+
+/* [hidden] tiene que ganar: display:flex le pisa el display:none del navegador
+   y el menú aparece abierto en escritorio tapando la página entera */
+[hidden] { display: none !important; }
+
+.nav__movil {
+  background: var(--selva);
+  border-top: 1px solid rgba(241, 239, 226, .14);
+  padding: 1.2rem var(--gotera) 2rem;
+  display: flex; flex-direction: column; gap: .35rem;
+  max-height: calc(100svh - var(--nav-h)); overflow-y: auto;
+}
+.nav__movil a {
+  text-decoration: none; color: var(--crema);
+  font-size: 1.0625rem; font-weight: 600; padding: .7rem 0;
+}
+.nav__movil .boton { margin-top: .8rem; align-self: flex-start; }
+
+@media (max-width: 980px) {
+  .nav__links, .nav__cta { display: none; }
+  .nav__burger { display: flex; }
+}
+/* en escritorio el menú móvil no existe, aunque quedara abierto al agrandar */
+@media (min-width: 981px) { .nav__movil { display: none !important; } }
+
+/* ── hero ──────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: calc(var(--nav-h) + 3rem) 0 clamp(3rem, 9vh, 6rem);
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero__foto { position: absolute; inset: -8% 0 -8%; z-index: -3; will-change: transform; }
+.hero__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+
+/* La gradación verde: la foto es de celular con cielo gris; el velo la
+   vuelve marca. El texto vive a la izquierda, así que ahí carga la
+   oscuridad; a la derecha se abre para que el paquete —que es el motivo
+   de la foto— se vea. Los números están medidos con tools/contraste-hero.cjs
+   sobre el frame compuesto, no estimados. */
+.hero__velo {
+  position: absolute; inset: 0; z-index: -2;
+  background:
+    linear-gradient(180deg, rgba(3,32,15,.86) 0%, rgba(3,32,15,.40) 34%, rgba(3,32,15,.74) 70%, var(--selva) 100%),
+    linear-gradient(96deg, rgba(3,32,15,.90) 0%, rgba(3,32,15,.34) 55%, rgba(6,56,28,.42) 100%);
+}
+@media (min-width: 1000px) {
+  .hero__velo {
+    background:
+      linear-gradient(180deg, rgba(3,32,15,.80) 0%, rgba(3,32,15,.20) 34%, rgba(3,32,15,.48) 72%, var(--selva) 100%),
+      linear-gradient(100deg, rgba(3,32,15,.94) 0%, rgba(3,32,15,.86) 34%, rgba(3,32,15,.34) 62%, rgba(3,32,15,.06) 88%);
+  }
+}
+.hero__nerv {
+  position: absolute; z-index: -1;
+  right: clamp(-6rem, -4vw, -2rem); top: 50%; transform: translateY(-50%);
+  width: clamp(300px, 42vw, 620px); height: 82%;
+  opacity: .16; pointer-events: none;
+}
+.hero__nerv svg { width: 100%; height: 100%; }
+
+.nerv path { fill: none; stroke: var(--oro); stroke-width: 1.4; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+
+.hero__texto { position: relative; }
+.hero__titulo {
+  font-size: var(--display-1);
+  line-height: .94;
+  letter-spacing: -.022em;
+  font-weight: 600;
+  max-width: 15ch;
+  margin: 0 0 1.6rem;
+  text-wrap: balance;
+}
+.hero__bajada {
+  font-size: var(--body-lg);
+  max-width: 46ch;
+  color: var(--crema);
+  margin-bottom: 2.2rem;
+}
+.hero__acciones { display: flex; flex-wrap: wrap; gap: .8rem; }
+
+.hero__cue {
+  position: absolute; left: 50%; bottom: 1.4rem; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .55rem;
+  text-decoration: none; color: var(--crema);
+  font-size: .6875rem; letter-spacing: .3em; text-transform: uppercase; font-weight: 600;
+}
+.hero__cue-linea { width: 1px; height: 44px; background: linear-gradient(var(--oro), transparent); }
+@media (max-width: 700px) { .hero__cue { display: none; } }
+
+/* ── manifiesto ────────────────────────────────────────── */
+
+.manifiesto { padding: var(--seccion) 0; background: var(--selva); }
+.manifiesto__caja { max-width: 1100px; }
+.manifiesto__titulo { max-width: 16ch; margin-bottom: 2.6rem; text-wrap: balance; }
+.manifiesto__cuerpo {
+  columns: 2; column-gap: clamp(2rem, 5vw, 4.5rem);
+  font-size: var(--body-lg);
+  max-width: 78ch;
+}
+.manifiesto__cuerpo p { break-inside: avoid; }
+@media (max-width: 780px) { .manifiesto__cuerpo { columns: 1; } }
+.manifiesto__remate {
+  margin-top: 3rem;
+  font-family: Fraunces, serif; font-style: italic; font-weight: 400;
+  font-size: var(--display-3);
+  color: var(--oro);
+  max-width: 20ch;
+}
+
+/* ── historia / 1918 ───────────────────────────────────── */
+
+.historia { padding: var(--seccion) 0; background: var(--verde-hondo); }
+.historia__grilla { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 6vw, 6rem); }
+@media (max-width: 900px) { .historia__grilla { grid-template-columns: 1fr; } }
+
+.historia__sticky { position: sticky; top: calc(var(--nav-h) + 3vh); }
+.dato {
+  font-size: var(--dato);
+  line-height: .82;
+  font-weight: 700;
+  color: var(--oro);
+  letter-spacing: -.03em;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.historia__pie {
+  font-family: Fraunces, serif; font-size: var(--display-3);
+  line-height: 1.05; margin-top: 1.2rem; max-width: 14ch;
+}
+.historia__intro { font-size: var(--body-lg); max-width: 56ch; margin-bottom: 3.5rem; }
+
+.hitos { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(1.6rem, 3vw, 2.6rem); }
+.hito {
+  display: grid; grid-template-columns: minmax(140px, 22%) 1fr;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-top: 1.6rem;
+  border-top: 1px solid rgba(241, 239, 226, .18);
+}
+@media (max-width: 560px) { .hito { grid-template-columns: 1fr; gap: .6rem; } }
+.hito__marca { font-size: clamp(1.75rem, 3.4vw, 2.75rem); line-height: 1; color: var(--oro); font-weight: 700; }
+.hito p { font-size: 1.0625rem; margin: 0; }
+
+/* ── origen ────────────────────────────────────────────── */
+
+.origen { background: var(--selva); }
+.origen__banda { position: relative; margin: 0; height: clamp(420px, 72vh, 760px); overflow: hidden; }
+.origen__foto { position: absolute; inset: -12% 0 -12%; will-change: transform; }
+.origen__foto img { width: 100%; height: 100%; object-fit: cover; }
+.origen__banda::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(3,32,15,.62) 0%, rgba(3,32,15,.18) 42%, rgba(3,32,15,.88) 86%, var(--selva) 100%);
+}
+/* el título invade la foto — no va debajo en una fila prolija */
+.origen__titulos {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: clamp(2rem, 6vh, 4.5rem); z-index: 2;
+}
+.origen__titulos h2 { max-width: 15ch; text-wrap: balance; }
+
+.origen__abajo { padding: clamp(3rem, 8vh, 5.5rem) 0 var(--seccion); }
+.origen__cuerpo { font-size: var(--body-lg); max-width: 60ch; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+.atributos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); }
+.atributos h3 { font-family: Montserrat, sans-serif; font-size: 1.0625rem; font-weight: 700; margin: 0 0 .5rem; color: var(--oro); }
+.atributos p { font-size: .9375rem; margin: 0; }
+.atributos li { padding-top: 1.1rem; border-top: 2px solid rgba(248, 221, 0, .35); }
+.origen__pie { margin-top: clamp(2rem, 4vw, 3rem); font-size: .875rem; color: var(--crema); opacity: .82; font-style: italic; }
+
+/* ── variedades (bloque claro) ─────────────────────────── */
+
+.variedades { background: var(--papel); color: var(--tinta); padding: var(--seccion) 0 clamp(3rem, 7vh, 5rem); }
+.variedades .volanta { color: var(--oro-hondo); }   /* el oro NUNCA como texto sobre claro */
+.variedades__cabeza h2 { max-width: 16ch; }
+.variedades__bajada { font-size: var(--body-lg); color: var(--tinta-suave); max-width: 52ch; margin-top: 1.4rem; }
+
+.riel { margin-top: clamp(2.5rem, 6vh, 4.5rem); }
+.riel__pista {
+  display: flex; gap: clamp(1rem, 2vw, 2rem);
+  padding-inline: var(--gotera);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.riel__pista::-webkit-scrollbar { display: none; }
+.riel { border-radius: var(--radio-card); transition: background-color .5s ease; }
+
+/* ── modo pinneado (escritorio) ──────────────────────────
+   La sección se fija en pantalla mientras el riel corre de
+   costado, así que tiene que medir EXACTO el alto del viewport:
+   si sobra, la mitad del riel queda abajo del pliegue y nunca
+   se ve. Cabecera arriba, riel ocupando lo que queda. */
+.variedades--pin {
+  height: 100svh;
+  padding: calc(var(--nav-h) + 1.5rem) 0 1.5rem;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.variedades--pin .variedades__cabeza {
+  flex: 0 0 auto;
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem); align-items: end;
+}
+.variedades--pin .variedades__cabeza .volanta { grid-column: 1 / -1; margin-bottom: .6rem; }
+.variedades--pin .variedades__bajada { margin-top: 0; }
+.variedades--pin .variedades__pie { display: none; }
+
+.variedades--pin .riel { flex: 1 1 auto; min-height: 0; display: flex; align-items: center; overflow: hidden; margin-top: clamp(1.5rem, 3vh, 2.5rem); }
+.variedades--pin .riel__pista { overflow: visible; padding-inline: clamp(2rem, 5vw, 4.5rem); height: 100%; align-items: center; }
+
+/* fichas horizontales: entran mejor en un alto acotado que las verticales */
+.variedades--pin .ficha {
+  flex-basis: min(64vw, 780px);
+  grid-template-rows: none; grid-template-columns: minmax(0, 40%) minmax(0, 60%);
+  max-height: 100%;
+}
+.variedades--pin .ficha__foto { padding: clamp(1rem, 2.5vw, 2rem); align-content: center; }
+.variedades--pin .ficha__foto img { width: auto; max-height: min(46vh, 400px); }
+.variedades--pin .ficha__txt { align-self: center; }
+
+.ficha {
+  scroll-snap-align: center;
+  flex: 0 0 min(88vw, 560px);
+  display: grid; grid-template-rows: auto 1fr;
+  background: var(--verde-hondo);
+  color: var(--crema);
+  border-radius: var(--radio-card);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+.ficha--azul { background: var(--azul); }
+/* luz detrás del envase: sin esto el paquete azul se hunde en la ficha azul,
+   y de paso es el gesto de las referencias (producto iluminado por atrás) */
+.ficha__foto {
+  display: grid; place-items: center;
+  padding: clamp(1.5rem, 4vw, 2.75rem) 0 0;
+  background: radial-gradient(58% 52% at 50% 44%, rgba(241, 239, 226, .17), rgba(241, 239, 226, 0) 72%);
+}
+.ficha--azul .ficha__foto { background: radial-gradient(58% 52% at 50% 44%, rgba(92, 200, 234, .30), rgba(92, 200, 234, 0) 72%); }
+.ficha__foto img { width: min(62%, 260px); border-radius: var(--radio-foto); box-shadow: 0 26px 60px -26px rgba(0,0,0,.7); }
+.ficha__txt { padding: clamp(1.5rem, 3.5vw, 2.5rem); }
+.ficha__sub { font-size: var(--etiqueta); text-transform: uppercase; letter-spacing: .22em; font-weight: 700; color: var(--oro); margin: 0 0 .7rem; }
+.ficha--azul .ficha__sub { color: var(--celeste-claro); }           /* 6,81:1 sobre azul */
+.ficha--esencial .ficha__sub { color: var(--gris-pack); }
+.ficha__nombre { font-size: var(--display-3); margin: 0 0 .9rem; }
+.ficha__txt > p { font-size: .9375rem; margin-bottom: 1.3rem; }
+
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; margin: 0; padding: 0; }
+.chips li {
+  font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: .42rem .9rem; border-radius: var(--radio-chip);
+  border: 1px solid rgba(241, 239, 226, .38);
+}
+.variedades__pie { margin-top: clamp(2.5rem, 5vh, 4rem); }
+
+/* ── perfil de sabor ───────────────────────────────────── */
+
+.perfil { background: var(--papel); color: var(--tinta); padding: clamp(3rem, 7vh, 5rem) 0 var(--seccion); }
+.perfil .volanta { color: var(--oro-hondo); }
+.perfil__bajada { font-size: var(--body-lg); color: var(--tinta-suave); max-width: 54ch; margin-top: 1.4rem; }
+.escala { margin-top: clamp(2.5rem, 6vh, 4rem); }
+.escala__svg { width: 100%; height: auto; overflow: visible; }
+.escala__eje { stroke: var(--verde); stroke-width: 2; stroke-linecap: round; }
+.escala__marca circle { fill: var(--verde); }
+.escala__nombre { fill: var(--tinta); font-family: Fraunces, serif; font-size: 25px; font-weight: 600; text-anchor: middle; }
+.escala__desc { fill: var(--tinta-suave); font-family: Montserrat, sans-serif; font-size: 14px; text-anchor: middle; }
+.escala__extremos {
+  display: flex; justify-content: space-between; margin-top: 1rem;
+  font-size: var(--etiqueta); font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--tinta-suave);
+}
+
+/* versión apilada para pantallas chicas */
+.escala__lista { display: none; }
+@media (max-width: 700px) {
+  .escala__svg, .escala__extremos { display: none; }
+  .escala__lista {
+    display: grid; gap: 1.4rem; list-style: none; margin: 0; padding: 0;
+  }
+  .escala__lista li { display: grid; gap: .25rem; padding-left: 1.2rem; border-left: 3px solid var(--verde); }
+  .escala__pos { font-size: var(--etiqueta); font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--oro-hondo); }
+  .escala__lista strong { font-family: Fraunces, serif; font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
+  .escala__lista li > span:last-child { font-size: .9375rem; color: var(--tinta-suave); }
+}
+
+/* ── por qué elegirla ──────────────────────────────────── */
+
+.porque { background: var(--verde-hondo); padding: var(--seccion) 0 0; }
+.porque h2 { max-width: 18ch; }
+.beneficios {
+  list-style: none; margin: clamp(2.5rem, 6vh, 4rem) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+.beneficios li { padding-top: 1.2rem; border-top: 1px solid rgba(241, 239, 226, .2); }
+.beneficios h3 { font-family: Montserrat, sans-serif; font-size: 1.0625rem; font-weight: 700; margin: 0 0 .45rem; }
+.beneficios p { font-size: .9375rem; margin: 0; opacity: .92; }
+
+/* el viaje */
+.viaje { padding: var(--seccion) 0 0; }
+.viaje__cita {
+  font-size: var(--display-2); line-height: 1.02; font-weight: 500;
+  font-style: italic; color: var(--oro);
+  max-width: 20ch; margin: 0 auto; text-wrap: balance;
+  border: 0; padding: 0;
+}
+.viaje__tira {
+  display: flex; gap: clamp(.75rem, 1.6vw, 1.4rem);
+  padding: clamp(2.5rem, 6vh, 4rem) var(--gotera) 0;
+  overflow-x: auto; scrollbar-width: none;
+}
+.viaje__tira::-webkit-scrollbar { display: none; }
+.viaje__tira figure { flex: 0 0 min(62vw, 320px); margin: 0; }
+.viaje__tira img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radio-foto); }
+.viaje__tira figcaption {
+  margin-top: .7rem; font-size: var(--etiqueta); font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--oro);
+}
+.viaje__remate {
+  font-family: Fraunces, serif; font-size: var(--display-3); font-weight: 600;
+  padding-top: clamp(2.5rem, 6vh, 4rem); padding-bottom: var(--seccion);
+  text-align: center;
+}
+
+/* ── ritual (bloque claro) ─────────────────────────────── */
+
+.ritual { background: var(--papel); color: var(--tinta); padding: var(--seccion) 0; }
+.ritual .volanta { color: var(--oro-hondo); }
+.pasos {
+  list-style: none; margin: clamp(2.5rem, 6vh, 4rem) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: clamp(1.6rem, 3vw, 2.6rem);
+}
+.paso { padding-top: 1.4rem; border-top: 2px solid var(--verde); }
+.paso__n { display: block; font-size: 2.5rem; line-height: 1; color: var(--verde); font-weight: 700; margin-bottom: .7rem; }
+.paso h3 { font-family: Montserrat, sans-serif; font-size: 1.0625rem; font-weight: 700; margin: 0 0 .5rem; }
+.paso p { font-size: .9375rem; color: var(--tinta-suave); margin: 0; }
+.ritual__tip {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  background: var(--verde-hondo); color: var(--crema);
+  padding: 1.4rem 1.7rem; border-radius: var(--radio-card);
+  font-size: 1rem; max-width: 72ch;
+}
+.ritual__tip strong { color: var(--oro); }
+
+/* ── dónde comprar ─────────────────────────────────────── */
+
+.donde { background: var(--papel); color: var(--tinta); padding: 0 0 var(--seccion); }
+.donde .volanta { color: var(--oro-hondo); }
+.donde__grilla { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+@media (max-width: 900px) { .donde__grilla { grid-template-columns: 1fr; } }
+.donde__bajada { font-size: var(--body-lg); color: var(--tinta-suave); max-width: 46ch; margin-top: 1.4rem; }
+.donde__acciones { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+.donde__nota { margin-top: 1.8rem; font-size: .9375rem; color: var(--tinta-suave); max-width: 46ch; }
+.donde__nota a { color: var(--verde); font-weight: 700; text-underline-offset: 3px; }
+.donde__foto { margin: 0; }
+.donde__foto img { border-radius: var(--radio-card); aspect-ratio: 4 / 5; object-fit: cover; box-shadow: var(--sombra); }
+
+/* ── distribuí ─────────────────────────────────────────── */
+
+.distribui { position: relative; background: var(--verde); padding: var(--seccion) 0; overflow: hidden; isolation: isolate; }
+.distribui__nerv { position: absolute; inset: 0; z-index: -1; opacity: .22; pointer-events: none; }
+.distribui__nerv svg { width: 100%; height: 100%; }
+.distribui__caja { max-width: 900px; }
+.distribui .volanta { color: var(--oro); }
+.distribui h2 { max-width: 14ch; }
+.distribui__cuerpo { font-size: var(--body-lg); max-width: 52ch; margin-top: 1.6rem; }
+
+.motivos { list-style: none; margin: clamp(2rem, 4vw, 3rem) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+.motivos li {
+  font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--oro); color: var(--tinta);
+  padding: .55rem 1.1rem; border-radius: var(--radio-chip);
+}
+.proceso { list-style: none; margin: clamp(2rem, 4vw, 3rem) 0 0; padding: 0; display: grid; gap: .9rem; max-width: 56ch; }
+.proceso li { display: flex; gap: 1rem; align-items: baseline; font-size: 1.0625rem; }
+.proceso span {
+  flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%;
+  display: inline-grid; place-items: center;
+  background: rgba(3, 32, 15, .45); color: var(--oro);
+  font-size: .8125rem; font-weight: 700; font-family: Montserrat, sans-serif;
+}
+.distribui__acciones { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: clamp(2.2rem, 5vw, 3.2rem); }
+
+/* ── pie ───────────────────────────────────────────────── */
+
+.pie { background: var(--selva); padding: var(--seccion) 0 2.5rem; }
+.pie__grilla { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 4fr); gap: clamp(2rem, 5vw, 4rem); }
+@media (max-width: 820px) { .pie__grilla { grid-template-columns: 1fr; } }
+.pie__marca img { width: 168px; margin-bottom: 1.2rem; }
+.pie__marca p { font-size: .9375rem; opacity: .88; }
+.pie__col h3 { font-family: Montserrat, sans-serif; font-size: var(--etiqueta); font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--oro); margin: 0 0 1.1rem; }
+.pie__col a { display: block; text-decoration: none; font-size: .9375rem; padding: .32rem 0; opacity: .9; }
+.pie__col a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
+.pie__legal {
+  margin-top: clamp(3rem, 7vh, 5rem); padding-top: 1.6rem;
+  border-top: 1px solid rgba(241, 239, 226, .16);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: .8rem;
+  font-size: .75rem; letter-spacing: .04em; opacity: .78;
+}
+.pie__legal p { margin: 0; }
+.pie__legal a { text-underline-offset: 3px; }
+
+/* ── impresión ─────────────────────────────────────────── */
+@media print {
+  .nav, .hero__cue, .hero__nerv, .distribui__nerv { display: none; }
+  body { background: #fff; color: #000; }
+}
