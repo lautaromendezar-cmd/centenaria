@@ -2,8 +2,7 @@
    hero, oscurecida a la izquierda para que entren el logo y la frase. Se genera, no
    se arrastra a mano: si cambia el mundo, se vuelve a correr.
       node tools/og.cjs                                  -> img/og.jpg               */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const sharp = req('sharp');
 
 const W = 1200, H = 630;

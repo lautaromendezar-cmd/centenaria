@@ -1,5 +1,4 @@
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const puppeteer = req('puppeteer-core'); const sharp = req('sharp');
 const http = require('http'), fs = require('fs'), path = require('path');
 const RAIZ = path.resolve(__dirname,'..'), P = 4732;
@@ -16,7 +15,7 @@ function alListen(srv, p) {
 }
 
 (async()=>{
-  const b=await puppeteer.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:'new',args:['--no-sandbox','--hide-scrollbars']});
+  const b=await puppeteer.launch({executablePath:CHROME,headless:'new',args:['--no-sandbox','--hide-scrollbars']});
   const pg=await b.newPage(); await pg.setViewport({width:390,height:844,isMobile:true,hasTouch:true});
   await pg.goto(`http://localhost:${P}/`,{waitUntil:'networkidle0'}); await new Promise(r=>setTimeout(r,2800));
   const alto=await pg.evaluate(()=>document.body.scrollHeight);

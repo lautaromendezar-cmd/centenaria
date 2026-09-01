@@ -5,8 +5,7 @@
    de texto claro — no el promedio, que siempre da un número lindo.
    Se usa Range para la caja real de las líneas: el rect del <h1> incluye
    aire que el texto no ocupa. */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const puppeteer = req('puppeteer-core');
 const sharp = req('sharp');
 const http = require('http'), fs = require('fs'), path = require('path');
@@ -33,7 +32,7 @@ function alListen(srv, p) {
 (async () => {
   const srv = http.createServer((q,s)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const f=path.join(RAIZ,u);if(!fs.existsSync(f)||fs.statSync(f).isDirectory()){s.writeHead(404);return s.end();}s.writeHead(200,{'Content-Type':T[path.extname(f)]||'application/octet-stream'});fs.createReadStream(f).pipe(s);}).listen(P); alListen(srv, P);
 
-  const b = await puppeteer.launch({ executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe', headless:'new', args:['--no-sandbox','--hide-scrollbars','--enable-unsafe-swiftshader','--use-angle=swiftshader'] });
+  const b = await puppeteer.launch({ executablePath:CHROME, headless:'new', args:['--no-sandbox','--hide-scrollbars','--enable-unsafe-swiftshader','--use-angle=swiftshader'] });
   let fallos = 0;
 
   for (const vp of [{w:1440,h:900,n:'escritorio'},{w:390,h:844,n:'celular'}]) {

@@ -8,8 +8,7 @@
    que se note. La profundidad la completan la niebla y las motas del shader.
 
       node tools/capas.cjs                                                          */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const sharp = req('sharp');
 const fs = require('fs');
 

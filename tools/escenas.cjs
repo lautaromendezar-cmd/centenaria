@@ -3,8 +3,7 @@
    donde la camara entra al monte; en un aereo o un interior seria falsa. Lo que
    las mantiene vivas es el avance de camara, el grado, el grano y la linterna.
       node tools/escenas.cjs                                                        */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const sharp = req('sharp');
 const fs = require('fs');
 

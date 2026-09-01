@@ -8,8 +8,7 @@
 
    Contra el servidor que ya este levantado:  node tools/servir.cjs 4740
                                               node tools/robustez.cjs 4740          */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const puppeteer = req('puppeteer-core');
 
 const P = Number(process.argv[2] || 4740);
@@ -43,7 +42,7 @@ const SONDA = () => {
 
 async function correr(nombre, preparar, esperaMs = 3400) {
   const b = await puppeteer.launch({
-    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    executablePath: CHROME,
     headless: 'new',
     args: ['--no-sandbox', '--hide-scrollbars', '--enable-unsafe-swiftshader', '--use-angle=swiftshader']
   });

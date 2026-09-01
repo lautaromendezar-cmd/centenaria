@@ -9,8 +9,7 @@
 
       node tools/servir.cjs 4740
       node tools/contraste.cjs 4740                                                  */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const puppeteer = req('puppeteer-core');
 const sharp = req('sharp');
 
@@ -35,7 +34,7 @@ const PLAN = [
 
 (async () => {
   const b = await puppeteer.launch({
-    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    executablePath: CHROME,
     headless: 'new',
     args: ['--no-sandbox', '--hide-scrollbars', '--enable-unsafe-swiftshader', '--use-angle=swiftshader']
   });

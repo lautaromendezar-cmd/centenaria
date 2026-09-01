@@ -10,8 +10,7 @@
 
       node tools/servir.cjs 4740
       node tools/entrada.cjs 4740          -> tools/_qc-entrada.jpg                   */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const puppeteer = req('puppeteer-core');
 const sharp = req('sharp');
 
@@ -21,7 +20,7 @@ const MARCAS = [120, 400, 700, 1000, 1400, 1800, 2300, 2900];
 
 (async () => {
   const b = await puppeteer.launch({
-    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    executablePath: CHROME,
     headless: 'new',
     args: ['--no-sandbox', '--hide-scrollbars', '--enable-unsafe-swiftshader', '--use-angle=swiftshader']
   });

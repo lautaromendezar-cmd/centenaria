@@ -4,8 +4,7 @@
       node tools/servir.cjs 4740
       node tools/rodar.cjs 4740                       -> tools/_qc-hero.jpg
       node tools/rodar.cjs 4740 390 844               -> movil                     */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const puppeteer = req('puppeteer-core');
 const sharp = req('sharp');
 
@@ -17,7 +16,7 @@ const PASOS = [0, .07, .14, .21, .28, .35, .42, .50, .60, .72, .85, .96];
 
 (async () => {
   const b = await puppeteer.launch({
-    executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    executablePath: CHROME,
     headless: 'new',
     args: ['--no-sandbox', '--hide-scrollbars', '--enable-unsafe-swiftshader', '--use-angle=swiftshader']
   });

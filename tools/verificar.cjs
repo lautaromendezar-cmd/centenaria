@@ -1,8 +1,7 @@
 /* Verificación con Chrome real: sirve el sitio, lo recorre, saca capturas
    y chequea lo que NO se ve mirando (errores de consola, reveals que
    quedaron invisibles, orden de foco, alt faltantes). */
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const puppeteer = req('puppeteer-core');
 const sharp = req('sharp');
 const http = require('http');
@@ -11,7 +10,6 @@ const path = require('path');
 
 const RAIZ = path.resolve(__dirname, '..');
 const PUERTO = 4735;
-const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const TIPOS = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.webp': 'image/webp', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml' };
 

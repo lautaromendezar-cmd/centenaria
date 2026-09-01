@@ -1,6 +1,5 @@
 // Detecta y recorta los 3 paquetes de pack3-verde.png (fondo verde con nervadura).
-const { createRequire } = require('module');
-const req = createRequire('C:/Users/Lautaro/Desktop/Claude/latina/node_modules/');
+const { req, CHROME } = require('./_entorno.cjs');
 const sharp = req('sharp');
 const SRC = 'C:/Users/Lautaro/Desktop/Claude/pdf-centenaria/assets/full/pack3-verde.png';
 
