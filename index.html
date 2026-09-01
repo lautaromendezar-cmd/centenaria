@@ -119,7 +119,8 @@ document.documentElement.classList.add('js', 'cargando');
   <div class="mundo__sombra"></div>
 </div>
 
-<!-- ============ EL DISCO: sol -> sello -> luna -> boca del mate -> boton ============ -->
+<!-- ============ EL DISCO: sol -> sello 1918. Termina su viaje en el hero:
+     despues del manifiesto se retira y no vuelve (de marca de agua sobraba). ============ -->
 <div class="disco" id="disco" aria-hidden="true">
   <svg class="sello" viewBox="0 0 400 400" role="presentation" focusable="false">
     <defs>
@@ -130,48 +131,7 @@ document.documentElement.classList.add('js', 'cargando');
       <path id="arcoSup" d="M 50,200 a 150,150 0 1 1 300,0"></path>
       <path id="arcoInf" d="M 36,200 a 164,164 0 1 0 328,0"></path>
     </defs>
-    <defs>
-      <radialGradient id="gLuna" cx="38%" cy="32%" r="78%">
-        <stop offset="0%"  stop-color="#F6F3E6"></stop>
-        <stop offset="58%" stop-color="#CFD6CC"></stop>
-        <stop offset="100%" stop-color="#8FA096"></stop>
-      </radialGradient>
-      <clipPath id="recorteMate"><circle cx="200" cy="200" r="150"></circle></clipPath>
-    </defs>
 
-    <!-- 03 · LUNA — el mismo disco sobre el monte de Brasil, ya de noche -->
-    <g class="disco__luna" id="dLuna">
-      <circle cx="200" cy="200" r="176" fill="url(#gLuna)"></circle>
-      <circle cx="200" cy="200" r="176" fill="none" stroke="rgba(241,239,226,.35)" stroke-width="1"></circle>
-      <circle cx="146" cy="152" r="26" fill="rgba(112,128,118,.30)"></circle>
-      <circle cx="248" cy="238" r="38" fill="rgba(112,128,118,.22)"></circle>
-      <circle cx="132" cy="252" r="15" fill="rgba(112,128,118,.26)"></circle>
-      <circle cx="258" cy="128" r="11" fill="rgba(112,128,118,.20)"></circle>
-    </g>
-
-    <!-- 05 · EL MATE visto desde arriba. Es esquematico a proposito: dibujo de manual,
-         no ilustracion. Y no es decorativo — los 5 pasos del ritual lo mueven. -->
-    <g class="disco__mate" id="dMate">
-      <circle cx="200" cy="200" r="176" fill="#0E1410"></circle>
-      <circle cx="200" cy="200" r="176" fill="none" stroke="var(--oro)" stroke-width="6" opacity=".9"></circle>
-      <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(248,221,0,.35)" stroke-width="1"></circle>
-      <g clip-path="url(#recorteMate)">
-        <g id="dYerba" class="disco__yerba">
-          <rect x="20" y="200" width="360" height="220" fill="#1B3A22"></rect>
-          <path d="M20,200 H380" stroke="var(--verde-vivo)" stroke-width="2" fill="none"></path>
-        </g>
-      </g>
-      <g id="dBombilla" class="disco__bombilla">
-        <path d="M104,318 L236,186" stroke="#D8DCD5" stroke-width="9" stroke-linecap="round"></path>
-        <path d="M104,318 L236,186" stroke="rgba(0,0,0,.35)" stroke-width="3" stroke-linecap="round"></path>
-        <circle cx="240" cy="182" r="13" fill="#D8DCD5"></circle>
-      </g>
-      <g id="dAgua" class="disco__agua">
-        <path d="M150,150 q26,34 0,66" stroke="rgba(248,221,0,.85)" stroke-width="3" fill="none" stroke-linecap="round"></path>
-      </g>
-    </g>
-
-    <!-- 02 · EL SELLO -->
     <g class="disco__sello" id="dSello">
     <circle class="sello__fondo"  cx="200" cy="200" r="184"></circle>
     <circle class="sello__aro sello__aro--ext" cx="200" cy="200" r="176"></circle>
@@ -185,9 +145,6 @@ document.documentElement.classList.add('js', 'cargando');
       <text class="sello__pie"  x="200" y="262">Envasada en Origen</text>
     </g>
     </g>
-
-    <!-- 06 · EL BOTON — el disco termina siendo la accion -->
-    <circle class="disco__oro" id="dOro" cx="200" cy="200" r="176" fill="var(--oro)"></circle>
   </svg>
 </div>
 
@@ -244,7 +201,7 @@ document.documentElement.classList.add('js', 'cargando');
     </div>
   </section>
 
-  <!-- ================= 01 . HISTORIA - el disco es el sello ================= -->
+  <!-- ================= 01 . HISTORIA ================= -->
   <section class="cap" id="historia">
     <div class="cap__cabeza">
       <p class="volanta reveal">01 <span aria-hidden="true">&mdash;</span> Nuestra historia</p>
@@ -269,7 +226,7 @@ document.documentElement.classList.add('js', 'cargando');
     </ol>
   </section>
 
-  <!-- ================= 02 . ORIGEN - el disco es la luna ================= -->
+  <!-- ================= 02 . ORIGEN ================= -->
   <section class="cap" id="origen">
     <div class="cap__cabeza">
       <p class="volanta reveal">02 <span aria-hidden="true">&mdash;</span> Del yerbal a tu mate</p>
@@ -323,7 +280,7 @@ document.documentElement.classList.add('js', 'cargando');
   <section class="claro" id="variedades">
     <div class="claro__caja">
       <div class="cap__cabeza">
-        <p class="volanta volanta--oscura reveal">03 <span aria-hidden="true">&mdash;</span> Nuestra l&iacute;nea</p>
+        <p class="volanta reveal">03 <span aria-hidden="true">&mdash;</span> Nuestra l&iacute;nea</p>
         <h2 class="claro__titulo reveal">Una yerba<br>para cada mate</h2>
       </div>
       <p class="claro__bajada reveal">Tres variedades pensadas para cada gusto y cada momento, con el sabor caracter&iacute;stico de Centenaria y presentaciones de 500 g y 1 kg.</p>
@@ -359,7 +316,7 @@ document.documentElement.classList.add('js', 'cargando');
       </ul>
 
       <div class="sabor reveal">
-        <p class="volanta volanta--oscura">Perfil de sabor</p>
+        <p class="volanta">Perfil de sabor</p>
         <h3 class="sabor__titulo">&iquest;C&oacute;mo te gusta tu mate?</h3>
         <p class="sabor__bajada">De lo m&aacute;s suave a lo m&aacute;s intenso, en Centenaria hay una yerba para cada paladar. Us&aacute; esta gu&iacute;a para encontrar la tuya.</p>
         <ol class="escala">
@@ -382,7 +339,7 @@ document.documentElement.classList.add('js', 'cargando');
       </div>
 
       <p class="claro__accion reveal">
-        <a class="boton boton--tinta" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Ver toda la l&iacute;nea en la tienda</a>
+        <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Ver toda la l&iacute;nea en la tienda</a>
       </p>
     </div>
   </section>
@@ -406,7 +363,7 @@ document.documentElement.classList.add('js', 'cargando');
     </blockquote>
   </section>
 
-  <!-- ================= 05 . EL RITUAL - el disco es la boca del mate ================= -->
+  <!-- ================= 05 . EL RITUAL ================= -->
   <section class="cap cap--ritual" id="ritual">
     <div class="cap__cabeza">
       <p class="volanta reveal">05 <span aria-hidden="true">&mdash;</span> El ritual</p>
@@ -442,7 +399,7 @@ document.documentElement.classList.add('js', 'cargando');
     <p class="tip reveal"><strong>Tip Centenaria:</strong> nunca uses agua hirviendo. El secreto de un mate suave y sin amargor est&aacute; en la temperatura justa.</p>
   </section>
 
-  <!-- ================= 06 . CIERRE - el disco es el boton ================= -->
+  <!-- ================= 06 . CIERRE ================= -->
   <section class="cierre" id="comprar">
     <div class="cap__cabeza">
       <p class="volanta reveal">06 <span aria-hidden="true">&mdash;</span> D&oacute;nde conseguirla</p>

@@ -26,10 +26,6 @@
   var aroExt = $('.sello__aro--ext');
   var aroInt = $('.sello__aro--int');
   var selloTexto = $('.sello__texto');
-  /* Los cuatro estados del disco. Es UN objeto que cambia de identidad, no cuatro
-     adornos: sol (lo dibuja el shader) -> sello -> luna -> boca del mate -> boton. */
-  var dSello = $('#dSello'), dLuna = $('#dLuna'), dMate = $('#dMate'), dOro = $('#dOro');
-  var dYerba = $('#dYerba'), dBombilla = $('#dBombilla'), dAgua = $('#dAgua');
 
   /* ---------------------------------------------------------------- motor */
   var monte = null;
@@ -98,10 +94,6 @@
     });
     gsap.set(selloTexto, { opacity: 0 });
     gsap.set(disco, { opacity: 0, scale: .82, rotate: -16 });
-    gsap.set([dLuna, dMate, dOro], { opacity: 0 });
-    gsap.set(dYerba, { y: 120, rotation: 0, svgOrigin: '200 200' });
-    gsap.set([dBombilla, dAgua], { opacity: 0 });
-    gsap.set(dBombilla, { x: -46, y: 46 });
   }
   prepararSello();
 
@@ -113,7 +105,9 @@
       gsap.set(e, { avance: .5, sol: 1, motas: .5, linterna: 0, vida: 0 });
       e.quieto = true;
       monte.frame();
-      gsap.set(disco, { opacity: 1, scale: 1, rotate: 0 });
+      /* sin scroll-animacion el sello no puede retirarse solo: se lo ancla al hero
+         (absolute en vez de fixed) y se va scrolleando con el, como corresponde */
+      gsap.set(disco, { opacity: 1, scale: 1, rotate: 0, position: 'absolute', top: '50vh' });
       gsap.set([aroExt, aroInt], { strokeDashoffset: 0 });
       gsap.set(selloTexto, { opacity: 1 });
       gsap.set(reveals, { opacity: 1, y: 0 });
@@ -160,12 +154,10 @@
       .to(selloTexto, { opacity: 1, ease: 'power1.out', duration: .16 }, .84);
 
     /* ---------------------------------------------------------------------
-       5. DE ACA EN ADELANTE: el disco atraviesa los capitulos cambiando de
-       identidad. Nunca se va de pantalla y nunca se corta el fondo: eso es
-       lo que hace que el scroll se sienta una sola toma.
-       El disco vive en z-index 1, debajo del contenido — es un actor de
-       fondo, no un elemento de interfaz. En el claro (que es opaco) queda
-       tapado solo, sin que haya que apagarlo a mano.
+       5. DE ACA EN ADELANTE: el disco ya cumplio — nacio sol, se enfrio en
+       sello, y se retira con el manifiesto. Lo que une los capitulos es el
+       fondo continuo (e.escena + la sombra), no el disco: arrastrarlo por
+       toda la pagina lo convertia en un circulo pegado que sobraba.
        --------------------------------------------------------------------- */
 
     function tramo(donde, a, b) {
@@ -199,83 +191,31 @@
        primer cambio de mundo, no se arrastra al galpon ni al aereo */
     escalon(e, 'frenteOp', 1, 0, tramo('#historia', 'top 88%', 'top 45%'));
 
-    /* MANIFIESTO — el sello se corre, se achica y baja el tono para que se pueda
-       leer encima. Pasa de protagonista a marca de agua, y ahi se queda durante
-       la historia. */
+    /* MANIFIESTO — el sello se corre, se achica y se VA: despues del hero no
+       vuelve a aparecer. Dejarlo de marca de agua lo convertia en un circulo
+       que sobraba en cada capitulo. */
     gsap.fromTo(disco,
       { scale: 1, xPercent: 0, yPercent: 0, opacity: 1 },
-      { scale: .40, xPercent: 92, yPercent: -46, opacity: .3, ease: 'none',
+      { scale: .40, xPercent: 92, yPercent: -46, opacity: 0, ease: 'none',
         immediateRender: false, scrollTrigger: tramo('#manifiesto', 'top 92%', 'top 45%') });
     sombra(0, .58, tramo('#manifiesto', 'top 88%', 'top 30%'));
 
-    /* 02 · ORIGEN — se enfria del todo: el mismo disco es ahora la luna sobre el
-       monte de Brasil. Cruza al otro lado del cuadro porque el texto de este
-       capitulo entra por la derecha. */
-    gsap.timeline({ defaults: { immediateRender: false }, scrollTrigger: tramo('#origen') })
-      .fromTo(dSello, { opacity: 1 }, { opacity: 0, duration: .4 }, 0)
-      .fromTo(dLuna, { opacity: 0 }, { opacity: 1, duration: .4 }, .1)
-      .fromTo(disco, { scale: .40, xPercent: 92, yPercent: -46, opacity: .3 },
-                     { scale: .5, xPercent: -78, yPercent: -30, opacity: .34, duration: 1 }, 0);
-    /* de noche el mundo se apaga mas y pierde saturacion */
+    /* 02 · ORIGEN — de noche el mundo se apaga mas. */
     /* nada de tocar la saturacion por capitulo: el uniform lo comparten el mundo
        base y las escenas, y cada escena ya viene con su propio grado. */
     sombra(.58, .62, tramo('#origen'));
 
-    /* 03 · VARIEDADES — el claro. Aca el mundo se ENCIENDE: la sombra se retira casi
-       del todo y queda el yerbal luminoso detras de los envases. Antes esta seccion
-       era un blanco plano y cortaba la pelicula al medio. El disco se apaga: en este
-       capitulo los protagonistas son los tres paquetes. */
-    escalon(disco, 'opacity', .34, 0, tramo('#variedades', 'top 90%', 'top 60%'));
-    sombra(.62, .04, tramo('#variedades', 'top 92%', 'top 55%'));
+    /* 03 · VARIEDADES — misma noche que el resto: los envases ponen la luz desde
+       sus tarjetas blancas. La sombra no se toca — el velo de papel claro que
+       habia aca cortaba la pelicula al medio. */
 
-    /* 04 · EL RITUAL — el disco visto desde arriba es la boca del mate. Y no es un
-       dibujo decorativo: los cinco pasos lo mueven. */
-    gsap.timeline({ defaults: { immediateRender: false }, scrollTrigger: tramo('#ritual', 'top 85%', 'top 45%') })
-      .fromTo(dLuna, { opacity: 1 }, { opacity: 0, duration: .3 }, 0)
-      .fromTo(dMate, { opacity: 0 }, { opacity: 1, duration: .4 }, .1)
-      .fromTo(disco, { scale: .5, xPercent: -78, yPercent: -30, opacity: 0 },
-                     { scale: .62, xPercent: -72, yPercent: 0, opacity: .55, duration: 1 }, 0);
+    /* 04 · POR QUE ELEGIRLA — manda el texto; la sombra sigue en .62, que es lo
+       que pide la grilla de beneficios sobre los haces de luz. */
+
+    /* 05 · EL RITUAL */
     sombra(.62, .58, tramo('#ritual'));
 
-    /* Cada paso mueve el diagrama. Es la parte del sitio donde el movimiento
-       explica algo en vez de decorar. */
-    var PASOS = [
-      { yerba: { y: -52, rotation: 0 },   agua: 0, bombilla: 0 },   /* cargar 3/4 */
-      { yerba: { y: -52, rotation: -21 }, agua: 0, bombilla: 0 },   /* inclinar */
-      { yerba: { y: -52, rotation: -21 }, agua: 1, bombilla: 0 },   /* agua tibia */
-      { yerba: { y: -52, rotation: -21 }, agua: .5, bombilla: 1 },  /* bombilla */
-      { yerba: { y: -46, rotation: -18 }, agua: 1, bombilla: 1 }    /* cebar */
-    ];
-    $$('.paso').forEach(function (li, n) {
-      ScrollTrigger.create({
-        trigger: li, start: 'top 72%', end: 'bottom 40%',
-        onEnter: function () { irAPaso(n); },
-        onEnterBack: function () { irAPaso(n); }
-      });
-    });
-    function irAPaso(n) {
-      var P = PASOS[n];
-      gsap.to(dYerba, { y: P.yerba.y, rotation: P.yerba.rotation, svgOrigin: '200 200',
-        duration: .8, ease: 'power2.inOut', overwrite: 'auto' });
-      gsap.to(dAgua, { opacity: P.agua, duration: .5, overwrite: 'auto' });
-      gsap.to(dBombilla, { opacity: P.bombilla, x: P.bombilla ? 0 : -46, y: P.bombilla ? 0 : 46,
-        duration: .7, ease: 'power3.out', overwrite: 'auto' });
-    }
-
-    /* 04 · POR QUE ELEGIRLA — el disco se retira: manda el texto. Y la sombra sube:
-       la grilla de beneficios cruza todo el ancho y cae justo sobre los haces de luz,
-       que es la zona mas clara del mundo. Medido con tools/contraste.cjs. */
-    escalon(disco, 'opacity', .34, 0, tramo('#porque', 'top 85%', 'top 50%'));
-    /* saliendo del claro el mundo se vuelve a cerrar */
-    sombra(.04, .62, tramo('#porque', 'top 92%', 'top 45%'));
-
-    /* 06 · CIERRE — el disco vuelve una ultima vez, ya como accion: oro lleno
-       detras del bloque de compra. Cierra el recorrido que empezo con el sol. */
-    gsap.timeline({ defaults: { immediateRender: false }, scrollTrigger: tramo('#comprar', 'top 85%', 'top 35%') })
-      .fromTo(dMate, { opacity: 1 }, { opacity: 0, duration: .3 }, 0)
-      .fromTo(dOro, { opacity: 0 }, { opacity: 1, duration: .4 }, .1)
-      .fromTo(disco, { scale: .62, xPercent: -72, yPercent: 0, opacity: .55 },
-                     { scale: 1.5, xPercent: 0, yPercent: 0, opacity: .10, duration: 1 }, 0);
+    /* 06 · CIERRE */
     sombra(.58, .60, tramo('#comprar'));
 
     revelarCapitulos();
@@ -290,9 +230,7 @@
       yPercent: -55, scale: 1.5, ease: 'none',
       scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 }
     });
-    gsap.set(disco, { opacity: .34, scale: .42, xPercent: 92, yPercent: -46 });
-    gsap.set([aroExt, aroInt], { strokeDashoffset: 0 });
-    gsap.set(selloTexto, { opacity: 1 });
+    /* sin motor el disco no aparece: sin el viaje sol->sello seria un adorno pegado */
     gsap.to('.mundo__sombra', {
       opacity: .68, ease: 'none',
       scrollTrigger: { trigger: '#historia', start: 'top 88%', end: 'top 30%', scrub: .6 }

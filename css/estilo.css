@@ -158,8 +158,8 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){ .grano{animation:none} }
 
 /* ============================== EL DISCO ==============================
-   Sol -> sello 1918 -> luna -> boca del mate -> boton. Un solo objeto que
-   atraviesa la home cambiando de identidad. Aca vive el sello. */
+   Sol -> sello 1918. El disco vive solo en el hero: el sol se enfria en el
+   sello y con el manifiesto se retira. No sigue a los capitulos. */
 .disco{position:fixed;left:50%;top:50%;z-index:1;width:var(--disco);height:var(--disco);
   margin:calc(var(--disco) / -2) 0 0 calc(var(--disco) / -2);pointer-events:none;opacity:0}
 .sello{width:100%;height:100%;overflow:visible;
@@ -278,33 +278,18 @@ main{position:relative;z-index:3}
   .cadena__efecto::before{content:"\2192 \00a0"}
 }
 
-/* ============================== EL CLARO (zona clara) ==============================
-   La unica seccion en luz. No es un cambio de tema porque si: los envases se leen
-   mucho mejor sobre claro, y el oro NO puede ser texto sobre claro (1,25:1) — por eso
-   aca la accion pasa a ser tinta sobre papel. Entra y sale con un degradado para que
-   se lea como salir a un claro del monte y no como un bloque pegado. */
-/* El fondo NO es opaco: es un velo de papel sobre el yerbal luminoso que hay
-   detras. Antes era var(--papel) plano y cortaba la pelicula al medio — se veia
-   como otra web pegada. Con el velo sigue siendo una zona clara (que es lo que
-   necesitan los envases y lo que obliga la regla del oro), pero es el mismo mundo. */
-.claro{position:relative;background:rgba(247,245,236,.58);color:var(--tinta);
-  padding:calc(var(--seccion) + 3rem) 0}
-.claro::before,.claro::after{content:'';position:absolute;left:0;right:0;height:clamp(60px,9vh,130px);
-  pointer-events:none}
-.claro::before{top:0;background:linear-gradient(to bottom,rgba(10,11,11,.55),transparent)}
-.claro::after{bottom:0;background:linear-gradient(to top,rgba(10,11,11,.55),transparent)}
+/* ============================== VARIEDADES ==============================
+   Antes era "el claro": un velo de papel claro sobre el yerbal, con degradados de
+   entrada y salida. Cortaba la pelicula al medio y desentonaba con el resto — ahora
+   sigue la misma noche que los demas capitulos y la luz la ponen los envases desde
+   sus tarjetas blancas, que siguen siendo opacas. */
+.claro{position:relative;color:var(--crema);padding:calc(var(--seccion) + 3rem) 0}
 .claro__caja{max-width:var(--ancho);margin:0 auto;padding:0 var(--gotera)}
-.volanta--oscura{color:var(--oro-hondo)}          /* 5,04:1 sobre papel */
 .claro__titulo{margin:1.4rem 0 0;font-family:Fraunces,Georgia,serif;font-weight:400;
-  font-size:var(--display-2);line-height:.98;letter-spacing:-.015em;color:var(--tinta)}
-/* Sobre el velo del claro se ve el yerbal: --tinta-suave (7,24:1 sobre papel solido)
-   cae a 4,10:1 y no pasa. El texto secundario que va DIRECTO sobre el velo usa
-   --verde-hondo; --tinta-suave queda para lo que esta dentro de una tarjeta opaca. */
+  font-size:var(--display-2);line-height:.98;letter-spacing:-.015em;color:var(--crema)}
 .claro__bajada{margin:clamp(1.5rem,3vh,2.2rem) 0 0 auto;max-width:38rem;
-  font-size:var(--body-lg);color:var(--verde-hondo)}
+  font-size:var(--body-lg);color:var(--crema);opacity:.85}
 .claro__accion{margin:clamp(3rem,7vh,5rem) 0 0}
-.boton--tinta{background:var(--verde-hondo);color:var(--crema)}   /* 11,44:1 */
-.boton--tinta:hover{transform:translateY(-2px);background:var(--verde)}
 
 /* --- fichas de variedad --- */
 .fichas{list-style:none;margin:clamp(3rem,7vh,5rem) 0 0;padding:0;
@@ -329,22 +314,22 @@ main{position:relative;z-index:3}
 /* --- perfil de sabor --- */
 .sabor{margin:clamp(3.5rem,8vh,6rem) 0 0}
 .sabor__titulo{margin:1.2rem 0 0;font-family:Fraunces,Georgia,serif;font-weight:400;
-  font-size:var(--display-3);color:var(--tinta)}
-.sabor__bajada{margin:.9rem 0 0;max-width:44rem;color:var(--verde-hondo)}
+  font-size:var(--display-3);color:var(--crema)}
+.sabor__bajada{margin:.9rem 0 0;max-width:44rem;color:var(--crema);opacity:.82}
 .escala{list-style:none;margin:clamp(2rem,4vh,3rem) 0 0;padding:0;
   display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;position:relative}
 /* La linea corre POR DEBAJO de los tres puntos: es el eje suave-intenso, no un adorno */
 .escala::before{content:'';position:absolute;left:6%;right:6%;top:9px;height:2px;
-  background:linear-gradient(to right,rgba(6,36,17,.16),var(--oro-hondo))}
+  background:linear-gradient(to right,rgba(241,239,226,.22),var(--oro))}
 .escala__punto{position:relative;padding-top:2.4rem;text-align:center}
 .escala__punto::before{content:'';position:absolute;top:3px;left:50%;margin-left:-7px;
-  width:14px;height:14px;border-radius:50%;background:var(--papel);
-  border:2px solid var(--oro-hondo)}
+  width:14px;height:14px;border-radius:50%;background:var(--fondo);
+  border:2px solid var(--oro)}
 .escala__nivel{display:block;font-size:var(--etiqueta);font-weight:700;
-  letter-spacing:.24em;text-transform:uppercase;color:var(--oro-hondo)}
+  letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
 .escala__quien{display:block;margin-top:.5rem;font-family:Fraunces,Georgia,serif;
-  font-size:1.35rem;color:var(--tinta)}
-.escala__nota{display:block;margin-top:.3rem;font-size:.875rem;color:var(--verde-hondo)}
+  font-size:1.35rem;color:var(--crema)}
+.escala__nota{display:block;margin-top:.3rem;font-size:.875rem;color:var(--crema);opacity:.75}
 /* En pantalla angosta la escala horizontal es ilegible: se apila y la linea se va */
 @media (max-width:700px){
   .escala{grid-template-columns:1fr;gap:1.6rem}

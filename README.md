@@ -27,7 +27,7 @@ estático y sale a buscar un build que no existe.
 
 | | |
 |---|---|
-| `index.html` | La home entera. El disco (sol → sello → luna → mate → botón) es SVG inline |
+| `index.html` | La home entera. El disco (sol → sello 1918, solo en el hero) es SVG inline |
 | `css/estilo.css` | Hoja única. Tokens arriba, secciones en el orden en que se leen |
 | `js/monte.js` | **Motor WebGL propio**, ~15 KB escritos a mano. No es three.js: ver abajo |
 | `js/main.js` | GSAP + ScrollTrigger sobre ese motor. Sin `type="module"`: anda con doble clic |
@@ -43,11 +43,12 @@ envases, las fotos reales del cliente y el patrón de nervadura.
 
 ## La idea
 
-**Un disco que nunca se va de la pantalla.** El sol sale detrás de la vegetación, se despega,
+**El sol se convierte en el sello.** El sol sale detrás de la vegetación, se despega,
 se enfría —pierde el halo, se le endurece el borde, aparece el filo dorado— y se convierte en
-el **sello «est · 1918» que está impreso en los tres paquetes**. Después sigue mutando: luna
-sobre el monte de Brasil, boca del mate vista desde arriba (que se mueve con los 5 pasos del
-ritual), y botón en el cierre.
+el **sello «est · 1918» que está impreso en los tres paquetes**. Ahí termina su viaje: con el
+manifiesto se retira y no vuelve. (Hubo una versión donde seguía mutando por los capítulos
+—luna, boca del mate, botón— y se descartó: fuera del hero quedaba como un círculo pegado
+que sobraba.)
 
 No es un adorno: el sello real ya trae el año, la frase del titular y «cien años abasteciendo
 a América Latina». El sol y el sello tienen la misma forma, así que la transición no es un
@@ -72,8 +73,8 @@ sola toma y no una pila de bloques.
 - **El velo del hero está calibrado, no elegido**: `tools/contraste.cjs` oculta el texto,
   captura el frame compuesto y mide el **peor píxel** detrás de cada línea. El H1 estaba en
   2,37:1 antes de recalibrarlo.
-- **El oro nunca va como texto sobre fondo claro** — da 1,25:1. En el claro de variedades la
-  acción pasa a ser tinta sobre papel.
+- **El oro nunca va como texto sobre fondo claro** — da 1,25:1. (Variedades fue una zona
+  clara y hoy es oscura como el resto; la regla sigue valiendo dentro de las tarjetas blancas.)
 - **Si GSAP no carga, la página se lee igual.** El respaldo está en el script inline del
   `<head>`, no dentro de `main.js` — que es justo el que puede no cargar. Lo mismo la cortina:
   el plazo que la retira lo arma el `<head>`, así que no hay forma de quedar encerrado atrás
