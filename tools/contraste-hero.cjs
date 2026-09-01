@@ -1,4 +1,4 @@
-/* Contraste REAL del texto del hero sobre la foto.
+/* Contraste REAL del texto del hero sobre el fondo COMPUESTO (capas + WebGL + velo + grano).
    El truco: se oculta el texto (visibility:hidden, sin mover nada), se
    captura el viewport y se miden los píxeles del fondo justo donde
    estaban las letras. Se toma el peor caso — el píxel más CLARO detrás
@@ -33,7 +33,7 @@ function alListen(srv, p) {
 (async () => {
   const srv = http.createServer((q,s)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const f=path.join(RAIZ,u);if(!fs.existsSync(f)||fs.statSync(f).isDirectory()){s.writeHead(404);return s.end();}s.writeHead(200,{'Content-Type':T[path.extname(f)]||'application/octet-stream'});fs.createReadStream(f).pipe(s);}).listen(P); alListen(srv, P);
 
-  const b = await puppeteer.launch({ executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe', headless:'new', args:['--no-sandbox','--hide-scrollbars'] });
+  const b = await puppeteer.launch({ executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe', headless:'new', args:['--no-sandbox','--hide-scrollbars','--enable-unsafe-swiftshader','--use-angle=swiftshader'] });
   let fallos = 0;
 
   for (const vp of [{w:1440,h:900,n:'escritorio'},{w:390,h:844,n:'celular'}]) {
@@ -44,7 +44,7 @@ function alListen(srv, p) {
 
     // cajas reales del texto, con Range (no el rect del elemento)
     const cajas = await pg.evaluate(() => {
-      const sel = [['.hero__titulo','#F1EFE2',48],['.hero__bajada','#F1EFE2',17],['.hero .volanta','#F8DD00',12],['.hero__cue-txt','#F1EFE2',11]];
+      const sel = [['.hero__titulo','#F1EFE2',48],['.hero__bajada','#F1EFE2',17],['.hero .volanta','#F8DD00',12],['.hero__pista','#F1EFE2',12],['.boton--linea','#F1EFE2',13],['.cabecera__nav a','#F1EFE2',12]];
       const out = [];
       for (const [s, color, px] of sel) {
         const el = document.querySelector(s); if (!el) continue;
@@ -58,7 +58,7 @@ function alListen(srv, p) {
 
     // ocultar el texto sin mover el layout, y capturar el fondo limpio
     await pg.evaluate(() => {
-      document.querySelectorAll('.hero__titulo, .hero__bajada, .hero .volanta, .hero__cue-txt')
+      document.querySelectorAll('.hero__titulo, .hero__bajada, .hero .volanta, .hero__pista, .boton--linea, .cabecera__nav a')
         .forEach(e => { e.style.visibility = 'hidden'; });
     });
     await new Promise(r=>setTimeout(r, 250));

@@ -1,422 +1,505 @@
 <!doctype html>
-<html lang="es-AR" class="no-js">
+<html lang="es-AR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Seleme Centenaria · Yerba Mate desde 1918</title>
-<meta name="description" content="Yerba mate Seleme Centenaria: padrón uruguayo, molienda fina y alto contenido de hoja. Elaborada y envasada en origen en el sur de Brasil desde 1918. Suave, naturalmente dulce y sin acidez.">
-<meta name="theme-color" content="#03200F">
-<link rel="canonical" href="https://www.yerbamatecentenaria.com.ar/">
+<title>Seleme Centenaria · Yerba mate desde 1918</title>
+<meta name="description" content="Yerba mate de padrón uruguayo, elaborada y envasada en origen desde 1918. Molienda fina, alto contenido de hoja: un mate suave, naturalmente dulce y sin acidez.">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="canonical" href="https://yerbamatecentenaria.com.ar/">
+<meta name="theme-color" content="#0A0B0B">
 
 <meta property="og:type" content="website">
-<meta property="og:locale" content="es_AR">
 <meta property="og:site_name" content="Seleme Centenaria">
-<meta property="og:title" content="Seleme Centenaria · Yerba Mate desde 1918">
-<meta property="og:description" content="Más de cien años de oficio matero. Hoja nativa del sur de Brasil, molienda fina, sin acidez.">
-<meta property="og:url" content="https://www.yerbamatecentenaria.com.ar/">
-<meta property="og:image" content="https://www.yerbamatecentenaria.com.ar/img/hero-mar-1100.webp">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://yerbamatecentenaria.com.ar/">
+<meta property="og:title" content="Seleme Centenaria &middot; Yerba mate desde 1918">
+<meta property="og:description" content="Padrón uruguayo de molienda fina, hoja nativa del sur de Brasil y envasada en origen: un mate suave, naturalmente dulce y sin acidez.">
+<meta property="og:image" content="https://yerbamatecentenaria.com.ar/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Monte del sur de Brasil al amanecer con el titular: El día empieza con yerba mate.">
 <meta name="twitter:card" content="summary_large_image">
+
+<!-- Solo datos verificables. Facebook NO va: hay dos handles dando vueltas y no se
+     puede resolver sin preguntarle al cliente (ver material/PENDIENTES.md). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Seleme Centenaria",
+  "alternateName": "Yerba Mate Centenaria",
+  "url": "https://yerbamatecentenaria.com.ar/",
+  "logo": "https://yerbamatecentenaria.com.ar/img/logo.webp",
+  "image": "https://yerbamatecentenaria.com.ar/img/og.jpg",
+  "foundingDate": "1918",
+  "description": "Yerba mate de padrón uruguayo, elaborada y envasada en origen en el sur de Brasil por la familia Seleme desde 1918. Distribuida en Argentina desde Gualeguaychú, Entre Ríos.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Gualeguaychú",
+    "addressRegion": "Entre Ríos",
+    "addressCountry": "AR"
+  },
+  "contactPoint": [{
+    "@type": "ContactPoint",
+    "contactType": "sales",
+    "telephone": "+54-9-3446-23-9393",
+    "email": "persaimportadora.ventas@gmail.com",
+    "areaServed": "AR",
+    "availableLanguage": "Spanish"
+  }],
+  "sameAs": [
+    "https://www.instagram.com/yerbacentenariaargentina/",
+    "https://centenariayerbamateshop.com.ar/"
+  ]
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="img/hero-mar-1600.webp" imagesrcset="img/hero-mar-760.webp 760w, img/hero-mar-1100.webp 1100w, img/hero-mar-1600.webp 1600w" imagesizes="100vw" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..700&family=Montserrat:wght@300;400;500;600;700&display=swap">
+<!-- Las tres capas del mundo son la primera pantalla entera: se piden ya, en paralelo,
+     sin esperar a que el parser llegue a los <img>. La cortina no se puede ir hasta
+     que esten, asi que cada milisegundo aca es un milisegundo de cortina. -->
+<link rel="preload" as="image" fetchpriority="high" href="img/cielo-1600.webp" imagesrcset="img/cielo-1100.webp 1100w, img/cielo-1600.webp 1600w, img/cielo-2200.webp 2200w" imagesizes="100vw">
+<link rel="preload" as="image" fetchpriority="high" href="img/cerca-1600.webp" imagesrcset="img/cerca-1100.webp 1100w, img/cerca-1600.webp 1600w, img/cerca-2200.webp 2200w" imagesizes="100vw">
+<link rel="preload" as="image" fetchpriority="high" href="img/frente-1600.webp" imagesrcset="img/frente-1100.webp 1100w, img/frente-1600.webp 1600w, img/frente-2200.webp 2200w" imagesizes="100vw">
 <link rel="stylesheet" href="css/estilo.css">
 
 <script>
-/* Respaldo de reveals: si el JS de animación no arranca, nada queda invisible.
-   Va acá, en el head, y NO adentro de main.js — que es justo el que puede no cargar. */
+/* Respaldo: si GSAP no carga, o falla el JS, la pagina se lee igual.
+   Va ACA y no en main.js a proposito: main.js es justo el que puede no cargar.
+
+   La cortina SOLO existe si este script corrio, y este mismo script arma el
+   plazo maximo para retirarla. Asi no hay forma de quedar encerrado atras de
+   un preloader porque main.js no cargo o una imagen nunca resolvio. */
+document.documentElement.classList.add('js', 'cargando');
 (function () {
-  var d = document.documentElement;
-  d.className = 'js';
-  try { if (matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('sin-motion'); } catch (e) {}
-  window.__respaldoReveal = setTimeout(function () { d.classList.add('reveal-forzado'); }, 2200);
+  var quitar = function () { document.documentElement.classList.remove('cargando'); };
+  /* Si main.js no llego a tomar la cortina (no cargo, o no hay GSAP), se retira
+     sola apenas termina de cargar la pagina: nadie se queda mirando un negro. */
+  addEventListener('load', function () { setTimeout(function () { if (!window.__cortina) quitar(); }, 300); });
+  setTimeout(quitar, 7000);   /* ultimo recurso */
 })();
 </script>
-
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization","name":"Seleme Centenaria",
-"alternateName":"Yerba Mate Centenaria","foundingDate":"1918",
-"url":"https://www.yerbamatecentenaria.com.ar/",
-"logo":"https://www.yerbamatecentenaria.com.ar/img/logo.webp",
-"email":"persaimportadora.ventas@gmail.com",
-"address":{"@type":"PostalAddress","addressLocality":"Gualeguaychú","addressRegion":"Entre Ríos","addressCountry":"AR"},
-"sameAs":["https://www.instagram.com/yerbacentenariaargentina/","https://centenariayerbamateshop.com.ar/"]}
-</script>
 </head>
+
 <body>
 
 <a class="saltar" href="#contenido">Saltar al contenido</a>
 
-<header class="nav" id="nav">
-  <div class="nav__caja">
-    <a class="nav__logo" href="#inicio" aria-label="Seleme Centenaria, inicio">
-      <img src="img/logo.webp" alt="Seleme Centenaria" width="600" height="343" fetchpriority="high">
-    </a>
-    <nav class="nav__links" aria-label="Principal">
-      <a href="#historia">Historia</a>
-      <a href="#origen">Origen</a>
-      <a href="#variedades">Variedades</a>
-      <a href="#ritual">El ritual</a>
-      <a href="#distribui">Distribuir</a>
-    </nav>
-    <a class="boton boton--oro nav__cta" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Comprar</a>
-    <button class="nav__burger" id="burger" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir menú">
-      <span></span><span></span>
-    </button>
+<!-- ============ CORTINA DE ENTRADA ============
+     El numero corre de 1918 a hoy con la carga real: los cien anios se cuentan,
+     no se escriben. Va apoyado abajo a la izquierda, en el MISMO lugar donde
+     despues aparece el titulo del hero, para que el telon deje un cuadro ya armado.
+     El disco no se usa aca a proposito: su primera aparicion es el sol.
+     Se retira con transform, nunca con opacity, o el LCP queda atado a la cortina. -->
+<div class="cortina" id="cortina" role="status">
+  <div class="cortina__caja">
+    <p class="cortina__marca">Seleme Centenaria</p>
+    <p class="cortina__anio" aria-hidden="true"><span id="cortinaAnio">1918</span></p>
+    <p class="cortina__pie" aria-hidden="true">Más de cien años de oficio matero</p>
   </div>
-  <div class="nav__movil" id="menu-movil" hidden>
+  <div class="cortina__riel" aria-hidden="true"><span class="cortina__avance" id="cortinaAvance"></span></div>
+  <p class="visualmente-oculto">Cargando: <span id="cortinaPct">0</span> por ciento</p>
+</div>
+
+<!-- ============ EL MUNDO: fondo unico, fijo, para toda la home ============ -->
+<div class="mundo" aria-hidden="true">
+  <!-- Capas reales. Son el LCP y el respaldo si no hay WebGL. -->
+  <div class="mundo__capas" id="capas">
+    <img class="mundo__capa" data-capa="cielo"   src="img/cielo-1600.webp"   srcset="img/cielo-1100.webp 1100w, img/cielo-1600.webp 1600w, img/cielo-2200.webp 2200w" sizes="100vw" alt="" fetchpriority="high" decoding="async">
+    <div class="mundo__sol" data-capa="sol"></div>
+    <img class="mundo__capa" data-capa="cerca"   fetchpriority="high" src="img/cerca-1600.webp"  srcset="img/cerca-1100.webp 1100w, img/cerca-1600.webp 1600w, img/cerca-2200.webp 2200w" sizes="100vw" alt="" decoding="async">
+    <img class="mundo__capa" data-capa="frente"  fetchpriority="high" src="img/frente-1600.webp"   srcset="img/frente-1100.webp 1100w, img/frente-1600.webp 1600w, img/frente-2200.webp 2200w" sizes="100vw" alt="" decoding="async">
+  </div>
+  <canvas class="mundo__lienzo" id="lienzo"></canvas>
+  <div class="mundo__velo"></div>
+  <div class="mundo__sombra"></div>
+</div>
+
+<!-- ============ EL DISCO: sol -> sello -> luna -> boca del mate -> boton ============ -->
+<div class="disco" id="disco" aria-hidden="true">
+  <svg class="sello" viewBox="0 0 400 400" role="presentation" focusable="false">
+    <defs>
+      <!-- Los radios NO son decorativos: el texto va centrado en la banda que dejan
+           los dos aros (138 y 176). Arriba las mayusculas suben desde la linea de
+           base, asi que la base va a 150 y las letras llegan a ~163. Abajo el texto
+           se apoya del lado de adentro, asi que la base va a 164 y baja a ~151. -->
+      <path id="arcoSup" d="M 50,200 a 150,150 0 1 1 300,0"></path>
+      <path id="arcoInf" d="M 36,200 a 164,164 0 1 0 328,0"></path>
+    </defs>
+    <defs>
+      <radialGradient id="gLuna" cx="38%" cy="32%" r="78%">
+        <stop offset="0%"  stop-color="#F6F3E6"></stop>
+        <stop offset="58%" stop-color="#CFD6CC"></stop>
+        <stop offset="100%" stop-color="#8FA096"></stop>
+      </radialGradient>
+      <clipPath id="recorteMate"><circle cx="200" cy="200" r="150"></circle></clipPath>
+    </defs>
+
+    <!-- 03 · LUNA — el mismo disco sobre el monte de Brasil, ya de noche -->
+    <g class="disco__luna" id="dLuna">
+      <circle cx="200" cy="200" r="176" fill="url(#gLuna)"></circle>
+      <circle cx="200" cy="200" r="176" fill="none" stroke="rgba(241,239,226,.35)" stroke-width="1"></circle>
+      <circle cx="146" cy="152" r="26" fill="rgba(112,128,118,.30)"></circle>
+      <circle cx="248" cy="238" r="38" fill="rgba(112,128,118,.22)"></circle>
+      <circle cx="132" cy="252" r="15" fill="rgba(112,128,118,.26)"></circle>
+      <circle cx="258" cy="128" r="11" fill="rgba(112,128,118,.20)"></circle>
+    </g>
+
+    <!-- 05 · EL MATE visto desde arriba. Es esquematico a proposito: dibujo de manual,
+         no ilustracion. Y no es decorativo — los 5 pasos del ritual lo mueven. -->
+    <g class="disco__mate" id="dMate">
+      <circle cx="200" cy="200" r="176" fill="#0E1410"></circle>
+      <circle cx="200" cy="200" r="176" fill="none" stroke="var(--oro)" stroke-width="6" opacity=".9"></circle>
+      <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(248,221,0,.35)" stroke-width="1"></circle>
+      <g clip-path="url(#recorteMate)">
+        <g id="dYerba" class="disco__yerba">
+          <rect x="20" y="200" width="360" height="220" fill="#1B3A22"></rect>
+          <path d="M20,200 H380" stroke="var(--verde-vivo)" stroke-width="2" fill="none"></path>
+        </g>
+      </g>
+      <g id="dBombilla" class="disco__bombilla">
+        <path d="M104,318 L236,186" stroke="#D8DCD5" stroke-width="9" stroke-linecap="round"></path>
+        <path d="M104,318 L236,186" stroke="rgba(0,0,0,.35)" stroke-width="3" stroke-linecap="round"></path>
+        <circle cx="240" cy="182" r="13" fill="#D8DCD5"></circle>
+      </g>
+      <g id="dAgua" class="disco__agua">
+        <path d="M150,150 q26,34 0,66" stroke="rgba(248,221,0,.85)" stroke-width="3" fill="none" stroke-linecap="round"></path>
+      </g>
+    </g>
+
+    <!-- 02 · EL SELLO -->
+    <g class="disco__sello" id="dSello">
+    <circle class="sello__fondo"  cx="200" cy="200" r="184"></circle>
+    <circle class="sello__aro sello__aro--ext" cx="200" cy="200" r="176"></circle>
+    <circle class="sello__aro sello__aro--int" cx="200" cy="200" r="138"></circle>
+    <g class="sello__texto">
+      <text class="sello__arco"><textPath href="#arcoSup" startOffset="50%">El Día Empieza Con Yerba Mate</textPath></text>
+      <text class="sello__arco"><textPath href="#arcoInf" startOffset="50%">Cien Años Abasteciendo a América Latina</textPath></text>
+      <text class="sello__anio" x="200" y="152">est · 1918</text>
+      <text class="sello__nom"  x="200" y="196">Original</text>
+      <text class="sello__nom"  x="200" y="232">Yerba Mate</text>
+      <text class="sello__pie"  x="200" y="262">Envasada en Origen</text>
+    </g>
+    </g>
+
+    <!-- 06 · EL BOTON — el disco termina siendo la accion -->
+    <circle class="disco__oro" id="dOro" cx="200" cy="200" r="176" fill="var(--oro)"></circle>
+  </svg>
+</div>
+
+<div class="grano" aria-hidden="true"></div>
+<div class="vineta" aria-hidden="true"></div>
+
+<!-- ============ CONTENIDO ============ -->
+<header class="cabecera" id="cabecera">
+  <a class="cabecera__marca" href="/">
+    <img src="img/logo.webp" width="600" height="343" alt="Seleme Centenaria" decoding="async">
+  </a>
+  <nav class="cabecera__nav" aria-label="Principal">
     <a href="#historia">Historia</a>
     <a href="#origen">Origen</a>
     <a href="#variedades">Variedades</a>
     <a href="#ritual">El ritual</a>
-    <a href="#donde">Dónde comprar</a>
-    <a href="#distribui">Distribuir</a>
-    <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Comprar online</a>
-  </div>
+    <a href="#comprar">Dónde comprar</a>
+    <a class="cabecera__tienda" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Tienda</a>
+  </nav>
 </header>
 
 <main id="contenido">
 
-<!-- ══ HERO ══ -->
-<section class="hero" id="inicio">
-  <div class="hero__foto" data-parallax="hero">
-    <img src="img/hero-mar-1600.webp"
-         srcset="img/hero-mar-760.webp 760w, img/hero-mar-1100.webp 1100w, img/hero-mar-1600.webp 1600w"
-         sizes="100vw" alt="Un paquete de yerba mate Centenaria sobre una roca, frente al mar" width="1600" height="900" fetchpriority="high">
-  </div>
-  <div class="hero__velo"></div>
-  <div class="hero__nerv" aria-hidden="true"><svg class="nerv nerv--sola" viewBox="0 0 420 720" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
-  <path d="M 210 712.8 C 199.92 439.2 216.72 220.32 210 28.8 M 210 649.19 Q 165.38 618.41 110.84 478.19 M 210 649.19 Q 254.62 618.41 309.16 478.19 M 210 585.58 Q 158.06 556.03 94.57 421.42 M 210 585.58 Q 261.94 556.03 325.43 421.42 M 210 521.96 Q 151.16 493.65 79.25 364.64 M 210 521.96 Q 268.84 493.65 340.75 364.64 M 210 458.35 Q 134.2 431.27 41.55 307.87 M 210 458.35 Q 285.8 431.27 378.45 307.87 M 210 394.74 Q 136.32 368.88 46.27 251.1 M 210 394.74 Q 283.68 368.88 373.73 251.1 M 210 331.13 Q 132.19 306.5 37.09 194.33 M 210 331.13 Q 287.81 306.5 382.91 194.33 M 210 267.52 Q 142.09 244.12 59.09 137.56 M 210 267.52 Q 277.91 244.12 360.91 137.56 M 210 203.9 Q 145.39 181.74 66.42 80.78 M 210 203.9 Q 274.61 181.74 353.58 80.78 M 210 140.29 Q 160.04 119.36 98.98 24.01 M 210 140.29 Q 259.96 119.36 321.02 24.01" data-vena="0"/>
-</svg></div>
-
-  <div class="hero__texto contenedor">
-    <p class="volanta" data-reveal>Yerba Mate <span>·</span> Desde 1918</p>
-    <h1 class="hero__titulo" data-lineas>El día empieza con yerba mate.</h1>
-    <p class="hero__bajada" data-reveal>Directamente del corazón de la región donde crecen las plantas de yerba más sabrosas del planeta. Un sabor suave, dulce y bien equilibrado.</p>
-    <div class="hero__acciones" data-reveal>
-      <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Comprar ahora</a>
-      <a class="boton boton--linea" href="#distribui">Quiero distribuir</a>
+  <!-- ---------- HERO ---------- -->
+  <section class="hero" id="hero">
+    <div class="hero__caja">
+      <p class="volanta hero__volanta reveal">Yerba Mate <span aria-hidden="true">·</span> Desde 1918</p>
+      <h1 class="hero__titulo">
+        <span class="linea"><span>El día empieza</span></span>
+        <span class="linea"><span>con yerba mate.</span></span>
+      </h1>
+      <p class="hero__bajada reveal">Directamente del corazón de la región donde crecen las plantas de yerba más sabrosas del planeta. Un sabor suave, dulce y bien equilibrado.</p>
+      <div class="hero__acciones reveal">
+        <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Comprar ahora</a>
+        <a class="boton boton--linea" href="#distribuir">Quiero distribuir</a>
+      </div>
     </div>
-  </div>
 
-  <a class="hero__cue" href="#manifiesto" aria-label="Ir a la siguiente sección">
-    <span class="hero__cue-linea" aria-hidden="true"></span>
-    <span class="hero__cue-txt">Bajá</span>
-  </a>
-</section>
+    <p class="hero__pista reveal" aria-hidden="true">
+      <span class="hero__pista-linea"></span>
+      Bajá y entrá al monte
+    </p>
+  </section>
 
-<!-- ══ MANIFIESTO ══ -->
-<section class="manifiesto" id="manifiesto">
-  <div class="contenedor manifiesto__caja">
-    <p class="volanta" data-reveal>Nuestra esencia</p>
-    <h2 class="manifiesto__titulo display-2" data-palabras>No es solo yerba, es felicidad.</h2>
+
+  <!-- ================= MANIFIESTO - aterriza el sello ================= -->
+  <section class="manifiesto" id="manifiesto">
+    <p class="volanta reveal">Nuestra esencia</p>
+    <h2 class="manifiesto__titulo reveal">No es solo yerba,<br>es felicidad.</h2>
     <div class="manifiesto__cuerpo">
-      <p data-reveal>El mate no se toma: se comparte. Es la primera ronda de la mañana, la excusa para juntarse, el compañero de las charlas que no tienen apuro. En cada cebada hay un ritual que nos une desde hace generaciones.</p>
-      <p data-reveal>Por eso hacemos Seleme Centenaria: una yerba de calidad premium, con más de cien años de oficio detrás, para que ese momento tuyo sea siempre el mejor del día.</p>
+      <p class="reveal">El mate no se toma: se comparte. Es la primera ronda de la ma&ntilde;ana, la excusa para juntarse, el compa&ntilde;ero de las charlas que no tienen apuro. En cada cebada hay un ritual que nos une desde hace generaciones.</p>
+      <p class="reveal">Por eso hacemos Seleme Centenaria: una yerba de calidad premium, con m&aacute;s de cien a&ntilde;os de oficio detr&aacute;s, para que ese momento tuyo sea siempre el mejor del d&iacute;a.</p>
+      <p class="manifiesto__remate reveal">Desde 1918, en cada mate argentino.</p>
     </div>
-    <p class="manifiesto__remate" data-reveal>Desde 1918, en cada mate argentino.</p>
-  </div>
-</section>
+  </section>
 
-<!-- ══ HISTORIA · 1918 ══ -->
-<section class="historia" id="historia">
-  <div class="contenedor historia__grilla">
-    <div class="historia__col-dato">
-      <div class="historia__sticky">
-        <p class="volanta" data-reveal>Nuestra historia</p>
-        <p class="dato" data-dato>1918</p>
-        <p class="historia__pie" data-reveal>Más de 100 años de oficio matero</p>
+  <!-- ================= 01 . HISTORIA - el disco es el sello ================= -->
+  <section class="cap" id="historia">
+    <div class="cap__cabeza">
+      <p class="volanta reveal">01 <span aria-hidden="true">&mdash;</span> Nuestra historia</p>
+      <h2 class="cap__titulo reveal">M&aacute;s de 100 a&ntilde;os<br>de oficio matero</h2>
+    </div>
+    <div class="cap__cuerpo">
+      <p class="cap__entrada reveal">Seleme Centenaria nace en 1918 de la mano de la familia Seleme, en el coraz&oacute;n de la regi&oacute;n yerbatera del sur de Brasil, donde nacen y crecen las hojas m&aacute;s ricas del planeta. Hoy llega a cada mate argentino desde Gualeguaych&uacute;, Entre R&iacute;os.</p>
+    </div>
+    <ol class="hitos">
+      <li class="hito reveal">
+        <p class="hito__dato">1918</p>
+        <p class="hito__texto">Comienza la historia. La familia Seleme funda el oficio de elegir y elaborar la mejor yerba, hoja por hoja.</p>
+      </li>
+      <li class="hito reveal">
+        <p class="hito__dato">+100</p>
+        <p class="hito__texto">A&ntilde;os abasteciendo a Am&eacute;rica Latina, con la yerba elaborada y envasada en origen, calidad premium.</p>
+      </li>
+      <li class="hito reveal">
+        <p class="hito__dato">Hoy</p>
+        <p class="hito__texto">Una l&iacute;nea completa que combina tradici&oacute;n, sabor y una identidad de marca inconfundible.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================= 02 . ORIGEN - el disco es la luna ================= -->
+  <section class="cap" id="origen">
+    <div class="cap__cabeza">
+      <p class="volanta reveal">02 <span aria-hidden="true">&mdash;</span> Del yerbal a tu mate</p>
+      <h2 class="cap__titulo reveal">Donde nacen las hojas<br>m&aacute;s ricas del planeta</h2>
+    </div>
+    <div class="cap__cuerpo">
+      <p class="cap__entrada reveal">Elaborada con hojas nativas seleccionadas, procedentes de reservas naturales del sur de Brasil, y envasada en origen. Un padr&oacute;n uruguayo de molienda fina y alto contenido de hoja, que da un mate suave, naturalmente dulce y sin acidez.</p>
+    </div>
+
+    <!-- La cadena de causas. Es el pedido explicito del cliente: "por que es distinta"
+         no se contesta con "calidad premium" -eso lo dice todo el mundo-, se contesta
+         mostrando que cada cosa que se siente viene de una decision concreta. -->
+    <div class="cadena reveal">
+      <p class="cadena__titulo">Por qu&eacute; es distinta</p>
+      <ul class="cadena__lista">
+        <li>
+          <span class="cadena__causa">Hoja nativa de reserva natural</span>
+          <span class="cadena__efecto">perfil naturalmente dulce</span>
+          <span class="cadena__sentis">No necesita az&uacute;car.</span>
+        </li>
+        <li>
+          <span class="cadena__causa">Microclima selv&aacute;tico, menos sol directo</span>
+          <span class="cadena__efecto">menos amargor</span>
+          <span class="cadena__sentis">Mate suave.</span>
+        </li>
+        <li>
+          <span class="cadena__causa">Padr&oacute;n uruguayo, molienda fina</span>
+          <span class="cadena__efecto">mucha hoja, poco polvo</span>
+          <span class="cadena__sentis">No se tapa y rinde m&aacute;s.</span>
+        </li>
+        <li>
+          <span class="cadena__causa">Sin acidez</span>
+          <span class="cadena__efecto">se puede tomar todo el d&iacute;a</span>
+          <span class="cadena__sentis">Mate largo y parejo.</span>
+        </li>
+        <li>
+          <span class="cadena__causa">Envasada en origen</span>
+          <span class="cadena__efecto">no se rompe la cadena</span>
+          <span class="cadena__sentis">Consistencia paquete a paquete.</span>
+        </li>
+        <li>
+          <span class="cadena__causa">Desde 1918</span>
+          <span class="cadena__efecto">oficio, no receta nueva</span>
+          <span class="cadena__sentis">La de siempre.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= 03 . VARIEDADES - el claro del monte, en luz ================= -->
+  <section class="claro" id="variedades">
+    <div class="claro__caja">
+      <div class="cap__cabeza">
+        <p class="volanta volanta--oscura reveal">03 <span aria-hidden="true">&mdash;</span> Nuestra l&iacute;nea</p>
+        <h2 class="claro__titulo reveal">Una yerba<br>para cada mate</h2>
       </div>
-    </div>
-    <div class="historia__col-texto">
-      <p class="historia__intro" data-reveal>Seleme Centenaria nace en 1918 de la mano de la familia Seleme, en el corazón de la región yerbatera del sur de Brasil, donde nacen y crecen las hojas más ricas del planeta. Hoy llega a cada mate argentino desde Gualeguaychú, Entre Ríos.</p>
-      <ol class="hitos">
-        <li class="hito" data-reveal>
-          <span class="hito__marca">1918</span>
-          <p>Comienza la historia. La familia Seleme funda el oficio de elegir y elaborar la mejor yerba, hoja por hoja.</p>
+      <p class="claro__bajada reveal">Tres variedades pensadas para cada gusto y cada momento, con el sabor caracter&iacute;stico de Centenaria y presentaciones de 500 g y 1 kg.</p>
+
+      <ul class="fichas">
+        <li class="ficha reveal">
+          <img class="ficha__foto" src="img/pack-original.webp" width="640" height="1043" alt="Paquete amarillo de Yerba Mate Seleme Centenaria Original de 1 kg" loading="lazy" decoding="async">
+          <div class="ficha__cuerpo">
+            <h3 class="ficha__nombre">Original</h3>
+            <p class="ficha__sub">Padr&oacute;n uruguayo <span aria-hidden="true">&middot;</span> la cl&aacute;sica</p>
+            <p class="ficha__texto">La de siempre. Padr&oacute;n uruguayo de molienda fina y alto contenido de hoja: sabor suave, naturalmente dulce y sin acidez. Ideal para un mate largo y equilibrado, de la primera a la &uacute;ltima cebada.</p>
+            <ul class="chips"><li>500 g</li><li>1 kg</li><li>Sin T.A.C.C.</li></ul>
+          </div>
         </li>
-        <li class="hito" data-reveal>
-          <span class="hito__marca">+100</span>
-          <p>Años abasteciendo a América Latina, con la yerba elaborada y envasada en origen, calidad premium.</p>
+        <li class="ficha reveal">
+          <img class="ficha__foto" src="img/pack-azul.webp" width="640" height="1052" alt="Paquete azul de Yerba Mate Seleme Centenaria Azul con Palo de 1 kg" loading="lazy" decoding="async">
+          <div class="ficha__cuerpo">
+            <h3 class="ficha__nombre">Azul <span aria-hidden="true">&middot;</span> Con Palo</h3>
+            <p class="ficha__sub">Mistura de dos padrones</p>
+            <p class="ficha__texto">Mistura entre el padr&oacute;n uruguayo y el argentino, con un sutil agregado de palos que suaviza el cuerpo manteniendo el sabor caracter&iacute;stico de Centenaria.</p>
+            <ul class="chips"><li>1 kg</li><li>Sin T.A.C.C.</li></ul>
+          </div>
         </li>
-        <li class="hito" data-reveal>
-          <span class="hito__marca">Hoy</span>
-          <p>Una línea completa que combina tradición, sabor y una identidad de marca inconfundible.</p>
+        <li class="ficha reveal">
+          <img class="ficha__foto" src="img/pack-esencial.webp" width="640" height="1064" alt="Paquete blanco de Yerba Mate Seleme Centenaria Esencial de 1 kg" loading="lazy" decoding="async">
+          <div class="ficha__cuerpo">
+            <h3 class="ficha__nombre">Esencial</h3>
+            <p class="ficha__sub">Blend con car&aacute;cter</p>
+            <p class="ficha__texto">Un blend irresistible y con car&aacute;cter, con las propiedades que brinda la fibra de la hoja de yerba mate nativa. Lo esencial est&aacute; en tu mate.</p>
+            <ul class="chips"><li>500 g</li><li>1 kg</li><li>Sin T.A.C.C.</li></ul>
+          </div>
         </li>
-      </ol>
+      </ul>
+
+      <div class="sabor reveal">
+        <p class="volanta volanta--oscura">Perfil de sabor</p>
+        <h3 class="sabor__titulo">&iquest;C&oacute;mo te gusta tu mate?</h3>
+        <p class="sabor__bajada">De lo m&aacute;s suave a lo m&aacute;s intenso, en Centenaria hay una yerba para cada paladar. Us&aacute; esta gu&iacute;a para encontrar la tuya.</p>
+        <ol class="escala">
+          <li class="escala__punto">
+            <span class="escala__nivel">Suave</span>
+            <span class="escala__quien">Original</span>
+            <span class="escala__nota">Suave &middot; dulce &middot; sin acidez</span>
+          </li>
+          <li class="escala__punto">
+            <span class="escala__nivel">Equilibrado</span>
+            <span class="escala__quien">Azul &middot; Con Palo</span>
+            <span class="escala__nota">Cuerpo medio &middot; con palo</span>
+          </li>
+          <li class="escala__punto">
+            <span class="escala__nivel">Intenso</span>
+            <span class="escala__quien">Esencial</span>
+            <span class="escala__nota">Con car&aacute;cter &middot; m&aacute;s fibra</span>
+          </li>
+        </ol>
+      </div>
+
+      <p class="claro__accion reveal">
+        <a class="boton boton--tinta" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Ver toda la l&iacute;nea en la tienda</a>
+      </p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ══ ORIGEN ══ -->
-<section class="origen" id="origen">
-  <figure class="origen__banda">
-    <div class="origen__foto" data-parallax="monte">
-      <img src="img/monte-1600.webp"
-           srcset="img/monte-760.webp 760w, img/monte-1100.webp 1100w, img/monte-1600.webp 1600w"
-           sizes="100vw" alt="Atardecer sobre el monte del sur de Brasil" width="1600" height="1067" loading="lazy" decoding="async">
+  <!-- ================= 04 . POR QUE ELEGIRLA ================= -->
+  <section class="cap" id="porque">
+    <div class="cap__cabeza">
+      <p class="volanta reveal">04 <span aria-hidden="true">&mdash;</span> Por qu&eacute; elegirla</p>
+      <h2 class="cap__titulo reveal">M&aacute;s que un sabor,<br>un compa&ntilde;ero diario</h2>
     </div>
-    <figcaption class="origen__titulos contenedor">
-      <p class="volanta" data-reveal>Del yerbal a tu mate</p>
-      <h2 class="display-2" data-palabras>Donde nacen las hojas más ricas del planeta</h2>
-    </figcaption>
-  </figure>
-
-  <div class="contenedor origen__abajo">
-    <p class="origen__cuerpo" data-reveal>Elaborada con hojas nativas seleccionadas, procedentes de reservas naturales del sur de Brasil, y envasada en origen. Un padrón uruguayo de molienda fina y alto contenido de hoja, que da un mate suave, naturalmente dulce y sin acidez.</p>
-    <ul class="atributos">
-      <li data-reveal><h3>Padrón uruguayo</h3><p>Selección de hojas nativas para un perfil suave y armonioso.</p></li>
-      <li data-reveal><h3>Molienda fina</h3><p>Alto contenido de hoja: rinde para muchas cebadas sin fatiga.</p></li>
-      <li data-reveal><h3>No produce acidez</h3><p>Un mate largo y equilibrado, dulce de forma natural.</p></li>
-      <li data-reveal><h3>Sin T.A.C.C.</h3><p>Libre de gluten. Envasada en origen, calidad premium.</p></li>
-    </ul>
-    <p class="origen__pie" data-reveal>Reservas naturales del sur de Brasil, donde crece la hoja nativa.</p>
-  </div>
-</section>
-
-<!-- ══ VARIEDADES · riel horizontal con scrub ══ -->
-<section class="variedades" id="variedades">
-  <div class="variedades__cabeza contenedor">
-    <p class="volanta" data-reveal>Nuestra línea</p>
-    <h2 class="display-2" data-palabras>Una yerba para cada mate</h2>
-    <p class="variedades__bajada" data-reveal>Tres variedades pensadas para cada gusto y cada momento, con el sabor característico de Centenaria.</p>
-  </div>
-
-  <div class="riel" id="riel">
-    <div class="riel__pista" id="riel-pista">
-      <article class="ficha ficha--original" data-tinte="#F6EFCE">
-        <div class="ficha__foto"><img src="img/pack-original.webp" alt="Paquete de Yerba Mate Centenaria Original" width="640" height="1043" loading="lazy" decoding="async"></div>
-        <div class="ficha__txt">
-          <p class="ficha__sub">Padrón uruguayo · la clásica</p>
-          <h3 class="ficha__nombre">Original</h3>
-          <p>La de siempre. Padrón uruguayo de molienda fina y alto contenido de hoja: sabor suave, naturalmente dulce y sin acidez. Ideal para un mate largo y equilibrado, de la primera a la última cebada.</p>
-          <ul class="chips"><li>500 g</li><li>1 kg</li><li>Sin TACC</li></ul>
-        </div>
-      </article>
-
-      <article class="ficha ficha--azul" data-tinte="#E6EDF6">
-        <div class="ficha__foto"><img src="img/pack-azul.webp" alt="Paquete de Yerba Mate Centenaria Azul con Palo" width="640" height="1052" loading="lazy" decoding="async"></div>
-        <div class="ficha__txt">
-          <p class="ficha__sub">Mistura de dos padrones</p>
-          <h3 class="ficha__nombre">Azul · Con Palo</h3>
-          <p>Mistura entre el padrón uruguayo y el argentino, con un sutil agregado de palos que suaviza el cuerpo manteniendo el sabor característico de Centenaria.</p>
-          <ul class="chips"><li>1 kg</li><li>Sin TACC</li></ul>
-        </div>
-      </article>
-
-      <article class="ficha ficha--esencial" data-tinte="#E7EEE8">
-        <div class="ficha__foto"><img src="img/pack-esencial.webp" alt="Paquete de Yerba Mate Centenaria Esencial" width="640" height="1064" loading="lazy" decoding="async"></div>
-        <div class="ficha__txt">
-          <p class="ficha__sub">Blend con carácter</p>
-          <h3 class="ficha__nombre">Esencial</h3>
-          <p>Un blend irresistible y con carácter, con las propiedades que brinda la fibra de la hoja de yerba mate nativa. Lo esencial está en tu mate.</p>
-          <ul class="chips"><li>500 g</li><li>1 kg</li><li>Sin TACC</li></ul>
-        </div>
-      </article>
-    </div>
-  </div>
-
-  <div class="contenedor variedades__pie">
-    <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Ver todas en la tienda</a>
-  </div>
-</section>
-
-<!-- ══ PERFIL DE SABOR ══ -->
-<section class="perfil" id="perfil">
-  <div class="contenedor">
-    <p class="volanta" data-reveal>Perfil de sabor</p>
-    <h2 class="display-2" data-palabras>¿Cómo te gusta tu mate?</h2>
-    <p class="perfil__bajada" data-reveal>De lo más suave a lo más intenso, en Centenaria hay una yerba para cada paladar. Usá esta guía para encontrar la tuya.</p>
-
-    <div class="escala" id="escala">
-      <svg class="escala__svg" viewBox="0 0 1000 130" role="img" aria-label="Escala de sabor: Original es suave, Azul con Palo es equilibrado, Esencial es intenso">
-        <line class="escala__eje" x1="40" y1="80" x2="960" y2="80"/>
-        <g class="escala__marca">
-          <circle cx="180" cy="80" r="9"/>
-          <text class="escala__nombre" x="180" y="48">Original</text>
-          <text class="escala__desc" x="180" y="112">suave · dulce · sin acidez</text>
-        </g>
-        <g class="escala__marca">
-          <circle cx="500" cy="80" r="9"/>
-          <text class="escala__nombre" x="500" y="48">Azul · Con Palo</text>
-          <text class="escala__desc" x="500" y="112">cuerpo medio · con palo</text>
-        </g>
-        <g class="escala__marca">
-          <circle cx="820" cy="80" r="9"/>
-          <text class="escala__nombre" x="820" y="48">Esencial</text>
-          <text class="escala__desc" x="820" y="112">con carácter · más fibra</text>
-        </g>
-      </svg>
-      <div class="escala__extremos"><span>Suave</span><span>Equilibrado</span><span>Intenso</span></div>
-
-      <!-- en pantallas chicas la escala horizontal no entra: tres etiquetas
-           de hasta 15 caracteres sobre 350 px quedan ilegibles. Misma
-           información, apilada. -->
-      <ol class="escala__lista">
-        <li data-reveal><span class="escala__pos">Suave</span><strong>Original</strong><span>suave · dulce · sin acidez</span></li>
-        <li data-reveal><span class="escala__pos">Equilibrado</span><strong>Azul · Con Palo</strong><span>cuerpo medio · con palo</span></li>
-        <li data-reveal><span class="escala__pos">Intenso</span><strong>Esencial</strong><span>con carácter · más fibra</span></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- ══ POR QUÉ ELEGIRLA ══ -->
-<section class="porque" id="porque">
-  <div class="contenedor">
-    <p class="volanta" data-reveal>Por qué elegirla</p>
-    <h2 class="display-2" data-palabras>Más que un sabor, un compañero diario</h2>
     <ul class="beneficios">
-      <li data-reveal><h3>Energía natural</h3><p>Acompaña tus mañanas y tu concentración a lo largo del día.</p></li>
-      <li data-reveal><h3>Rico en antioxidantes</h3><p>Propiedades naturales de la hoja de yerba mate.</p></li>
-      <li data-reveal><h3>Sin T.A.C.C.</h3><p>Libre de gluten, apta para toda la familia.</p></li>
-      <li data-reveal><h3>Rinde más</h3><p>Molienda fina y alto contenido de hoja: más cebadas por mate.</p></li>
-      <li data-reveal><h3>No produce acidez</h3><p>Suave y equilibrada, para tomar todo el día.</p></li>
-      <li data-reveal><h3>Calidad premium</h3><p>Envasada en origen, con más de 100 años de oficio.</p></li>
+      <li class="beneficio reveal"><h3>Energ&iacute;a natural</h3><p>Acompa&ntilde;a tus ma&ntilde;anas y tu concentraci&oacute;n a lo largo del d&iacute;a.</p></li>
+      <li class="beneficio reveal"><h3>Rico en antioxidantes</h3><p>Propiedades naturales de la hoja de yerba mate.</p></li>
+      <li class="beneficio reveal"><h3>Sin T.A.C.C.</h3><p>Libre de gluten, apta para toda la familia.</p></li>
+      <li class="beneficio reveal"><h3>Rinde m&aacute;s</h3><p>Molienda fina y alto contenido de hoja: m&aacute;s cebadas por mate.</p></li>
+      <li class="beneficio reveal"><h3>No produce acidez</h3><p>Suave y equilibrada, para tomar todo el d&iacute;a.</p></li>
+      <li class="beneficio reveal"><h3>Calidad premium</h3><p>Envasada en origen, con m&aacute;s de 100 a&ntilde;os de oficio.</p></li>
     </ul>
-  </div>
+    <blockquote class="cita reveal">
+      <p>Del desayuno en la cancha a la playa: donde va un argentino, va Centenaria.</p>
+    </blockquote>
+  </section>
 
-  <!-- el viaje: el paquete donde no debería estar -->
-  <div class="viaje">
-    <blockquote class="viaje__cita contenedor" data-palabras>Del desayuno en la cancha a la playa: donde va un argentino, va Centenaria.</blockquote>
-    <div class="viaje__tira">
-      <figure data-viaje><img src="img/boca-900.webp" srcset="img/boca-640.webp 640w, img/boca-900.webp 900w" sizes="(max-width:900px) 62vw, 24vw" alt="El paquete de Centenaria en una mesada, con el escudo de Boca Juniors al fondo" width="900" height="1125" loading="lazy" decoding="async"><figcaption>En la cancha</figcaption></figure>
-      <figure data-viaje><img src="img/playa-1000.webp" srcset="img/playa-700.webp 700w, img/playa-1000.webp 1000w" sizes="(max-width:900px) 62vw, 24vw" alt="Una mano sostiene el paquete Esencial a contraluz en la playa" width="1000" height="1250" loading="lazy" decoding="async"><figcaption>En la playa</figcaption></figure>
-      <figure data-viaje><img src="img/pavas-900.webp" srcset="img/pavas-640.webp 640w, img/pavas-900.webp 900w" sizes="(max-width:900px) 62vw, 24vw" alt="Dos tanques de agua pintados como un mate y una pava gigantes contra el cielo" width="900" height="1125" loading="lazy" decoding="async"><figcaption>En el camino</figcaption></figure>
-      <figure data-viaje><img src="img/stand-1000.webp" srcset="img/stand-700.webp 700w, img/stand-1000.webp 1000w" sizes="(max-width:900px) 62vw, 24vw" alt="Gente tomando mate en el stand de Centenaria, con la gazebo amarilla de fondo" width="1000" height="1250" loading="lazy" decoding="async"><figcaption>En la ronda</figcaption></figure>
+  <!-- ================= 05 . EL RITUAL - el disco es la boca del mate ================= -->
+  <section class="cap cap--ritual" id="ritual">
+    <div class="cap__cabeza">
+      <p class="volanta reveal">05 <span aria-hidden="true">&mdash;</span> El ritual</p>
+      <h2 class="cap__titulo reveal">El mate perfecto,<br>paso a paso</h2>
     </div>
-    <p class="viaje__remate contenedor" data-reveal>Donde hay mate, hay Centenaria.</p>
-  </div>
-</section>
-
-<!-- ══ EL RITUAL ══ -->
-<section class="ritual" id="ritual">
-  <div class="contenedor">
-    <p class="volanta" data-reveal>El ritual</p>
-    <h2 class="display-2" data-palabras>El mate perfecto, paso a paso</h2>
     <ol class="pasos">
-      <li class="paso" data-paso>
-        <span class="paso__n">1</span>
-        <h3>Cargá el mate</h3>
-        <p>Llená el mate hasta tres cuartos con Centenaria. Tapalo con la mano, dalo vuelta y agitá suave para que el polvo quede arriba.</p>
+      <li class="paso reveal">
+        <p class="paso__n">01</p>
+        <h3 class="paso__titulo">Carg&aacute; el mate</h3>
+        <p class="paso__texto">Llen&aacute; el mate hasta tres cuartos con Centenaria. Tapalo con la mano, dalo vuelta y agit&aacute; suave para que el polvo quede arriba.</p>
       </li>
-      <li class="paso" data-paso>
-        <span class="paso__n">2</span>
-        <h3>Incliná la yerba</h3>
-        <p>Volvé el mate a su posición dejando la yerba en pendiente. Así se forma el hueco donde va la bombilla.</p>
+      <li class="paso reveal">
+        <p class="paso__n">02</p>
+        <h3 class="paso__titulo">Inclin&aacute; la yerba</h3>
+        <p class="paso__texto">Volv&eacute; el mate a su posici&oacute;n dejando la yerba en pendiente. As&iacute; se forma el hueco donde va la bombilla.</p>
       </li>
-      <li class="paso" data-paso>
-        <span class="paso__n">3</span>
-        <h3>Primer hilo de agua tibia</h3>
-        <p>Humedecé el sector más bajo con agua tibia y esperá un momento. Esto protege la yerba y hace que dure más lavados.</p>
+      <li class="paso reveal">
+        <p class="paso__n">03</p>
+        <h3 class="paso__titulo">Primer hilo de agua tibia</h3>
+        <p class="paso__texto">Humedec&eacute; el sector m&aacute;s bajo con agua tibia y esper&aacute; un momento. Esto protege la yerba y hace que dure m&aacute;s lavados.</p>
       </li>
-      <li class="paso" data-paso>
-        <span class="paso__n">4</span>
-        <h3>Colocá la bombilla</h3>
-        <p>Tapá la punta con el pulgar e insertala en el hueco húmedo, sin revolver, hasta el fondo.</p>
+      <li class="paso reveal">
+        <p class="paso__n">04</p>
+        <h3 class="paso__titulo">Coloc&aacute; la bombilla</h3>
+        <p class="paso__texto">Tap&aacute; la punta con el pulgar e insertala en el hueco h&uacute;medo, sin revolver, hasta el fondo.</p>
       </li>
-      <li class="paso" data-paso>
-        <span class="paso__n">5</span>
-        <h3>Cebá y disfrutá</h3>
-        <p>Agua a 70–80 °C (que no hierva) siempre sobre el mismo lado. Cebá parejo y a compartir la ronda.</p>
+      <li class="paso reveal">
+        <p class="paso__n">05</p>
+        <h3 class="paso__titulo">Ceb&aacute; y disfrut&aacute;</h3>
+        <p class="paso__texto">Agua a 70&ndash;80 &deg;C (que no hierva) siempre sobre el mismo lado. Ceb&aacute; parejo y a compartir la ronda.</p>
       </li>
     </ol>
-    <p class="ritual__tip" data-reveal><strong>Tip Centenaria:</strong> nunca uses agua hirviendo. El secreto de un mate suave y sin amargor está en la temperatura justa.</p>
-  </div>
-</section>
+    <p class="tip reveal"><strong>Tip Centenaria:</strong> nunca uses agua hirviendo. El secreto de un mate suave y sin amargor est&aacute; en la temperatura justa.</p>
+  </section>
 
-<!-- ══ DÓNDE COMPRAR ══ -->
-<section class="donde" id="donde">
-  <div class="contenedor donde__grilla">
-    <div class="donde__txt">
-      <p class="volanta" data-reveal>Puntos de venta</p>
-      <h2 class="display-2" data-palabras>Dónde comprar</h2>
-      <p class="donde__bajada" data-reveal>Conseguí Centenaria en nuestros puntos de venta, o compralo online y te llega a todo el país.</p>
-      <div class="donde__acciones" data-reveal>
-        <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Comprar online</a>
-        <a class="boton boton--linea-osc" href="/donde-comprar/">Ver puntos de venta</a>
-      </div>
-      <p class="donde__nota" data-reveal>¿Tenés un local y querés vender Centenaria? <a href="#distribui">Sumate como punto de venta</a> y empezá a vender en tu zona.</p>
+  <!-- ================= 06 . CIERRE - el disco es el boton ================= -->
+  <section class="cierre" id="comprar">
+    <div class="cap__cabeza">
+      <p class="volanta reveal">06 <span aria-hidden="true">&mdash;</span> D&oacute;nde conseguirla</p>
+      <h2 class="cap__titulo reveal">Donde hay mate,<br>hay Centenaria.</h2>
     </div>
-    <figure class="donde__foto" data-reveal>
-      <img src="img/spread-900.webp" srcset="img/spread-640.webp 640w, img/spread-900.webp 900w" sizes="(max-width:900px) 90vw, 40vw" alt="Mesa con paquetes de Centenaria, alfajores y cartelería de la marca" width="900" height="1125" loading="lazy" decoding="async">
-    </figure>
-  </div>
-</section>
 
-<!-- ══ DISTRIBUÍ ══ -->
-<section class="distribui" id="distribui">
-  <div class="distribui__nerv" aria-hidden="true"><svg class="nerv" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-  <path d="M 85.71 612 C 81.39 439.2 88.59 300.96 85.71 180 M 85.71 561.78 Q 62.94 542.53 35.11 454.86 M 85.71 561.78 Q 108.48 542.53 136.31 454.86 M 85.71 511.56 Q 60.51 493.29 29.7 410.04 M 85.71 511.56 Q 110.92 493.29 141.73 410.04 M 85.71 461.34 Q 54.24 444.04 15.78 365.22 M 85.71 461.34 Q 117.18 444.04 155.65 365.22 M 85.71 411.12 Q 49.47 394.79 5.16 320.4 M 85.71 411.12 Q 121.96 394.79 166.27 320.4 M 85.71 360.9 Q 53.8 345.54 14.8 275.58 M 85.71 360.9 Q 117.62 345.54 156.62 275.58 M 85.71 310.68 Q 57.45 296.29 22.91 230.76 M 85.71 310.68 Q 113.98 296.29 148.52 230.76 M 85.71 260.46 Q 66.19 247.05 42.32 185.94 M 85.71 260.46 Q 105.24 247.05 129.11 185.94" data-vena="0"/>
-  <path d="M 257.14 612 C 252.82 414.76 260.02 256.97 257.14 118.91 M 257.14 554.68 Q 234.07 532.71 205.86 432.64 M 257.14 554.68 Q 280.22 532.71 308.42 432.64 M 257.14 497.36 Q 226.84 476.5 189.81 381.48 M 257.14 497.36 Q 287.44 476.5 324.47 381.48 M 257.14 440.03 Q 228.63 420.29 193.77 330.32 M 257.14 440.03 Q 285.66 420.29 320.51 330.32 M 257.14 382.71 Q 225.81 364.07 187.51 279.16 M 257.14 382.71 Q 288.48 364.07 326.77 279.16 M 257.14 325.39 Q 227.01 307.86 190.18 228.01 M 257.14 325.39 Q 287.27 307.86 324.1 228.01 M 257.14 268.07 Q 228.28 251.65 193.01 176.85 M 257.14 268.07 Q 286 251.65 321.28 176.85 M 257.14 210.75 Q 236.83 195.44 212 125.69 M 257.14 210.75 Q 277.46 195.44 302.28 125.69" data-vena="1"/>
-  <path d="M 428.57 612 C 424.25 390.33 431.45 212.99 428.57 57.82 M 428.57 547.58 Q 405.19 522.89 376.61 410.42 M 428.57 547.58 Q 451.95 522.89 480.53 410.42 M 428.57 483.15 Q 401.48 459.71 368.36 352.92 M 428.57 483.15 Q 455.66 459.71 488.78 352.92 M 428.57 418.73 Q 397.87 396.53 360.35 295.42 M 428.57 418.73 Q 459.27 396.53 496.79 295.42 M 428.57 354.31 Q 399.52 333.36 364.02 237.93 M 428.57 354.31 Q 457.62 333.36 493.12 237.93 M 428.57 289.88 Q 400.38 270.18 365.93 180.43 M 428.57 289.88 Q 456.76 270.18 491.21 180.43 M 428.57 225.46 Q 398.69 207 362.17 122.93 M 428.57 225.46 Q 458.45 207 494.97 122.93 M 428.57 161.03 Q 405.73 143.83 377.8 65.44 M 428.57 161.03 Q 451.42 143.83 479.34 65.44" data-vena="2"/>
-  <path d="M 600 612 C 595.68 433.09 602.88 289.96 600 164.73 M 600 560 Q 576.31 540.08 547.36 449.3 M 600 560 Q 623.69 540.08 652.64 449.3 M 600 508.01 Q 576.11 489.09 546.91 402.9 M 600 508.01 Q 623.89 489.09 653.09 402.9 M 600 456.01 Q 567.12 438.1 526.94 356.5 M 600 456.01 Q 632.88 438.1 673.06 356.5 M 600 404.02 Q 564.61 387.11 521.37 310.09 M 600 404.02 Q 635.39 387.11 678.63 310.09 M 600 352.02 Q 569.73 336.12 532.74 263.69 M 600 352.02 Q 630.27 336.12 667.26 263.69 M 600 300.03 Q 569.7 285.13 532.67 217.28 M 600 300.03 Q 630.3 285.13 667.33 217.28 M 600 248.03 Q 576.19 234.14 547.08 170.88 M 600 248.03 Q 623.81 234.14 652.92 170.88" data-vena="3"/>
-  <path d="M 771.43 612 C 767.11 408.65 774.31 245.98 771.43 103.64 M 771.43 552.9 Q 747.44 530.26 718.11 427.08 M 771.43 552.9 Q 795.42 530.26 824.74 427.08 M 771.43 493.81 Q 742.45 472.3 707.03 374.34 M 771.43 493.81 Q 800.41 472.3 835.83 374.34 M 771.43 434.71 Q 745.72 414.35 714.29 321.6 M 771.43 434.71 Q 797.14 414.35 828.56 321.6 M 771.43 375.61 Q 737.23 356.39 695.44 268.85 M 771.43 375.61 Q 805.62 356.39 847.42 268.85 M 771.43 316.51 Q 739.87 298.44 701.3 216.11 M 771.43 316.51 Q 802.99 298.44 841.56 216.11 M 771.43 257.42 Q 741.94 240.49 705.9 163.37 M 771.43 257.42 Q 800.92 240.49 836.96 163.37 M 771.43 198.32 Q 749.98 182.53 723.77 110.63 M 771.43 198.32 Q 792.88 182.53 819.09 110.63" data-vena="4"/>
-  <path d="M 942.86 612 C 938.54 384.22 945.74 201.99 942.86 42.55 M 942.86 545.8 Q 918.56 520.43 888.86 404.86 M 942.86 545.8 Q 967.15 520.43 996.85 404.86 M 942.86 479.6 Q 917.08 455.51 885.58 345.78 M 942.86 479.6 Q 968.63 455.51 1000.14 345.78 M 942.86 413.4 Q 910.75 390.6 871.51 286.7 M 942.86 413.4 Q 974.96 390.6 1014.2 286.7 M 942.86 347.2 Q 913.58 325.68 877.79 227.62 M 942.86 347.2 Q 972.14 325.68 1007.92 227.62 M 942.86 281 Q 910.99 260.76 872.03 168.54 M 942.86 281 Q 974.73 260.76 1013.68 168.54 M 942.86 214.81 Q 918.64 195.84 889.04 109.46 M 942.86 214.81 Q 967.08 195.84 996.68 109.46 M 942.86 148.61 Q 920.88 130.92 894.02 50.38 M 942.86 148.61 Q 964.83 130.92 991.69 50.38" data-vena="5"/>
-  <path d="M 1114.29 612 C 1109.97 426.98 1117.17 278.97 1114.29 149.45 M 1114.29 558.23 Q 1089.68 537.62 1059.61 443.75 M 1114.29 558.23 Q 1138.89 537.62 1168.96 443.75 M 1114.29 504.46 Q 1083.42 484.89 1045.69 395.76 M 1114.29 504.46 Q 1145.15 484.89 1182.88 395.76 M 1114.29 450.69 Q 1080 432.16 1038.09 347.77 M 1114.29 450.69 Q 1148.57 432.16 1190.48 347.77 M 1114.29 396.92 Q 1087.29 379.43 1054.3 299.78 M 1114.29 396.92 Q 1141.28 379.43 1174.27 299.78 M 1114.29 343.15 Q 1084.36 326.7 1047.78 251.79 M 1114.29 343.15 Q 1144.21 326.7 1180.79 251.79 M 1114.29 289.37 Q 1089.98 273.97 1060.28 203.8 M 1114.29 289.37 Q 1138.59 273.97 1168.29 203.8 M 1114.29 235.6 Q 1093.61 221.24 1068.33 155.81 M 1114.29 235.6 Q 1134.97 221.24 1160.24 155.81" data-vena="6"/>
-</svg></div>
-  <div class="contenedor distribui__caja">
-    <p class="volanta" data-reveal>Para comercios y distribuidores</p>
-    <h2 class="display-2" data-palabras>Distribuí Centenaria. ¡Sumate!</h2>
-    <p class="distribui__cuerpo" data-reveal>Contamos con precio competitivo para distribución y comercios. Escribinos y te enviamos la lista mayorista, condiciones y opciones de envío a todo el país.</p>
+    <div class="puertas">
+      <article class="puerta puerta--principal reveal">
+        <h3 class="puerta__titulo">Comprala online</h3>
+        <p class="puerta__texto">Env&iacute;os a todo el pa&iacute;s con Andreani, Correo Argentino, OCA y V&iacute;a Cargo. Retiro en CABA, C&oacute;rdoba, Rosario y Santa Fe. Entre 3 y 7 d&iacute;as h&aacute;biles desde que se acredita el pago.</p>
+        <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Ir a la tienda</a>
+      </article>
 
-    <ul class="motivos">
-      <li data-reveal>Excelente para distribuidores</li>
-      <li data-reveal>Calidad premium</li>
-      <li data-reveal>Gran presencia visual</li>
-    </ul>
+      <article class="puerta reveal">
+        <h3 class="puerta__titulo">Puntos de venta</h3>
+        <p class="puerta__texto">Todav&iacute;a no llegamos a tu zona. Pod&eacute;s comprarla online con env&iacute;o a todo el pa&iacute;s &mdash; o, si ten&eacute;s un comercio, ser vos quien la traiga.</p>
+        <a class="enlace" href="#distribuir">&iquest;Ten&eacute;s un local? Sumate como punto de venta <span aria-hidden="true">&rarr;</span></a>
+      </article>
 
-    <ol class="proceso">
-      <li data-reveal><span>1</span> Escribinos por WhatsApp.</li>
-      <li data-reveal><span>2</span> Contanos qué cantidad aproximada te interesa.</li>
-      <li data-reveal><span>3</span> Te mandamos la lista de precios según tu escala.</li>
-      <li data-reveal><span>4</span> Coordinamos pago y entrega.</li>
-    </ol>
-
-    <div class="distribui__acciones" data-reveal>
-      <a class="boton boton--oro" href="https://wa.me/5493446239393?text=Hola%2C%20quiero%20distribuir%20Yerba%20Mate%20Centenaria." target="_blank" rel="noopener">Escribir por WhatsApp</a>
-      <a class="boton boton--linea" href="mailto:persaimportadora.ventas@gmail.com">Escribir por mail</a>
+      <article class="puerta reveal" id="distribuir">
+        <h3 class="puerta__titulo">Distribu&iacute; Centenaria</h3>
+        <p class="puerta__texto">Contamos con precio competitivo para distribuci&oacute;n y comercios. Escribinos y te enviamos la lista mayorista, condiciones y opciones de env&iacute;o a todo el pa&iacute;s.</p>
+        <ol class="proceso">
+          <li>Escribinos por WhatsApp.</li>
+          <li>Contanos qu&eacute; cantidad aproximada te interesa.</li>
+          <li>Te mandamos la lista de precios seg&uacute;n tu escala.</li>
+          <li>Coordinamos pago y entrega.</li>
+        </ol>
+        <a class="boton boton--linea" href="https://wa.me/5493446239393?text=Hola%2C%20quiero%20distribuir%20Yerba%20Mate%20Centenaria." target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      </article>
     </div>
-  </div>
-</section>
+
+    <div class="contacto reveal" id="contacto">
+      <h3 class="contacto__titulo">Estamos para escucharte</h3>
+      <ul class="contacto__lista">
+        <li><span>WhatsApp</span><a href="https://wa.me/5493446239393" target="_blank" rel="noopener">3446 23-9393</a></li>
+        <li><span>WhatsApp</span><a href="https://wa.me/5493446510714" target="_blank" rel="noopener">3446 51-0714</a></li>
+        <li><span>Email</span><a href="mailto:persaimportadora.ventas@gmail.com">persaimportadora.ventas@gmail.com</a></li>
+        <li><span>Instagram</span><a href="https://www.instagram.com/yerbacentenariaargentina/" target="_blank" rel="noopener">@yerbacentenariaargentina</a></li>
+      </ul>
+    </div>
+  </section>
 
 </main>
 
-<footer class="pie" id="contacto">
-  <div class="contenedor pie__grilla">
-    <div class="pie__marca">
-      <img src="img/logo.webp" alt="Seleme Centenaria" width="600" height="343" loading="lazy" decoding="async">
-      <p>Seleme Centenaria · Desde 1918<br>Gualeguaychú, Entre Ríos</p>
-    </div>
-    <div class="pie__col">
-      <h3>Navegación</h3>
-      <a href="#historia">Historia</a>
-      <a href="#origen">Origen</a>
-      <a href="#variedades">Variedades</a>
-      <a href="#ritual">El ritual</a>
-      <a href="/donde-comprar/">Dónde comprar</a>
-      <a href="#distribui">Distribuí Centenaria</a>
-    </div>
-    <div class="pie__col">
-      <h3>Contacto</h3>
-      <a href="https://wa.me/5493446239393" target="_blank" rel="noopener">WhatsApp 3446 23-9393</a>
-      <a href="https://wa.me/5493446510714" target="_blank" rel="noopener">WhatsApp 3446 51-0714</a>
-      <a href="mailto:persaimportadora.ventas@gmail.com">persaimportadora.ventas@gmail.com</a>
-      <a href="https://www.instagram.com/yerbacentenariaargentina/" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Tienda online</a>
-    </div>
-  </div>
-  <div class="contenedor pie__legal">
-    <p>SELEME CENTENARIA · ELABORADA EN ORIGEN, BRASIL · GUALEGUAYCHÚ, ENTRE RÍOS, ARGENTINA</p>
-    <p>Diseño web: <a href="https://lautaromendez.com.ar" target="_blank" rel="noopener">Lautaro Mendez</a></p>
+<footer class="pie">
+  <div class="pie__caja">
+    <img class="pie__1918" src="img/1918.webp" width="300" height="273" alt="" loading="lazy" decoding="async">
+    <p class="pie__marca">Seleme Centenaria <span aria-hidden="true">&middot;</span> Desde 1918</p>
+    <p class="pie__legal">Elaborada en origen, Brasil <span aria-hidden="true">&middot;</span> Gualeguaych&uacute;, Entre R&iacute;os, Argentina</p>
+    <p class="pie__credito">Dise&ntilde;o web: <a href="https://lautaromendez.com.ar" target="_blank" rel="noopener">Lautaro Mendez</a></p>
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
-<script src="js/main.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+<script src="js/monte.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

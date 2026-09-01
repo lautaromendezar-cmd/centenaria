@@ -1,9 +1,10 @@
 # Centenaria · web nueva
 
 Sitio de **Seleme Centenaria** (yerba mate, desde 1918) — reemplaza el WordPress + Elementor
-de `yerbamatecentenaria.com.ar`, que hice yo. Vanilla, **sin build**: HTML + CSS + GSAP.
+de `yerbamatecentenaria.com.ar`, que hice yo. Vanilla, **sin build**: HTML + CSS + GSAP +
+un motor WebGL propio.
 
-**Estado: la home está hecha y verificada. Falta todo lo demás.**
+**Estado: la home está completa y verificada. Faltan las tres páginas internas.**
 
 ---
 
@@ -11,10 +12,11 @@ de `yerbamatecentenaria.com.ar`, que hice yo. Vanilla, **sin build**: HTML + CSS
 
 ```bash
 node tools/servir.cjs 4740      # http://localhost:4740/
-node tools/verificar.cjs        # Chrome real: consola, reveals, alt, scroll lateral
-node tools/contraste-hero.cjs   # contraste del texto del hero SOBRE la foto
-node tools/mirar.cjs            # capturas del riel pinneado
-node tools/movil.cjs            # recorrido a 390 px + menú abierto
+
+node tools/robustez.cjs 4740    # los 6 escenarios de FALLA (es el que más importa)
+node tools/contraste.cjs 4740   # contraste de toda la home sobre el fondo real
+node tools/entrada.cjs 4740     # cortina + LCP medido
+node tools/rodar.cjs 4740       # hoja de contactos del scroll (agregá 390 844 para móvil)
 ```
 
 Los scripts toman `sharp` y `puppeteer-core` de `../latina/node_modules` con `createRequire`,
@@ -25,42 +27,86 @@ estático y sale a buscar un build que no existe.
 
 | | |
 |---|---|
-| `index.html` | La home entera. Los SVG de nervadura van inline (se animan con `stroke-dashoffset`) |
+| `index.html` | La home entera. El disco (sol → sello → luna → mate → botón) es SVG inline |
 | `css/estilo.css` | Hoja única. Tokens arriba, secciones en el orden en que se leen |
-| `js/main.js` | GSAP + ScrollTrigger. Sin `type="module"`: tiene que andar con doble clic |
+| `js/monte.js` | **Motor WebGL propio**, ~15 KB escritos a mano. No es three.js: ver abajo |
+| `js/main.js` | GSAP + ScrollTrigger sobre ese motor. Sin `type="module"`: anda con doble clic |
 | `img/` | Todo generado por `tools/`, nada arrastrado a mano |
-| `tools/` | Preparación de imágenes, generador de la nervadura y los verificadores |
+| `tools/` | Preparación de imágenes y los cuatro verificadores |
+| `_gen/` | Las generaciones crudas (Higgsfield). Gitignoreadas: 94 MB de PNG regenerables |
+
+**Scripts viejos.** `verificar.cjs`, `mirar.cjs`, `movil.cjs` y `zoom.cjs` son de la home v1
+descartada y apuntan a selectores que ya no existen; **`verificar.cjs` además está roto**
+(llama `alListen(srv)` con `srv` sin definir). Los reemplazan los cuatro de arriba.
+`paquetes.cjs`, `imagenes.cjs` y `nervadura.cjs` sí siguen sirviendo: generaron los tres
+envases, las fotos reales del cliente y el patrón de nervadura.
+
+## La idea
+
+**Un disco que nunca se va de la pantalla.** El sol sale detrás de la vegetación, se despega,
+se enfría —pierde el halo, se le endurece el borde, aparece el filo dorado— y se convierte en
+el **sello «est · 1918» que está impreso en los tres paquetes**. Después sigue mutando: luna
+sobre el monte de Brasil, boca del mate vista desde arriba (que se mueve con los 5 pasos del
+ritual), y botón en el cierre.
+
+No es un adorno: el sello real ya trae el año, la frase del titular y «cien años abasteciendo
+a América Latina». El sol y el sello tienen la misma forma, así que la transición no es un
+efecto — es un reconocimiento.
+
+El fondo es **uno solo y fijo** para toda la home. Las secciones no traen fondo propio: lo que
+las hace legibles es `.mundo__sombra`, que sube por capítulo. Por eso el scroll se siente una
+sola toma y no una pila de bloques.
 
 ## Decisiones que no son obvias
 
 - **La copy no se inventó**: sale del folleto v2 que el cliente ya aprobó y usa.
-- **Los tres paquetes se recortaron por detección**, no a ojo: `tools/paquetes.cjs` busca las
-  columnas no-verdes de `pack3-verde.png` y saca las cajas. Son provisorios — van a
-  reemplazarse por fotos de producto en alta.
-- **La nervadura de hoja es SVG generado** (`tools/nervadura.cjs`), no una imagen: por eso se
-  puede dibujar con el scroll. Es el patrón real de los paquetes y las gazebos.
-- **El oro nunca va como texto sobre fondo claro** — da 1,25:1. Sobre `--papel` se usa
-  `--oro-hondo`. Eso define la arquitectura: el sitio es mayoritariamente oscuro y las zonas
-  claras quedan para variedades, perfil de sabor y ritual.
-- **El velo del hero está calibrado, no elegido**: se abre a la derecha para que se vea el
-  paquete, y `tools/contraste-hero.cjs` mide el peor píxel detrás de cada línea de texto
-  ocultando el texto y muestreando el frame compuesto. Todo pasa AA.
-- **El riel de variedades se pinnea sólo en ≥1000 px.** En el celular queda como carrusel
-  nativo con scroll-snap: se maneja mejor con el dedo y no pelea con el scroll vertical.
-- **La escala de sabor tiene versión apilada en ≤700 px.** La horizontal es ilegible ahí.
+- **El motor es WebGL propio y no three.js.** Hacen falta 5 quads con profundidad, niebla,
+  motas y una luz que sigue al puntero. Un grafo de escena completo serían ~450 KB para no
+  usar el 98% — y todo demo de three.js termina pareciéndose al anterior.
+- **Tres capas, no cuatro.** Con foto real cada matte de más es un borde de más para que se
+  note. La profundidad la completan la niebla, las motas y la linterna.
+- **El mundo se genera; el paquete jamás.** La IA le reescribe el microtexto de la etiqueta.
+  Los tres envases son fotos reales recortadas por detección.
+- **La fuente de luz quedó FUERA de cuadro a propósito** al elegir la imagen. Un sol quemado
+  dentro de la foto pelearía con el sol que sube y se enfría.
+- **El velo del hero está calibrado, no elegido**: `tools/contraste.cjs` oculta el texto,
+  captura el frame compuesto y mide el **peor píxel** detrás de cada línea. El H1 estaba en
+  2,37:1 antes de recalibrarlo.
+- **El oro nunca va como texto sobre fondo claro** — da 1,25:1. En el claro de variedades la
+  acción pasa a ser tinta sobre papel.
 - **Si GSAP no carga, la página se lee igual.** El respaldo está en el script inline del
-  `<head>`, no dentro de `main.js` — que es justo el que puede no cargar.
+  `<head>`, no dentro de `main.js` — que es justo el que puede no cargar. Lo mismo la cortina:
+  el plazo que la retira lo arma el `<head>`, así que no hay forma de quedar encerrado atrás
+  de un preloader.
+
+### Dos cosas medidas que no eran obvias
+
+- **En esta página el LCP es siempre el texto del hero.** Un `<canvas>` no es candidato nunca,
+  y Chrome descarta las imágenes que cubren exactamente el viewport: las toma por fondo. (La
+  misma imagen a 1400×800 sí califica; a 1440×900 no.) Por eso la entrada del hero arranca
+  *junto* con el telón y no después: el texto pinta detrás mientras sube, y el LCP no mira
+  oclusión. 2888 → 964 ms.
+- **Varios tweens con `scrub` sobre la misma propiedad se pisan.** GSAP le toma el valor
+  inicial a cada tween cuando lo crea, así que el de un capítulo posterior —todavía en
+  progreso 0— devolvía `.mundo__sombra` a cero y dejaba el mundo brillante abajo del texto.
+  Dio un fallo de contraste real (2,22:1). Todo tramo va con `fromTo` + `immediateRender:false`.
 
 ## Lo que falta
 
-**Del cliente** (está todo detallado en `material/PENDIENTES.md`, fuera del repo):
+**Del cliente** (detallado en `material/PENDIENTES.md`, fuera del repo):
 lista de puntos de venta, cuál de los dos Facebook es el bueno, si el mínimo mayorista es
-20 o 100 kg, si Azul con Palo existe en ½ kg, **video** (no hay ninguno) y el **logo en
-vectorial** (hoy es un PNG de 600 px).
+20 o 100 kg, si Azul con Palo existe en ½ kg, y el **logo en vectorial** (hoy es un PNG
+de 600 px).
 
-**Mío:** las otras tres páginas (`/donde-comprar/`, `/vende-centenaria/`, `/contacto/`), las
-fotos de producto en alta, los fondos generados que faltan, y volver a chequear precios
-contra la tienda antes de publicar.
+**Deliberadamente NO publicado**, y conviene que siga así hasta que él confirme: la lista de
+29 distribuidores (son teléfonos de personas reales y la lista está deducida de Latina), los
+precios mayoristas (envejecen solos y le muestran la estructura de costos a la competencia) y
+el Facebook.
+
+**Mío:** las tres páginas internas (`/donde-comprar/`, `/vende-centenaria/`, `/contacto/`),
+autohospedar las fuentes (hoy son de Google y el swap de Fraunces es el cuello del LCP; de
+paso el sitio andaría sin internet), y volver a chequear precios contra la tienda antes de
+publicar.
 
 ## ⚠️ El repo es PÚBLICO
 

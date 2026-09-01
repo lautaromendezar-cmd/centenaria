@@ -7,6 +7,10 @@ tools/_qc*.jpg
 tools/_qc*.png
 tools/_nervadura-*.svg
 
+# Generaciones crudas de Higgsfield: ~35 MB de PNG que se vuelven a generar
+# con tools/capas.cjs. Lo que se sirve son los WebP de img/.
+_gen/
+
 # ⚠️ material/ NO se sube mientras el repo sea PÚBLICO.
 # Adentro hay: los teléfonos y nombres de 29 distribuidores (personas
 # reales, y encima una lista SIN CONFIRMAR), la lista de precios
