@@ -16,7 +16,10 @@
 <meta property="og:url" content="https://yerbamatecentenaria.com.ar/">
 <meta property="og:title" content="Seleme Centenaria &middot; Yerba mate desde 1918">
 <meta property="og:description" content="Padrón uruguayo de molienda fina, hoja nativa del sur de Brasil y envasada en origen: un mate suave, naturalmente dulce y sin acidez.">
-<meta property="og:image" content="https://yerbamatecentenaria.com.ar/img/og.jpg">
+<!-- OJO: la imagen OG tiene que ser una URL que exista HOY, o WhatsApp no arma la
+     tarjeta. Mientras el sitio viva en la URL de revision apunta a Vercel; cuando
+     vaya al dominio propio, cambiarla a https://yerbamatecentenaria.com.ar/img/og.jpg -->
+<meta property="og:image" content="https://centenaria.vercel.app/img/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Monte del sur de Brasil al amanecer con el titular: El día empieza con yerba mate.">
@@ -164,7 +167,55 @@ document.documentElement.classList.add('js', 'cargando');
     <a href="#comprar">Dónde comprar</a>
     <a class="cabecera__tienda" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Tienda</a>
   </nav>
+  <button class="cabecera__menu" id="menuBoton" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+    <span></span><span></span>
+  </button>
 </header>
+
+<!-- ============ MENU MOVIL: pantalla completa ============
+     Vive fuera de la cabecera para no pelear con su stacking context. El script
+     que lo maneja va inline y sin dependencias: la navegacion movil no puede
+     depender de que GSAP o main.js hayan cargado. -->
+<div class="menu" id="menu" aria-hidden="true">
+  <button class="menu__cerrar" id="menuCerrar" type="button" aria-label="Cerrar menú"></button>
+  <p class="menu__marca">Seleme Centenaria <span aria-hidden="true">&middot;</span> 1918</p>
+  <nav class="menu__nav" aria-label="Principal">
+    <a href="#historia">Historia</a>
+    <a href="#origen">Origen</a>
+    <a href="#variedades">Variedades</a>
+    <a href="#ritual">El ritual</a>
+    <a href="#comprar">Dónde comprar</a>
+    <a class="menu__tienda" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Tienda</a>
+  </nav>
+  <div class="menu__contacto">
+    <a href="https://wa.me/5493446239393" target="_blank" rel="noopener">WhatsApp <span aria-hidden="true">&middot;</span> 3446 23-9393</a>
+    <a href="mailto:persaimportadora.ventas@gmail.com">persaimportadora.ventas@gmail.com</a>
+    <a href="https://www.instagram.com/yerbacentenariaargentina/" target="_blank" rel="noopener">@yerbacentenariaargentina</a>
+  </div>
+</div>
+<script>
+(function () {
+  var raiz = document.documentElement;
+  var boton = document.getElementById('menuBoton');
+  var menu = document.getElementById('menu');
+  var cerrar = document.getElementById('menuCerrar');
+  if (!boton || !menu || !cerrar) return;
+  function poner(abierto) {
+    raiz.classList.toggle('menu-abierto', abierto);
+    boton.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    menu.setAttribute('aria-hidden', abierto ? 'false' : 'true');
+    /* el fondo no scrollea mientras el menu esta abierto */
+    raiz.style.overflow = abierto ? 'hidden' : '';
+    (abierto ? cerrar : boton).focus();
+  }
+  boton.addEventListener('click', function () { poner(true); });
+  cerrar.addEventListener('click', function () { poner(false); });
+  menu.addEventListener('click', function (ev) { if (ev.target.closest('a')) poner(false); });
+  addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && raiz.classList.contains('menu-abierto')) poner(false);
+  });
+})();
+</script>
 
 <main id="contenido">
 

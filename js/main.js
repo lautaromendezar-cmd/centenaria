@@ -106,8 +106,9 @@
       e.quieto = true;
       monte.frame();
       /* sin scroll-animacion el sello no puede retirarse solo: se lo ancla al hero
-         (absolute en vez de fixed) y se va scrolleando con el, como corresponde */
-      gsap.set(disco, { opacity: 1, scale: 1, rotate: 0, position: 'absolute', top: '50vh' });
+         (absolute en vez de fixed) y se va scrolleando con el, como corresponde.
+         En pantalla angosta directamente no va: le cae encima al titulo. */
+      if (!chico.matches) gsap.set(disco, { opacity: 1, scale: 1, rotate: 0, position: 'absolute', top: '50vh' });
       gsap.set([aroExt, aroInt], { strokeDashoffset: 0 });
       gsap.set(selloTexto, { opacity: 1 });
       gsap.set(reveals, { opacity: 1, y: 0 });
