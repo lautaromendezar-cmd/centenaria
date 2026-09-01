@@ -1,12 +1,28 @@
 # CONTINUAR · Centenaria
 
-Estado al **1-sep-2026**. Para retomar desde otra máquina, leer esto y después el
-[README](README.md), que explica cómo está armado y las decisiones que no son obvias.
+Estado al **1-sep-2026 (tarde, desde la notebook)**. Para retomar desde otra máquina,
+leer esto y después el [README](README.md), que explica cómo está armado y las
+decisiones que no son obvias.
 
 - **Online:** https://centenaria.vercel.app/ (Vercel, preset *Other*, sin build, push a `main` redespliega)
-- **Repo:** `lautaromendezar-cmd/centenaria` · **PÚBLICO** · commit `8297af5`
-- **Verificado en producción:** recorrido completo sin un request fallido, WebGL vivo,
-  las 3 capas base y las 6 escenas cargando, sin errores de JS.
+- **Repo:** `lautaromendezar-cmd/centenaria` · **PÚBLICO** · commit `13541b2`
+- **Estado: esperando la devolución del cliente** sobre la ronda de ajustes del 1-sep:
+  - El disco termina su viaje en el hero (sol → sello y se retira con el manifiesto);
+    fuera la luna, la boca del mate y el círculo de oro.
+  - Variedades dejó el velo claro: misma noche que el resto, la luz la ponen las tarjetas.
+  - Menú móvil de pantalla completa (X, links centrados, contactos abajo); la cabecera
+    móvil quedó solo con marca y hamburguesa.
+  - `og:image` apunta a la URL de Vercel para que WhatsApp arme la tarjeta —
+    **volverla al dominio propio cuando salga** (comentario en el head).
+  - Fix real de scrub: volver al hero restaura bajada/botones/sello (fromTo + cajas;
+    la nota larga está en el timeline del hero de `main.js`).
+  - Títulos de capítulo entran por líneas (máscara del hero) y hay un gajo de yerba
+    en primer plano con parallax en historia, ritual y cierre (`tools/rama.cjs`,
+    `img/gajo-*.webp` — nombre nuevo por el caché inmutable de `/img/`).
+- Las herramientas de `tools/` ahora resuelven `node_modules` y Chrome por máquina
+  vía `tools/_entorno.cjs` (casa: `latina/node_modules`; notebook: `Desktop\Claude`).
+  En la notebook NO correr `contraste.cjs`/`entrada.cjs` (WebGL por software clava la
+  CPU): la suite completa se corre en la PC de casa antes de publicar.
 
 ---
 
