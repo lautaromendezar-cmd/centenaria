@@ -305,6 +305,21 @@ main{position:relative;z-index:3}
 .cap__cuerpo{margin:clamp(2rem,5vh,3.5rem) 0 0 auto;max-width:36rem}
 .cap__entrada{margin:0;font-size:var(--body-lg);color:var(--crema)}
 
+/* ============================== LA RAMA ==============================
+   La misma rama de yerba del frente del hero (recortada por tools/rama.cjs),
+   suelta en primer plano de algunos capitulos. Se mueve a otra velocidad que el
+   fondo (main.js) y esa diferencia es la profundidad. z-index negativo: queda
+   arriba del mundo pero abajo de todo el contenido de main. El sangrado hasta
+   el borde del viewport lo clipa el overflow-x:hidden del body. */
+.rama{position:absolute;z-index:-1;pointer-events:none}
+.rama img{width:100%;height:auto;filter:brightness(.9) blur(1px)}
+.rama--historia{top:3%;right:calc((100% - 100vw)/2);width:clamp(240px,24vw,370px)}
+.rama--ritual{top:32%;left:calc((100% - 100vw)/2);width:clamp(300px,30vw,480px)}
+.rama--ritual img{transform:scaleX(-1)}
+.rama--cierre{top:1%;right:calc((100% - 100vw)/2);width:clamp(220px,21vw,330px)}
+/* en pantalla angosta se pisaria con el texto: no va */
+@media (max-width:760px){.rama{display:none}}
+
 /* --- hitos: 1918 / +100 / Hoy --- */
 .hitos{list-style:none;margin:clamp(3rem,8vh,6rem) 0 0;padding:0;
   display:grid;gap:clamp(2rem,5vw,4rem);grid-template-columns:repeat(3,1fr)}

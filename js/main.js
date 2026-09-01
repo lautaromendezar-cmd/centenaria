@@ -14,7 +14,10 @@
 
   /* Ocultar lo que el JS va a revelar se hace ACA, no en el CSS: si este archivo
      no carga, .reveal ya vale opacity:1 y la pagina se lee entera. */
-  var reveals = $$('.reveal');
+  /* Los titulos grandes NO van en el paquete de reveals: entran por lineas, con
+     la misma mascara que el titulo del hero (ver revelarCapitulos). */
+  var TITULOS = '.manifiesto__titulo, .cap__titulo, .claro__titulo';
+  var reveals = $$('.reveal').filter(function (el) { return !el.matches(TITULOS); });
   var lineas = $$('.hero__titulo .linea > span');
   gsap.set(reveals, { opacity: 0, y: 18 });
   gsap.set(lineas, { yPercent: 108 });
@@ -264,11 +267,43 @@
     revelarCapitulos();
   }
 
+  /* Separa el titulo por <br> y envuelve cada linea en la mascara del hero: un
+     span exterior con overflow:hidden y uno interior que sube. Corre solo con
+     GSAP andando, asi que sin JS el titulo queda plano y legible. */
+  function partirTitulo(t) {
+    var partes = [[]];
+    Array.prototype.slice.call(t.childNodes).forEach(function (n) {
+      if (n.nodeName === 'BR') partes.push([]);
+      else partes[partes.length - 1].push(n);
+    });
+    t.innerHTML = '';
+    return partes.map(function (nodos) {
+      var linea = document.createElement('span'); linea.className = 'linea';
+      var interno = document.createElement('span');
+      nodos.forEach(function (n) { interno.appendChild(n); });
+      linea.appendChild(interno); t.appendChild(linea);
+      return interno;
+    });
+  }
+
   function revelarCapitulos() {
     $$('.manifiesto, .cap, .claro, .cierre').forEach(function (sec) {
-      gsap.to($$('.reveal', sec), {
-        opacity: 1, y: 0, duration: .85, stagger: .09, ease: 'power3.out',
-        scrollTrigger: { trigger: sec, start: 'top 72%' }
+      var titulo = $(TITULOS, sec);
+      var lineasSec = titulo ? partirTitulo(titulo) : [];
+      if (lineasSec.length) gsap.set(lineasSec, { yPercent: 108 });
+      var piezas = $$('.reveal', sec).filter(function (el) { return !el.matches(TITULOS); });
+      var tlSec = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 72%' } });
+      if (lineasSec.length) tlSec.to(lineasSec, { yPercent: 0, duration: .9, stagger: .11, ease: 'power3.out' }, 0);
+      tlSec.to(piezas, { opacity: 1, y: 0, duration: .85, stagger: .09, ease: 'power3.out' }, lineasSec.length ? .15 : 0);
+    });
+
+    /* La rama en primer plano cruza el capitulo a OTRA velocidad que el fondo:
+       esa diferencia es la profundidad. Es la gramatica del hero (mundo atras,
+       hoja adelante) llevada a los capitulos. */
+    $$('.rama').forEach(function (r) {
+      gsap.fromTo(r, { yPercent: 15 }, {
+        yPercent: -15, ease: 'none', immediateRender: false,
+        scrollTrigger: { trigger: r.parentNode, start: 'top bottom', end: 'bottom top', scrub: .8 }
       });
     });
   }
