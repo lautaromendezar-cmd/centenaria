@@ -234,10 +234,15 @@ document.documentElement.classList.add('js', 'cargando');
       </div>
     </div>
 
-    <p class="hero__pista reveal" aria-hidden="true">
-      <span class="hero__pista-linea"></span>
-      Bajá y entrá al monte
-    </p>
+    <!-- La pista va envuelta a proposito: el fade del scroll actua sobre las CAJAS
+         (.hero__caja y esta), nunca sobre los mismos elementos que anima la
+         entrada. Ver la nota del timeline del hero en main.js. -->
+    <div class="hero__pistaCaja">
+      <p class="hero__pista reveal" aria-hidden="true">
+        <span class="hero__pista-linea"></span>
+        Bajá y entrá al monte
+      </p>
+    </div>
   </section>
 
 

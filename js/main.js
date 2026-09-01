@@ -117,7 +117,26 @@
       return;
     }
 
+    /* DOS REGLAS que costaron un bug real (la bajada y los botones no volvian al
+       scrollear de vuelta al hero, y a veces quedaba el sello como circulo verde
+       sin tinta):
+       1. El fade del scroll NO toca los elementos que anima la entrada: actua
+          sobre las CAJAS (.hero__caja, .hero__pistaCaja). Al retroceder un tween
+          mas atras de su inicio, GSAP restaura los estilos inline que capturo en
+          el primer render — y para los .reveal eso era "oculto". Las cajas no
+          tienen estilos inline nunca, asi que su restore siempre es visible.
+       2. El disco tiene un solo dueño visible por tramo, y el trigger del hero
+          lo clampa a 0 antes de su aparicion (.74): el tween del manifiesto le
+          restauraba opacity 1 al volver, con la tinta y los aros aun sin dibujar.
+       Ademas todo va con fromTo + immediateRender:false, como los tramos de los
+       capitulos (ver nota mas abajo). */
     var tl = gsap.timeline({
+      defaults: { immediateRender: false },
+      /* el clampeo va en el onUpdate del TIMELINE, no del ScrollTrigger: el scrub
+         sigue easing despues del ultimo evento de scroll, y el trigger ya no avisa */
+      onUpdate: function () {
+        if (tl.progress() < .74) gsap.set(disco, { opacity: 0 });
+      },
       scrollTrigger: {
         trigger: '.hero', start: 'top top', end: '+=230%',
         pin: true, pinSpacing: true, scrub: .65, anticipatePin: 1
@@ -126,33 +145,39 @@
 
     /* 1. la camara entra al monte: las capas se separan y la niebla se abre.
           El sol sube DETRAS de la loma hasta despegarse del filo. */
-    tl.to(e, { avance: 1, ease: 'none', duration: .54 }, 0)
-      .to(e, { sol: 1, ease: 'power1.inOut', duration: .46 }, 0)
+    tl.fromTo(e, { avance: 0 }, { avance: 1, ease: 'none', duration: .54 }, 0)
+      .fromTo(e, { sol: 0 }, { sol: 1, ease: 'power1.inOut', duration: .46 }, 0)
       /* el sol trepa hasta el punto de fuga de los rayos que ya trae la foto:
          si apareciera en otro lado se leeria como un disco pegado encima */
-      .to(e, { solY: .70, solRadio: .10, ease: 'power1.inOut', duration: .46 }, 0)
-      .to(e, { motas: 1, ease: 'power1.out', duration: .3 }, .10)
+      .fromTo(e, { solY: .46, solRadio: .06 }, { solY: .70, solRadio: .10, ease: 'power1.inOut', duration: .46 }, 0)
+      .fromTo(e, { motas: 0 }, { motas: 1, ease: 'power1.out', duration: .3 }, .10)
 
-      /* 2. el texto del hero se va antes de que el sol quede solo en cuadro */
-      .to([$('.hero__volanta'), $('.hero__titulo'), $('.hero__bajada'), $('.hero__acciones'), $('.hero__pista')],
+      /* 2. el texto del hero se va antes de que el sol quede solo en cuadro
+            (las cajas, no los elementos: regla 1 de arriba) */
+      .fromTo([$('.hero__caja'), $('.hero__pistaCaja')],
+        { opacity: 1, y: 0 },
         { opacity: 0, y: -50, ease: 'power2.in', duration: .2, stagger: .03 }, .14)
 
       /* 3. limpio de la cresta, pasa al frente, se centra y crece.
             Se lo deja respirar solo en cuadro: es el unico momento quieto del hero. */
-      .to(e, { solX: .5, solRadio: .215, ease: 'power2.inOut', duration: .26 }, .42)
-      .to(e, { motas: .3, ease: 'none', duration: .3 }, .5)
+      .fromTo(e, { solX: .74 }, { solX: .5, ease: 'power2.inOut', duration: .26 }, .42)
+      .fromTo(e, { solRadio: .10 }, { solRadio: .215, ease: 'power2.inOut', duration: .26 }, .42)
+      .fromTo(e, { motas: 1 }, { motas: .3, ease: 'none', duration: .3 }, .5)
 
       /* 4. SE ENFRIA. El disco no se cambia por otro: pierde el halo, se le endurece
             el borde y vira al verde del envase. Recien sobre eso entra la tinta.
             Que sea el mismo objeto es lo que hace que se lea como reconocimiento
             —"ah, era el sello del paquete"— y no como un efecto de transicion. */
-      .to(e, { solSobre: 1, ease: 'none', duration: .01 }, .60)
-      .to(e, { solFrio: 1, ease: 'power2.inOut', duration: .16 }, .62)
-      .to(e, { solY: .5, ease: 'power2.inOut', duration: .20 }, .60)
-      .to(disco, { opacity: 1, scale: 1, rotate: 0, ease: 'power2.out', duration: .14 }, .74)
-      .to(e, { solOpacidad: 0, ease: 'none', duration: .1 }, .76)
-      .to([aroExt, aroInt], { strokeDashoffset: 0, ease: 'power2.inOut', duration: .2, stagger: .04 }, .76)
-      .to(selloTexto, { opacity: 1, ease: 'power1.out', duration: .16 }, .84);
+      .fromTo(e, { solSobre: 0 }, { solSobre: 1, ease: 'none', duration: .01 }, .60)
+      .fromTo(e, { solFrio: 0 }, { solFrio: 1, ease: 'power2.inOut', duration: .16 }, .62)
+      .fromTo(e, { solY: .70 }, { solY: .5, ease: 'power2.inOut', duration: .20 }, .60)
+      .fromTo(disco, { opacity: 0, scale: .82, rotate: -16 },
+                     { opacity: 1, scale: 1, rotate: 0, ease: 'power2.out', duration: .14 }, .74)
+      .fromTo(e, { solOpacidad: 1 }, { solOpacidad: 0, ease: 'none', duration: .1 }, .76)
+      .fromTo([aroExt, aroInt],
+        { strokeDashoffset: function (i, el) { return 2 * Math.PI * el.r.baseVal.value; } },
+        { strokeDashoffset: 0, ease: 'power2.inOut', duration: .2, stagger: .04 }, .76)
+      .fromTo(selloTexto, { opacity: 0 }, { opacity: 1, ease: 'power1.out', duration: .16 }, .84);
 
     /* ---------------------------------------------------------------------
        5. DE ACA EN ADELANTE: el disco ya cumplio — nacio sol, se enfrio en

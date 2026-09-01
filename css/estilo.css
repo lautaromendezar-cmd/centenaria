@@ -185,7 +185,9 @@ a{color:inherit}
   border-bottom:1px solid transparent;transition:border-color .25s,color .25s}
 .cabecera__nav a:hover{border-bottom-color:var(--oro);color:var(--oro)}
 .cabecera__tienda{color:var(--oro)}
-@media (max-width:760px){.cabecera__nav a:not(.cabecera__tienda){display:none}}
+/* En movil el menu de pantalla completa reemplaza a la nav entera: en la
+   cabecera quedan solo la marca y la hamburguesa. Tienda vive dentro del menu. */
+@media (max-width:760px){.cabecera__nav{display:none}}
 
 /* --- hamburguesa (solo movil) --- */
 .cabecera__menu{display:none;flex-direction:column;justify-content:center;align-items:center;
