@@ -71,10 +71,52 @@ Cómo se generaron, por si hay que rehacerlas:
 | Mundo del hero | `nano_banana_pro` 21:9 2k | Se eligió el encuadre con **la fuente de luz fuera de cuadro**: un sol quemado dentro de la foto pelearía con el sol que sube y se enfría |
 | Rama de yerba (frente) | `seedream_v5_pro` con `remove_bg` | Devuelve el recorte con alfa ya hecho |
 | Vegetación media | `recraft_v4_1` sobre negro + `remove_background` | |
-| Las 6 escenas | `nano_banana_pro` 21:9 2k | Galpón 1918, aéreo atardecer, yerbal luminoso, mate en la mesa, noche, amanecer |
+| Las 6 escenas (v2) | `nano_banana_pro` 21:9 2k | **Una sola película**, ver abajo. Los prompts están en `material/PROMPTS-ESCENAS.md` |
 
 Ojo con `models_explore action:'recommend'`: devuelve 4-5 modelos y **se come los mejores**.
 Nano Banana Pro no aparece ahí; hay que listar el catálogo entero.
+
+---
+
+## El mundo v2 — una película, no seis fotos (2-sep)
+
+La v1 eran **seis fotos sin relación**: dos interiores casi idénticos (`porque` y `ritual`),
+dos aéreos casi idénticos (`origen` y `cierre`) y un campo blanco (`variedades`) que no
+pertenecía a ese mundo. Por buenas que fueran una por una, juntas se leían como un banco de
+imágenes. Se ve en `tools/_qc-cruces.jpg`, columna del medio.
+
+La v2 es **una sola tarde que se hace noche y termina amaneciendo**, bajando del monte a la
+mesa. El tiempo siempre avanza; la altura hace el viaje:
+
+| # | Sección | Cámara | Momento |
+|---|---|---|---|
+| 01 | `historia` | El secadero entre araucarias, humo del barbacuá | Última luz |
+| 02 | `origen` | Justo sobre el dosel, niebla en los valles | Atardecer |
+| 03 | `variedades` | **Sobre las nubes** | Noche |
+| 04 | `porque` | De vuelta entre las hojas, rocío a contraluz | Noche |
+| 05 | `ritual` | La mesa junto a la ventana, farol | Noche cerrada |
+| 06 | `cierre` | El monte otra vez, ventana encendida a lo lejos | Amanece |
+
+El 06 cierra el círculo contra el hero, que dice «El día empieza con yerba mate».
+
+**Lo que hace que se lean como un mundo no es el guion, es el bloque común de óptica y grado**
+que va pegado en los seis prompts sin cambiar una palabra: misma lente, mismo grano, misma
+aberración, mismo bosque, y la luz siempre arriba a la derecha con el cuadrante inferior
+izquierdo vacío, que es donde vive el texto. Si cada prompt trae su propia óptica, vuelven a
+ser seis fotos.
+
+⚠️ **`variedades` va oscura a propósito**: la luz de esa sección la ponen las tres tarjetas
+blancas de los envases. Si esa escena sale luminosa, la sección se cae.
+
+⚠️ **`ritual` salió de día en el primer intento** y hubo que rehacerla: el bloque común pide
+la luz arriba a la derecha, y el modelo la metió por la ventana como si fuera la mañana. Para
+una escena nocturna hay que decir «DEEP NIGHT», negar explícitamente el amanecer y los haces,
+y dejar la ventana como fuente fría. La descartada quedó en `_gen/esc-v2/_ritual-dia-descartada.png`.
+
+**Respaldo de la v1:** `Desktop/Claude/_centenaria-fondos-v1-20260902` (140 MB, fuera del
+repo) y los PNG fuente también en `_gen/esc-v1/`.
+
+**Costo:** 2 créditos por imagen 21:9 2k. Las seis + una repetición salieron 14.
 
 ---
 

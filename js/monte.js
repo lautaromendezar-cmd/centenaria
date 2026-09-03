@@ -418,7 +418,9 @@
         img.onload = function () {
           escenas[i] = { tex: textura(gl, img), asp: img.naturalWidth / img.naturalHeight };
         };
-        img.src = 'img/esc-' + n + '-' + w + '.webp';
+        /* la version va en el NOMBRE: /img/ se sirve immutable un anio y los
+           archivos no llevan hash (ver tools/escenas.cjs) */
+        img.src = 'img/esc-' + n + '-v2-' + w + '.webp';
       });
     }
 
