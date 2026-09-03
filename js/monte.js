@@ -420,7 +420,7 @@
         };
         /* la version va en el NOMBRE: /img/ se sirve immutable un anio y los
            archivos no llevan hash (ver tools/escenas.cjs) */
-        img.src = 'img/esc-' + n + '-v2-' + w + '.webp';
+        img.src = 'img/esc-' + n + '-v3-' + w + '.webp';
       });
     }
 

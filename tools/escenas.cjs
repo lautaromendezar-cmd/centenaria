@@ -16,7 +16,7 @@ const ESCENAS = ['historia', 'origen', 'variedades', 'porque', 'ritual', 'cierre
    entro al sitio sigue viendo la vieja durante un anio. Al cambiar el mundo hay
    que subir esta version y actualizar el patron en js/monte.js (cargarEscenas).
    Mismo criterio que se uso con img/gajo-*.webp. */
-const VERSION = 'v2';
+const VERSION = 'v3';
 
 (async () => {
   let total = 0;

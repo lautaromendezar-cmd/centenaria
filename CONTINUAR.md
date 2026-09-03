@@ -58,6 +58,18 @@ distribuidores —personas reales— y la lista de precios mayorista.
 **Hay que copiarlo a mano** desde la máquina vieja (o pasar el repo a privado, sacar esa línea
 del `.gitignore` y commitearlo).
 
+### 2-bis. Lo NUEVO que tampoco viaja (2-sep)
+
+- `material/PROMPTS-ESCENAS.md` — los seis prompts del mundo, con el bloque común de óptica
+  y grado. **Sin esto no se puede regenerar ninguna escena.**
+- `_gen/esc-v2/` — los PNG fuente de las seis escenas, los `.txt` de cada prompt, y las dos
+  descartadas (`_ritual-dia-descartada.png`, `_variedades-nubes-descartada.png`).
+- `_gen/packs/` — los recortes con alfa a resolución nativa.
+- El respaldo del mundo v1 vive **fuera del repo**, en
+  `Desktop/Claude/_centenaria-fondos-v1-20260902` (140 MB).
+
+Lo que sí viaja y alcanza para que el sitio ande: los `.webp` de `img/`.
+
 ### 3. `_gen/` está gitignoreado (94 MB)
 
 Son los PNG crudos que salieron de Higgsfield. **No hacen falta para que el sitio ande**: los
@@ -92,7 +104,7 @@ mesa. El tiempo siempre avanza; la altura hace el viaje:
 |---|---|---|---|
 | 01 | `historia` | El secadero entre araucarias, humo del barbacuá | Última luz |
 | 02 | `origen` | Justo sobre el dosel, niebla en los valles | Atardecer |
-| 03 | `variedades` | **Sobre las nubes** | Noche |
+| 03 | `variedades` | Entre las hileras del yerbal, con los envases parados adentro | Atardecer |
 | 04 | `porque` | De vuelta entre las hojas, rocío a contraluz | Noche |
 | 05 | `ritual` | La mesa junto a la ventana, farol | Noche cerrada |
 | 06 | `cierre` | El monte otra vez, ventana encendida a lo lejos | Amanece |
@@ -105,13 +117,54 @@ aberración, mismo bosque, y la luz siempre arriba a la derecha con el cuadrante
 izquierdo vacío, que es donde vive el texto. Si cada prompt trae su propia óptica, vuelven a
 ser seis fotos.
 
-⚠️ **`variedades` va oscura a propósito**: la luz de esa sección la ponen las tres tarjetas
-blancas de los envases. Si esa escena sale luminosa, la sección se cae.
+### Los tres envases dejaron la tarjeta blanca (2-sep)
+
+Las tres tarjetas blancas cortaban la película al medio: eran lo único del sitio que no
+pertenecía al mundo. Ahora **los envases se paran dentro del yerbal**.
+
+Cómo está resuelto, que es lo que importa para no romperlo:
+
+- **Los envases NO se generan.** Son la foto real, recortada con alfa por
+  `tools/paquetes-alfa.cjs` desde el folleto `pdf-centenaria/assets/full/pack3-verde.png`.
+  Se probó generarlos en ambiente y el modelo escribió **«YERBA MATE DUS PALO»** en el azul
+  (dice CON PALO) y microtexto inventado en los tres. Impublicable sobre el producto de un
+  cliente.
+- **El fondo es el mundo WebGL, no una foto compuesta.** Si el conjunto fuera una sola
+  imagen 21:9, los envases no se podrían animar por separado y su posición quedaría fija
+  mientras el texto reflowea: en cada resolución se desalinearían. Separados, el texto sigue
+  siendo HTML y acomoda solo.
+- **Lo que los apoya es su sombra de contacto** (`.ficha__peana::after`), no el suelo de la
+  foto. El fondo es fijo y la sección scrollea encima, así que ningún horizonte pintado
+  calzaría en más de una posición de scroll.
+- **El filo cálido va con `drop-shadow`, no `box-shadow`**: drop-shadow respeta el alfa y
+  sigue la silueta; box-shadow dibujaría un rectángulo.
+- **Entran escalonados y viajan a distinta velocidad** (el del medio un poco más), para que
+  la fila se abra en profundidad en vez de moverse pegada.
+
+⚠️ **Recorte:** el fondo del original es verde oscuro **y la sombra bajo los envases también**.
+Con `g > r+12 && g > b+12` la sombra quedaba del lado del paquete y los tres salían pegados en
+un solo grupo. El criterio que separa es `g < 170 && g >= r-2 && g >= b+2` — el tope de 170 es
+lo que deja afuera al envase blanco. Y `sharp.metadata()` devuelve el tamaño del **archivo**,
+no el del `extract`: hay que tomar ancho/alto/canales del propio `toBuffer`.
+
+⚠️ **Resolución:** el único original es un folleto de 1080×1440, así que cada envase mide
+~298×499 nativos — alcanza, pero está justo en retina. **Pedirle al cliente las fotos de los
+envases en alta.** No sirve un upscale: reescribe el microtexto de la etiqueta.
+
+⚠️ **El velo afloja en esta sección** (`.62 → .52`) para que el yerbal se lea, y arranca recién
+a `top 45%`: con el tramo por defecto empezaba a abrirse mientras el texto de `#origen` seguía
+en pantalla y `.cadena__sentis` caía a 4.07:1 contra los 4.5 que exige.
 
 ⚠️ **`ritual` salió de día en el primer intento** y hubo que rehacerla: el bloque común pide
 la luz arriba a la derecha, y el modelo la metió por la ventana como si fuera la mañana. Para
 una escena nocturna hay que decir «DEEP NIGHT», negar explícitamente el amanecer y los haces,
 y dejar la ventana como fuente fría. La descartada quedó en `_gen/esc-v2/_ritual-dia-descartada.png`.
+
+⚠️ **La versión del nombre va en `tools/escenas.cjs` (`VERSION`) y en `cargarEscenas` de
+`js/monte.js`. Hoy es `v3`.** Se sube CADA VEZ que se regenera cualquier escena, aunque sea
+una sola: `/img/` se sirve `immutable` un año sin hash, así que reusar el nombre deja al que
+ya entró viendo la imagen vieja. Ya pasó dos veces en este proyecto — la segunda, regenerando
+`variedades` sobre el mismo `-v2-` que ya estaba publicado.
 
 **Respaldo de la v1:** `Desktop/Claude/_centenaria-fondos-v1-20260902` (140 MB, fuera del
 repo) y los PNG fuente también en `_gen/esc-v1/`.

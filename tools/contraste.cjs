@@ -27,6 +27,10 @@ const PLAN = [
   ['#historia', [['.cap__titulo', 48], ['.cap__entrada', 17], ['.hito__dato', 60], ['.hito__texto', 16], ['.volanta', 12]]],
   ['#origen',   [['.cap__titulo', 48], ['.cap__entrada', 17], ['.cadena__causa', 16], ['.cadena__efecto', 16], ['.cadena__sentis', 17]]],
   ['#variedades', [['.claro__titulo', 48], ['.claro__bajada', 17], ['.ficha__nombre', 28], ['.ficha__texto', 16], ['.escala__quien', 21], ['.escala__nota', 14]]],
+  /* Las fichas quedan ABAJO DEL PLIEGUE cuando se mira #variedades desde arriba,
+     asi que en escritorio no se median. Desde que los envases dejaron la tarjeta
+     blanca ese texto es crema sobre el mundo y hay que mirarlo: va aparte. */
+  ['.fichas', [['.ficha__nombre', 28], ['.ficha__sub', 12], ['.ficha__texto', 16], ['.chips li', 12]]],
   ['#ritual',   [['.cap__titulo', 48], ['.paso__titulo', 28], ['.paso__texto', 16], ['.tip', 16]]],
   ['#porque',   [['.beneficio h3', 24], ['.beneficio p', 16], ['.cita p', 40]]],
   ['#comprar',  [['.cap__titulo', 48], ['.puerta__titulo', 28], ['.puerta__texto', 16], ['.contacto__lista a', 18], ['.proceso', 16]]]

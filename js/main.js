@@ -256,15 +256,30 @@
        base y las escenas, y cada escena ya viene con su propio grado. */
     sombra(.58, .62, tramo('#origen'));
 
-    /* 03 · VARIEDADES — misma noche que el resto: los envases ponen la luz desde
-       sus tarjetas blancas. La sombra no se toca — el velo de papel claro que
-       habia aca cortaba la pelicula al medio. */
+    /* 03 · VARIEDADES — el velo AFLOJA. Cuando los envases estaban sobre tarjetas
+       blancas la seccion tenia que quedar oscura para que las tarjetas fueran lo
+       mas luminoso del cuadro. Ahora los envases se paran DENTRO del yerbal, asi
+       que el velo se abre para que la escena se lea y vuelve a cerrarse enseguida.
 
-    /* 04 · POR QUE ELEGIRLA — manda el texto; la sombra sigue en .62, que es lo
-       que pide la grilla de beneficios sobre los haces de luz. */
+       VA EN DOS TIEMPOS, y no es capricho. La escena del yerbal es bastante mas
+       luminosa que la de las nubes que reemplazo, y DURANTE el cruce entra detras
+       del texto de #origen: `.cadena__sentis` —dorado, 17px— caia a 4.07:1 contra
+       los 4.5 que exige. Retrasar la apertura no alcanzaba (4.41). Asi que el velo
+       primero se CIERRA mientras cruzan las dos escenas, y recien despues se abre.
+       Medido con tools/cruce-contraste.cjs. */
+    sombra(.62, .70, tramo('#variedades', 'top 82%', 'top 32%'));
+    sombra(.70, .52, tramo('#variedades', 'top 30%', 'top -10%'));
+
+    /* 04 · POR QUE ELEGIRLA — manda el texto: el velo vuelve a cerrarse, que es lo
+       que pide la grilla de beneficios sobre los haces de luz.
+
+       Arranca a 'top bottom' y no al 82% por defecto: `.escala__quien` vive al final
+       de #variedades y con el velo todavia abierto se quedaba en 4.34:1 cuando la
+       escena de las hojas —calida, a contraluz— empezaba a entrar detras. */
+    sombra(.52, .64, tramo('#porque', 'top bottom', 'top 45%'));
 
     /* 05 · EL RITUAL */
-    sombra(.62, .58, tramo('#ritual'));
+    sombra(.64, .58, tramo('#ritual'));
 
     /* 06 · CIERRE */
     sombra(.58, .60, tramo('#comprar'));
@@ -318,6 +333,29 @@
       if (lineasSec.length) tlSec.to(lineasSec, { yPercent: 0, duration: .9, stagger: .11, ease: 'power3.out' }, 0);
       tlSec.to(piezas, { opacity: 1, y: 0, duration: .85, stagger: .09, ease: 'power3.out' }, lineasSec.length ? .15 : 0);
     });
+
+    /* LOS TRES ENVASES. Ya no estan sobre tarjetas blancas: se paran dentro del
+       mundo, asi que tienen que comportarse como objetos del mundo y no como
+       imagenes de un catalogo.
+       - Entran escalonados (opacity + scale, NO yPercent: el yPercent se lo lleva
+         el parallax de abajo y dos tweens sobre la misma propiedad se pisan).
+       - Y cada uno viaja a distinta velocidad: el del medio un poco mas, asi que
+         al scrollear la fila se abre en profundidad en vez de moverse pegada. */
+    var envases = $$('.ficha__foto');
+    if (envases.length) {
+      /* set + to, como los .reveal: el estado inicial lo pone el JS, nunca el CSS.
+         Asi, si el JS no corre, los envases quedan VISIBLES en vez de invisibles. */
+      gsap.set(envases, { opacity: 0, scale: .94 });
+      gsap.to(envases, { opacity: 1, scale: 1, duration: .9, stagger: .12, ease: 'power3.out',
+        scrollTrigger: { trigger: '#variedades', start: 'top 68%' } });
+      envases.forEach(function (p, i) {
+        var vel = [11, 17, 13][i] || 13;
+        gsap.fromTo(p, { yPercent: vel }, {
+          yPercent: -vel, ease: 'none', immediateRender: false,
+          scrollTrigger: { trigger: '#variedades', start: 'top bottom', end: 'bottom top', scrub: .8 }
+        });
+      });
+    }
 
     /* La rama en primer plano cruza el capitulo a OTRA velocidad que el fondo:
        esa diferencia es la profundidad. Es la gramatica del hero (mundo atras,

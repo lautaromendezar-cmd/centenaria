@@ -66,12 +66,21 @@ const NOM = ['hero→historia','historia→origen','origen→variedades','varied
 
         const cajas = await pg.evaluate(sels => {
           const out = [];
+        /* La CABECERA es fixed y va por encima: el texto del capitulo le pasa por
+           debajo. Medirlo ahi da 1.00:1 porque el "fondo" que se lee son las letras
+           crema del menu, no el mundo. Es un falso positivo, no un fallo del sitio:
+           esas cajas se descartan. */
+        const cab = document.querySelector('.cabecera');
+        const rc = cab ? cab.getBoundingClientRect() : null;
+        const tapado = r => !!rc && r.top < rc.bottom + 4 && r.bottom > rc.top - 4;
+
           for (const [sel, px] of sels) for (const el of document.querySelectorAll(sel)) {
             const cs = getComputedStyle(el);
             if (cs.visibility === 'hidden' || cs.display === 'none' || +cs.opacity < .5) continue;
             const rg = document.createRange(); rg.selectNodeContents(el);
             for (const r of rg.getClientRects())
-              if (r.width > 8 && r.height > 6 && r.top > -20 && r.bottom < innerHeight + 20)
+              if (r.width > 8 && r.height > 6 && r.top > -20 && r.bottom < innerHeight + 20
+                  && !tapado(r))
                 out.push({ sel, px, color: cs.color, x:r.x, y:r.y, w:r.width, h:r.height });
           }
           return out;
