@@ -216,6 +216,28 @@
     ESCENAS.forEach(function (sec, i) {
       escalon(e, 'escena', i, i + 1, tramo(sec));
     });
+
+    /* LA CAMARA NO PARA. Antes `e.avance` movia la camara solo en el hero y los
+       capitulos quedaban con el encuadre clavado: por eso el mundo se sentia vivo
+       arriba y se volvia un pase de diapositivas abajo.
+       Cada escena tiene ahora su propio empuje lento, que corre durante toda su
+       vida en pantalla — desde que empieza a aparecer hasta que la reemplaza la
+       siguiente— no solo durante el cruce.
+       Como cada una anima SU objeto (e.camaras[i]) no hay dos tweens peleando por
+       la misma propiedad, que es la trampa que ya nos comimos con la sombra. */
+    ESCENAS.forEach(function (sec, i) {
+      var cam = e.camaras[i];
+      if (!cam) return;
+      var sig = ESCENAS[i + 1];
+      var hasta = sig
+        ? { endTrigger: sig, end: 'top 28%' }
+        : { end: 'bottom bottom' };
+      var cfg = { trigger: sec, start: 'top 92%', scrub: .8 };
+      for (var k in hasta) cfg[k] = hasta[k];
+      gsap.fromTo(cam,
+        { z: 1.04, dy: .012 },
+        { z: 1.15, dy: -.012, ease: 'none', immediateRender: false, scrollTrigger: cfg });
+    });
     /* la vegetacion del hero pertenece a ESE punto de vista: se retira con el
        primer cambio de mundo, no se arrastra al galpon ni al aereo */
     escalon(e, 'frenteOp', 1, 0, tramo('#historia', 'top 88%', 'top 45%'));

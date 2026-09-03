@@ -19,7 +19,7 @@
      grabado y no el relleno: es lo que hace que se lea como tinta iluminada. */
   var FS_CAPA =
     'precision mediump float;varying vec2 v;' +
-    'uniform sampler2D uTex;uniform vec2 uRes;uniform float uAsp,uEsc,uNieblaC,uLamp,uBrillo,uSat,uCA,uRayos,uT,uOp;' +
+    'uniform sampler2D uTex;uniform vec2 uRes;uniform float uAsp,uEsc,uNieblaC,uLamp,uBrillo,uSat,uCA,uRayos,uT,uOp,uCorte,uEntra;' +
     'uniform vec2 uOff,uPtr;uniform vec3 uNiebla;' +
     'float luma(vec3 c){return dot(c,vec3(.299,.587,.114));}' +
     'void main(){' +
@@ -52,7 +52,24 @@
     ' vec2 p=(v-uPtr)*vec2(ca,1.);' +
     ' float lamp=exp(-dot(p,p)*6.5)*uLamp;' +
     ' c.rgb+=lamp*vec3(1.,.86,.32)*(.18+1.25*luma(c.rgb));' +
-    ' float aa=c.a*uOp;' +
+    /* EL CRUCE ENTRE ESCENAS NO ES UN FUNDIDO PLANO.
+       Cruzar dos fotos al 50% da gris: dos imagenes promediadas pierden las dos su
+       contraste y el cuadro del medio queda un pure marron. Era el peor fotograma
+       de toda la pagina (se veia en tools/_cruces.cjs).
+       En vez de eso, un BARRIDO con borde suave: la escena nueva entra por arriba
+       y baja, como una luz que gana el cuadro. En cada pixel manda una sola de las
+       dos, asi que ninguna pierde contraste; lo que las une es un frente ancho y
+       ondulado, no una regla. La direccion refuerza el viaje vertical de la pagina. */
+    ' float wp=1.;' +
+    ' if(uCorte>.0005&&uCorte<.9995){' +
+    '  float m=clamp(dot(v-.5,vec2(-.3219,.9468))+.5,0.,1.);' +
+    '  m+=sin(v.x*7.3+v.y*4.1)*.045;' +                 /* frente ondulado, no una regla */
+    '  float bd=.24;' +                                  /* ancho del borde suave */
+    '  float f=uCorte*(1.+2.*bd)-bd;' +
+    '  float w=1.-smoothstep(f-bd,f+bd,m);' +
+    '  wp=mix(1.-w,w,uEntra);' +
+    ' } else { wp=uEntra>.5?uCorte:1.-uCorte; }' +
+    ' float aa=c.a*uOp*wp;' +
     ' gl_FragColor=vec4(c.rgb*aa,aa);}';   /* premultiplicado */
 
   /* Sol. Se dibuja DESPUES del cielo y ANTES de las crestas: por eso la loma
@@ -204,12 +221,22 @@
          segunda y la tercera. Es un solo numero continuo, asi que el cruce entre
          escenas lo maneja el scroll sin que haya que coordinar estados. */
       escena: 0,
+      /* UNA CAMARA POR ESCENA. El hero se siente vivo porque la camara nunca para
+         (e.avance); en los capitulos estaba clavada y por eso el mundo se moria en
+         cuanto salias del hero. Ahora cada escena tiene su propio empuje lento, que
+         corre durante TODO el capitulo, no solo en el cruce.
+         Efecto lateral y buscado: en el cruce la que se va esta cerrada (z alto) y
+         la que llega entra abierta (z bajo), asi que las dos NO viajan pegadas y el
+         cambio se lee como profundidad en vez de como un fundido. */
+      camaras: [],      /* [{z, dy}] por indice de escena; las llena main.js */
       frenteOp: 1,      /* el primer plano del hero se retira cuando cambia el mundo */
       vida: 1,          /* 0 apaga viento, respiracion de los rayos y destello */
       linterna: 1,      /* 0 apaga la linterna (reduced motion / touch) */
       ptr: [.62, .52],
       quieto: false     /* true = no anima solo, dibuja un frame y para */
     };
+    for (var ci = 0; ci < 12; ci++) e.camaras.push({ z: 1.04, dy: 0 });
+
     var ptrSuave = [.62, .52];
 
     var W = 0, H = 0, dpr = 1;
@@ -254,8 +281,8 @@
       /* --- las escenas de los capitulos, cruzandose entre si --- */
       var idx = Math.max(0, e.escena);
       var iA = Math.floor(idx), mez = idx - iA, iB = iA + 1;
-      if (iA >= 1) dibujarEscena(iA - 1, 1 - mez, mez, t);
-      if (iB >= 1) dibujarEscena(iB - 1, mez, mez, t);
+      if (iA >= 1) dibujarEscena(iA - 1, 1 - mez, mez, t, true);
+      if (iB >= 1) dibujarEscena(iB - 1, mez, mez, t, false);
 
       /* --- vegetacion media --- */
       dibujarCapa(1, t);
@@ -285,7 +312,7 @@
        para el hero, donde la camara entra al monte. En un aereo o en un interior
        seria falsa. Lo que la mantiene viva es el avance de camara, el grado, el
        grano y la linterna — las mismas herramientas, no una estetica distinta. */
-    function dibujarEscena(i, op, mez, t) {
+    function dibujarEscena(i, op, mez, t, saliendo) {
       var esc = escenas[i];
       if (!esc || op < .004) return;
       gl.useProgram(progCapa.p);
@@ -295,11 +322,14 @@
       gl.uniform1i(progCapa.u.uTex, 0);
       gl.uniform2f(progCapa.u.uRes, W, H);
       gl.uniform1f(progCapa.u.uAsp, esc.asp);
-      /* cada cruce empuja la camara un poco: sin esto el cambio de escena se lee
-         como un pase de diapositivas */
-      gl.uniform1f(progCapa.u.uEsc, 1.03 + mez * .06);
+      /* La camara de ESTA escena, que viene corriendo desde que el capitulo entro.
+         A la que se va se le suma un envion extra durante el cruce: acelera y se
+         aleja mientras la nueva recién empieza su propio empuje. Es lo que separa
+         un cruce con camara de un fundido. */
+      var cam = e.camaras[i] || { z: 1.04, dy: 0 };
+      gl.uniform1f(progCapa.u.uEsc, cam.z + (saliendo ? mez * .07 : 0));
       var px = (ptrSuave[0] - .5) * -.016;
-      var py = (ptrSuave[1] - .5) * .011;
+      var py = (ptrSuave[1] - .5) * .011 + cam.dy;
       gl.uniform2f(progCapa.u.uOff, px, py);
       gl.uniform3f(progCapa.u.uNiebla, .38, .35, .30);
       gl.uniform1f(progCapa.u.uNieblaC, 0);
@@ -310,7 +340,10 @@
       gl.uniform1f(progCapa.u.uCA, .010);
       gl.uniform1f(progCapa.u.uRayos, .07 * e.vida);
       gl.uniform1f(progCapa.u.uT, t);
-      gl.uniform1f(progCapa.u.uOp, op);
+      /* la opacidad la resuelve el barrido pixel a pixel, no un alfa global */
+      gl.uniform1f(progCapa.u.uCorte, mez);
+      gl.uniform1f(progCapa.u.uEntra, saliendo ? 0 : 1);
+      gl.uniform1f(progCapa.u.uOp, 1);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
 
@@ -363,6 +396,9 @@
       gl.uniform1f(progCapa.u.uT, t);
       /* el cielo base se queda de piso siempre; la vegetacion del hero se retira
          cuando entra la primera escena, porque pertenece a ESE punto de vista */
+      /* comparte programa con las escenas: si no se apaga, hereda SU barrido */
+      gl.uniform1f(progCapa.u.uCorte, 0);
+      gl.uniform1f(progCapa.u.uEntra, 0);
       gl.uniform1f(progCapa.u.uOp, i === 0 ? 1 : e.frenteOp);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
