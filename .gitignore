@@ -18,3 +18,5 @@ _gen/
 # Una vez que el repo pase a privado se borra esta línea y se commitea:
 # no hay nada malo en versionarlo, el problema es la visibilidad.
 material/
+.vercel
+.env*
