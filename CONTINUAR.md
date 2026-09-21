@@ -4,7 +4,10 @@ Estado al **21-sep-2026 (madrugada, desde la PC de casa)**. Para retomar desde o
 leer esto y después el [README](README.md), que explica cómo está armado y las
 decisiones que no son obvias.
 
-- **Online:** https://centenaria.vercel.app/ (Vercel, preset *Other*, sin build, push a `main` redespliega)
+- **Online:** https://centenaria.vercel.app/ (Vercel, preset *Other*, sin build).
+  ⚠️ **El push a `main` YA NO redespliega** (21-sep): la integración de Vercel es una GitHub
+  App y la cuenta de GitHub está marcada desde el 7-sep. Se publica a mano, desde un clon
+  limpio para no subir `_gen/` ni `material/` (ver «Publicar» al final).
 - **Repo:** `lautaromendezar-cmd/centenaria` · **PÚBLICO** · último commit: ver `git log -1`
 - **Estado:** al cliente le fascinó la intro (el zoom a la selva y el sol que se vuelve
   sello) y el resto le pareció plano: «imágenes que cambian pero no están conectadas».
@@ -337,3 +340,19 @@ node tools/pasajes.cjs 4740     # hoja de contactos de los seis pasajes (agregá
 ```
 
 Al cerrar el 21-sep: 6/6 escenarios, toda la home en AA, sin texto a mitad de los cruces, LCP 2,4–2,8 s por software (máquina cargada; el árbol anterior daba 2,4–4,2 ese día).
+
+## Publicar (desde el 21-sep, a mano)
+
+El webhook de Vercel no dispara. Deployar el commit que está en `main`, desde una copia
+limpia (el árbol de trabajo tiene `_gen/` y `material/`, que no están en `.vercelignore`):
+
+```bash
+D=$TEMP/cent-deploy && rm -rf "$D" && mkdir -p "$D"
+git archive HEAD | tar -x -C "$D" && cp -r .vercel "$D/.vercel"
+(cd "$D" && vercel deploy --prod --yes)
+vercel ls          # tiene que aparecer un deploy de hace segundos, Ready, Production
+```
+
+`.vercel/` es la carpeta que deja `vercel link` (gitignoreada): si en una máquina nueva no
+está, correr `vercel link` una vez dentro del repo. Después cotejar lo publicado contra el
+commit bajando `index.html`, `css/`, `js/` e `img/` con `curl` y comparando con `cmp`.
