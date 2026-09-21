@@ -400,8 +400,18 @@ document.documentElement.classList.add('js', 'cargando');
     <div class="cap__cuerpo">
       <p class="cap__entrada reveal">Seleme Centenaria nace en 1918 de la mano de la familia Seleme, en el coraz&oacute;n de la regi&oacute;n yerbatera del sur de Brasil, donde nacen y crecen las hojas m&aacute;s ricas del planeta. Hoy llega a cada mate argentino desde Gualeguaych&uacute;, Entre R&iacute;os.</p>
     </div>
+    <!-- El 1918 de la cortina vuelve y cuenta hasta hoy con el scroll (main.js,
+         contarHistoria). Sin JS queda en 1918, que es verdad igual. -->
+    <p class="historia__anio" aria-hidden="true"><span id="historiaAnio">1918</span></p>
     <ol class="hitos">
       <li class="hito reveal">
+        <!-- Copia de archivo (tools/fabrica.cjs). OJO: el cliente la mando como
+             "la fabrica en 1918" y NO lo es: es la fabrica de hoy con filtro sepia.
+             El pie lo dice; presentarla como de 1918 seria un error que cualquiera nota. -->
+        <figure class="archivo">
+          <img src="img/fabrica-hoy-480.webp" srcset="img/fabrica-hoy-480.webp 480w, img/fabrica-hoy-800.webp 800w" sizes="(max-width:820px) 80vw, 19rem" width="480" height="632" alt="Frente de la ervateira Seleme, en el sur de Brasil: el galp&oacute;n con el cartel Ervateira Seleme, desde 1918, entre araucarias." loading="lazy" decoding="async">
+          <figcaption>La ervateira Seleme, hoy. Donde empez&oacute; todo.</figcaption>
+        </figure>
         <p class="hito__dato">1918</p>
         <p class="hito__texto">Comienza la historia. La familia Seleme funda el oficio de elegir y elaborar la mejor yerba, hoja por hoja.</p>
       </li>

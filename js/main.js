@@ -325,7 +325,23 @@
        problema ya no existe. Nada de tocar la saturacion por capitulo: el uniform
        lo comparten el mundo base y las escenas. */
 
+    contarHistoria();
     revelarCapitulos();
+  }
+
+  /* HISTORIA: el 1918 de la cortina vuelve y cuenta hasta hoy mientras se
+     recorren los hitos. Es el mismo gesto de la entrada —los cien anios se
+     cuentan, no se escriben— puesto donde se cuenta la historia. Con scrub, asi
+     que al volver arriba descuenta. */
+  function contarHistoria() {
+    var el = $('#historiaAnio'), hitos = $('#historia .hitos');
+    if (!el || !hitos) return;
+    var n = { v: DESDE };
+    gsap.fromTo(n, { v: DESDE }, {
+      v: HASTA, ease: 'none', immediateRender: false, snap: { v: 1 },
+      scrollTrigger: { trigger: hitos, start: 'top 90%', end: 'bottom 55%', scrub: .5 },
+      onUpdate: function () { el.textContent = String(Math.round(n.v)); }
+    });
   }
 
   /* ---------------------------------------------------------------------
@@ -432,6 +448,7 @@
       opacity: .68, ease: 'none',
       scrollTrigger: { trigger: '#historia', start: 'top 88%', end: 'top 30%', scrub: .6 }
     });
+    contarHistoria();
     revelarCapitulos();
   }
 
