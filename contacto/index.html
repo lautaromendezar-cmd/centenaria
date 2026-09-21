@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contacto · Seleme Centenaria</title>
+<meta name="description" content="Contacto de Yerba Mate Seleme Centenaria en Argentina: WhatsApp, email e Instagram. Distribuida desde Gualeguaychú, Entre Ríos.">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<!-- Slug heredado del WordPress, que esta indexado: no cambiarlo. -->
+<link rel="canonical" href="https://yerbamatecentenaria.com.ar/contacto/">
+<meta name="theme-color" content="#0A0B0B">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Seleme Centenaria">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://yerbamatecentenaria.com.ar/contacto/">
+<meta property="og:title" content="Contacto &middot; Seleme Centenaria">
+<meta property="og:description" content="WhatsApp, email e Instagram de Yerba Mate Seleme Centenaria en Argentina.">
+<meta property="og:image" content="https://centenaria.vercel.app/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..700&family=Montserrat:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="/css/estilo.css">
+</head>
+
+<body>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<div class="mundo mundo--quieto" aria-hidden="true">
+  <div class="mundo__capas">
+    <img class="mundo__capa" src="/img/cielo-1600.webp" srcset="/img/cielo-1100.webp 1100w, /img/cielo-1600.webp 1600w, /img/cielo-2200.webp 2200w" sizes="100vw" alt="" fetchpriority="high" decoding="async">
+    <img class="mundo__capa" src="/img/cerca-1600.webp" srcset="/img/cerca-1100.webp 1100w, /img/cerca-1600.webp 1600w, /img/cerca-2200.webp 2200w" sizes="100vw" alt="" decoding="async">
+    <img class="mundo__capa" src="/img/frente-1600.webp" srcset="/img/frente-1100.webp 1100w, /img/frente-1600.webp 1600w, /img/frente-2200.webp 2200w" sizes="100vw" alt="" decoding="async">
+  </div>
+  <div class="mundo__velo"></div>
+  <div class="mundo__sombra"></div>
+</div>
+<div class="grano" aria-hidden="true"></div>
+<div class="vineta" aria-hidden="true"></div>
+
+<header class="cabecera" id="cabecera">
+  <a class="cabecera__marca" href="/">
+    <img src="/img/logo.webp" width="600" height="343" alt="Seleme Centenaria" decoding="async">
+  </a>
+  <nav class="cabecera__nav" aria-label="Principal">
+    <a href="/#historia">Historia</a>
+    <a href="/#origen">Origen</a>
+    <a href="/#variedades">Variedades</a>
+    <a href="/#ritual">El ritual</a>
+    <a href="/donde-comprar/">Dónde comprar</a>
+    <a class="cabecera__tienda" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Tienda</a>
+  </nav>
+  <button class="cabecera__menu" id="menuBoton" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+    <span></span><span></span>
+  </button>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <button class="menu__cerrar" id="menuCerrar" type="button" aria-label="Cerrar menú"></button>
+  <p class="menu__marca">Seleme Centenaria <span aria-hidden="true">&middot;</span> 1918</p>
+  <nav class="menu__nav" aria-label="Principal">
+    <a href="/#historia">Historia</a>
+    <a href="/#origen">Origen</a>
+    <a href="/#variedades">Variedades</a>
+    <a href="/#ritual">El ritual</a>
+    <a href="/donde-comprar/">Dónde comprar</a>
+    <a class="menu__tienda" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Tienda</a>
+  </nav>
+  <div class="menu__contacto">
+    <a href="https://wa.me/5493446239393" target="_blank" rel="noopener">WhatsApp <span aria-hidden="true">&middot;</span> 3446 23-9393</a>
+    <a href="mailto:persaimportadora.ventas@gmail.com">persaimportadora.ventas@gmail.com</a>
+    <a href="https://www.instagram.com/yerbacentenariaargentina/" target="_blank" rel="noopener">@yerbacentenariaargentina</a>
+  </div>
+</div>
+<script>
+(function () {
+  var raiz = document.documentElement;
+  var boton = document.getElementById('menuBoton');
+  var menu = document.getElementById('menu');
+  var cerrar = document.getElementById('menuCerrar');
+  if (!boton || !menu || !cerrar) return;
+  function poner(abierto) {
+    raiz.classList.toggle('menu-abierto', abierto);
+    boton.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    menu.setAttribute('aria-hidden', abierto ? 'false' : 'true');
+    raiz.style.overflow = abierto ? 'hidden' : '';
+    (abierto ? cerrar : boton).focus();
+  }
+  boton.addEventListener('click', function () { poner(true); });
+  cerrar.addEventListener('click', function () { poner(false); });
+  menu.addEventListener('click', function (ev) { if (ev.target.closest('a')) poner(false); });
+  addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && raiz.classList.contains('menu-abierto')) poner(false);
+  });
+})();
+</script>
+
+<main class="pagina" id="contenido">
+  <p class="volanta">Contacto</p>
+  <h1 class="pagina__titulo">Estamos<br>para escucharte.</h1>
+  <p class="pagina__bajada">Para comprar, para distribuir o para preguntar por tu zona: escribinos por donde te quede m&aacute;s c&oacute;modo.</p>
+  <p class="pagina__acciones">
+    <a class="boton boton--oro" href="https://wa.me/5493446239393" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    <a class="boton boton--linea" href="mailto:persaimportadora.ventas@gmail.com">Escribir por email</a>
+  </p>
+
+  <section class="pagina__bloque">
+    <ul class="contacto__lista">
+      <li><span>WhatsApp</span><a href="https://wa.me/5493446239393" target="_blank" rel="noopener">3446 23-9393</a></li>
+      <li><span>WhatsApp</span><a href="https://wa.me/5493446510714" target="_blank" rel="noopener">3446 51-0714</a></li>
+      <li><span>Email</span><a href="mailto:persaimportadora.ventas@gmail.com">persaimportadora.ventas@gmail.com</a></li>
+      <li><span>Instagram</span><a href="https://www.instagram.com/yerbacentenariaargentina/" target="_blank" rel="noopener">@yerbacentenariaargentina</a></li>
+      <li><span>Tienda online</span><a href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">centenariayerbamateshop.com.ar</a></li>
+      <li><span>Distribuci&oacute;n en Argentina</span><a href="/#origen">Gualeguaych&uacute;, Entre R&iacute;os</a></li>
+    </ul>
+    <!-- Facebook NO va: hay dos handles dando vueltas y el cliente todavia no
+         dijo cual es el bueno (CONTINUAR.md). -->
+  </section>
+
+  <section class="pagina__bloque">
+    <div class="puertas">
+      <article class="puerta">
+        <h2 class="puerta__titulo">Quiero comprar</h2>
+        <p class="puerta__texto">Online con env&iacute;o a todo el pa&iacute;s, o en tu zona.</p>
+        <a class="enlace" href="/donde-comprar/">D&oacute;nde comprar <span aria-hidden="true">&rarr;</span></a>
+      </article>
+      <article class="puerta">
+        <h2 class="puerta__titulo">Quiero vender</h2>
+        <p class="puerta__texto">Precio competitivo para distribuci&oacute;n y comercios.</p>
+        <a class="enlace" href="/vende-centenaria/">Vend&eacute; Centenaria <span aria-hidden="true">&rarr;</span></a>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <div class="pie__caja">
+    <img class="pie__1918" src="/img/1918.webp" width="300" height="273" alt="" loading="lazy" decoding="async">
+    <p class="pie__marca">Seleme Centenaria <span aria-hidden="true">&middot;</span> Desde 1918</p>
+    <p class="pie__legal">Elaborada en origen, Brasil <span aria-hidden="true">&middot;</span> Gualeguaych&uacute;, Entre R&iacute;os, Argentina</p>
+    <nav class="pie__nav" aria-label="P&aacute;ginas">
+      <a href="/donde-comprar/">D&oacute;nde comprar</a>
+      <a href="/vende-centenaria/">Vend&eacute; Centenaria</a>
+      <a href="/contacto/" aria-current="page">Contacto</a>
+    </nav>
+    <p class="pie__credito">Dise&ntilde;o web: <a href="https://lautaromendez.com.ar" target="_blank" rel="noopener">Lautaro Mendez</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

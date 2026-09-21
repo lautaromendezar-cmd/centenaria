@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yerbamatecentenaria.com.ar/sitemap.xml

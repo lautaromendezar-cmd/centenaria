@@ -564,6 +564,55 @@ main{position:relative;z-index:3}
   text-transform:uppercase;color:var(--crema);opacity:.6}
 .pie__credito{margin:1.6rem 0 0;font-size:.875rem;color:var(--crema);opacity:.6}
 .pie__credito a{color:var(--oro);text-decoration:none;border-bottom:1px solid rgba(248,221,0,.35)}
+/* las tres paginas internas (slugs del WordPress, indexados) se enlazan desde
+   el pie de todas las paginas, para que se rastreen desde la home */
+.pie__nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem 2rem;margin:1.6rem 0 0}
+.pie__nav a{font-size:var(--etiqueta);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--crema);text-decoration:none;opacity:.8;padding:.3rem 0;
+  border-bottom:1px solid transparent;transition:color .25s,border-color .25s}
+.pie__nav a:hover,.pie__nav a[aria-current]{color:var(--oro);opacity:1}
+.pie__nav a:hover{border-bottom-color:var(--oro)}
+
+/* ============================== PAGINAS INTERNAS ==============================
+   /donde-comprar/, /vende-centenaria/ y /contacto/: los slugs del WordPress, que
+   estan indexados. Sin motor ni cortina: el mundo queda quieto en la primera
+   pantalla del hero, con el velo cerrado, y reusan puertas, chips, beneficios y
+   la lista de contacto de la home. */
+.mundo--quieto .mundo__sombra{opacity:.66}
+.pagina{position:relative;z-index:3;max-width:var(--ancho);margin:0 auto;
+  padding:clamp(7.5rem,17vh,11.5rem) var(--gotera) var(--seccion)}
+.pagina__titulo{margin:1.4rem 0 0;font-family:Fraunces,Georgia,serif;font-weight:400;
+  font-size:var(--display-1);line-height:.96;letter-spacing:-.02em;color:var(--crema);
+  max-width:min(40rem,82%)}
+@media (max-width:900px){.pagina__titulo{max-width:100%}}
+.pagina__bajada{margin:clamp(1.5rem,3vh,2.2rem) 0 0;max-width:38rem;font-size:var(--body-lg);
+  color:var(--crema);opacity:.88}
+.pagina__acciones{display:flex;flex-wrap:wrap;gap:.9rem;margin:clamp(1.6rem,3.4vh,2.4rem) 0 0}
+.pagina__bloque{margin:clamp(3.5rem,8vh,6rem) 0 0}
+.pagina__subtitulo{margin:1.2rem 0 0;font-family:Fraunces,Georgia,serif;font-weight:400;
+  font-size:var(--display-2);line-height:1;letter-spacing:-.015em;color:var(--crema)}
+.pagina .puertas{margin-top:clamp(2.5rem,6vh,4rem)}
+.pagina .puerta .enlace{margin-top:auto}
+.pagina .beneficios{margin-top:clamp(2rem,5vh,3rem)}
+.pagina .contacto__lista{margin-top:0}
+.pagina .puerta .proceso{margin-bottom:1.6rem}
+/* la linea de variedades, en lista: nombre, subtitulo y presentaciones */
+.linea{list-style:none;margin:clamp(1.6rem,4vh,2.4rem) 0 0;padding:0;max-width:44rem}
+.linea>li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.3rem 1.5rem;align-items:center;
+  padding:1.1rem 0;border-top:1px solid rgba(241,239,226,.14)}
+.linea>li:last-child{border-bottom:1px solid rgba(241,239,226,.14)}
+.linea__nombre{font-family:Fraunces,Georgia,serif;font-size:1.5rem;line-height:1.1;color:var(--crema)}
+.linea__sub{grid-column:1;font-size:var(--etiqueta);font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--oro)}
+.linea .chips{grid-column:2;grid-row:1 / span 2;margin:0}
+.linea--compacta{margin-top:1.2rem;max-width:none}
+.linea--compacta>li{padding:.75rem 0}
+.linea--compacta .linea__nombre{font-size:1.2rem}
+.linea--compacta .chips{grid-row:1}
+@media (max-width:600px){
+  .linea>li{grid-template-columns:1fr}
+  .linea .chips,.linea--compacta .chips{grid-column:1;grid-row:auto;margin-top:.5rem}
+}
 
 /* ============================== MOTION ==============================
    El respaldo NO vive aca: .reveal arranca visible y el JS lo baja. Si GSAP no carga,
