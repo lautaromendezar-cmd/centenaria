@@ -272,6 +272,21 @@
       /* el mate se va con el ritual, en el pasaje al cierre: el disco ya
          cumplio dos veces y el sol del cierre es del shader, no de este DOM */
       if (i === 5 && conRitual) tlP.fromTo(disco, { opacity: 1 }, { opacity: 0, duration: .3 }, 0);
+      /* EL SOL SALE DE NUEVO. El cierre amanece sobre el monte y cierra el
+         circulo contra el hero ("El dia empieza con yerba mate"). Es el mismo
+         FS_SOL del hero, dibujado DELANTE de la escena con su halo (la foto no
+         tiene alfa en el cielo para taparlo con el monte, y no hace falta: sube
+         desde la bruma apareciendo, y eso ya se lee como amanecer). Vuelve
+         caliente —lo contrario del viaje del hero, donde se enfriaba en sello—
+         y arriba a la derecha, que es de donde viene la luz en toda la pelicula.
+         Entra recien cuando la escena del amanecer ya gano el cuadro (.45). */
+      if (i === 5) {
+        tlP.fromTo(e, { solFrio: 1, solX: .5, solRadio: .215 },
+                      { solFrio: 0, solX: .74, solRadio: .07, duration: .001 }, .40)
+           .fromTo(e, { solOpacidad: 0, solY: .30 },
+                      { solOpacidad: 1, solY: .62, duration: .52, ease: 'power1.out' }, .45)
+           .fromTo(e, { solRadio: .07 }, { solRadio: .09, duration: .52 }, .45);
+      }
     });
 
     /* LA CAMARA NO PARA. Antes `e.avance` movia la camara solo en el hero y los

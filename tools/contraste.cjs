@@ -33,7 +33,7 @@ const PLAN = [
   ['.fichas', [['.ficha__nombre', 28], ['.ficha__sub', 12], ['.ficha__texto', 16], ['.chips li', 12]]],
   ['#ritual',   [['.cap__titulo', 48], ['.paso__titulo', 28], ['.paso__texto', 16], ['.tip', 16]]],
   ['#porque',   [['.beneficio h3', 24], ['.beneficio p', 16], ['.cita p', 40]]],
-  ['#comprar',  [['.cap__titulo', 48], ['.puerta__titulo', 28], ['.puerta__texto', 16], ['.contacto__lista a', 18], ['.proceso', 16]]]
+  ['#comprar',  [['.cap__titulo', 48], ['.cierre__remate', 22], ['.puerta__titulo', 28], ['.puerta__texto', 16], ['.contacto__lista a', 18], ['.proceso', 16]]]
 ];
 
 (async () => {
