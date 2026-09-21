@@ -1,6 +1,6 @@
 # CONTINUAR · Centenaria
 
-Estado al **21-sep-2026 (madrugada, desde la PC de casa)**. Para retomar desde otra máquina,
+Estado al **21-sep-2026 (tarde, desde la PC de la oficina)**. Para retomar desde otra máquina,
 leer esto y después el [README](README.md), que explica cómo está armado y las
 decisiones que no son obvias.
 
@@ -9,25 +9,75 @@ decisiones que no son obvias.
   App y la cuenta de GitHub está marcada desde el 7-sep. Se publica a mano, desde un clon
   limpio para no subir `_gen/` ni `material/` (ver «Publicar» al final).
 - **Repo:** `lautaromendezar-cmd/centenaria` · **PÚBLICO** · último commit: ver `git log -1`
-- **Estado:** al cliente le fascinó la intro (el zoom a la selva y el sol que se vuelve
-  sello) y el resto le pareció plano: «imágenes que cambian pero no están conectadas».
-  A Lautaro también. El 20/21-sep se hizo la primera parte de la respuesta y está en la
-  URL de revisión, **todavía sin mostrársela al cliente**:
-  1. **Cada escena tiene dos planos** (fondo + primer plano con alfa en una esquina) y la
-     cámara entra como en el hero. Ver «Planos y pasajes» más abajo.
-  2. **Pasajes entre capítulos:** el mundo recupera la pantalla entre capítulo y capítulo,
-     con el velo levantado y sin texto encima.
-  3. **Sigue: Ritual como primera escena fijada** (el disco vuelve como boca del mate y los
-     cinco pasos lo transforman). Mostrársela al cliente antes de hacer el Cierre.
-     **No está empezado**; el plan está escrito abajo.
-- Batería del 21-sep en la PC de casa: robustez 6/6, contraste AA en toda la home, ningún
-  texto en pantalla a mitad de los seis cruces (escritorio y celular), LCP 2,4–2,8 s por
-  software. Ese mismo día el árbol anterior medía 2,4–4,2 s: la máquina estaba cargada,
-  no es una regresión.
+- **Estado: el sitio está terminado de mi lado.** El 21-sep en la oficina se cerraron los
+  seis pasos que faltaban, un commit por paso:
+  1. **Ritual como escena fijada** (`ritualFijo` en main.js, `#dMate` en el SVG del disco,
+     `html.ritual-fijo` en CSS): la sección se fija como el hero, el disco vuelve como la
+     boca del mate y los cinco pasos lo transforman con el scroll, de a uno.
+  2. **Cierre:** el sol del hero sale de nuevo sobre el monte en el pasaje al cierre y la
+     página cierra con la frase literal «El día empieza con yerba mate» (`.cierre__remate`).
+  3. **Historia:** el 1918 cuenta hasta hoy con el scroll (`contarHistoria`) y la foto de la
+     fábrica va como copia de archivo en el hito 1918 (`tools/fabrica.cjs`, pie honesto).
+  4. **Las tres páginas internas** con los slugs del WordPress: `/donde-comprar/`,
+     `/vende-centenaria/`, `/contacto/` (sin motor, mundo quieto). Más `sitemap.xml` y
+     `robots.txt`, y enlaces en el pie de todas.
+  5. **Fuentes autohospedadas** en `fonts/` + `css/fuentes.css` (ver la trampa de opsz ahí).
+     Ya no hay ninguna llamada a Google Fonts. **GSAP también está autohospedado**
+     (`js/vendor/`), así que el sitio anda offline entero.
+  6. **Precios y presentaciones cotejados** contra la tienda: coinciden (Original y
+     Essencial en ½ y 1 kg, Azul con Palo solo 1 kg). La tienda pide **100 kg** de mínimo
+     mayorista; el folleto dice 20. Sigue sin publicarse hasta que el cliente confirme.
+- **⚠️ Los pasos 2 a 6 NO están verificados en Chrome.** En la oficina la CPU estaba
+  ocupada codificando video y el WebGL por software no puede correr en paralelo. Del paso 1
+  sí: robustez 6/6, pasajes OK (escritorio) y `tools/ritual.cjs` en escritorio y celular.
+  **Falta la batería completa en la PC de casa antes de mostrárselo al cliente**
+  (robustez, contraste, entrada, cruce-contraste, pasajes, ritual; escritorio y celular).
+  Lo que hay que mirar a ojo además: el `.historia__anio` (arriba a la derecha de Historia,
+  cae cerca del frente WebGL de la araucaria), el sol del cierre contra el velo `.60`, y
+  que `contraste.cjs` en `#ritual` ya no mide los pasos (están en opacidad 0 al inicio del
+  pin): si hace falta, sumar un punto a mitad del pin.
+- **Bugs que aparecieron de paso (arreglados):** `--display-3`, `--radio-card` y
+  `--radio-chip` se habían perdido en el commit de la home nueva (8297af5) y los títulos de
+  fichas, pasos, puertas y contacto caían a 1rem. Restaurados con los valores originales:
+  **esos títulos ahora se ven más grandes que en lo publicado** el 21-sep a la madrugada.
 - Las herramientas de `tools/` resuelven `node_modules` y Chrome por máquina
-  vía `tools/_entorno.cjs` (casa: `latina/node_modules`; notebook: `Desktop\Claude`).
-  En la notebook NO correr `contraste.cjs`/`entrada.cjs` (WebGL por software clava la
-  CPU): la suite completa se corre en la PC de casa antes de publicar.
+  vía `tools/_entorno.cjs` (casa: `latina/node_modules`; notebook y oficina:
+  `Desktop\Claude`). En la notebook y en la oficina NO correr `contraste.cjs`/`entrada.cjs`
+  (WebGL por software clava la CPU): la suite completa se corre en la PC de casa.
+  Desde el 21-sep todas emulan `prefers-reduced-motion: no-preference`: la PC de la
+  oficina tiene las animaciones de Windows apagadas y Chrome tomaba el camino quieto.
+
+### La PC de la oficina (21-sep), por si se vuelve a usar
+
+- WMI está roto («Clase no válida»): `tasklist`/`taskkill` no andan y puppeteer no puede
+  cerrar Chrome si el script se cae → quedan Chrome huérfanos comiendo CPU. Cerrarlos con
+  `Get-Process chrome | Where StartTime` + `Stop-Process` (el Chrome del usuario tiene
+  `MainWindowTitle`; no matar por nombre).
+- Chrome headless reporta `prefers-reduced-motion: reduce` (ya contemplado en las tools).
+- La red es flaky para cdnjs (por eso GSAP pasó a `js/vendor/`).
+- Una sola corrida de puppeteer por vez, y avisar antes: si Lautaro está codificando
+  video, la máquina no da para las dos cosas.
+
+### Mensaje para el cliente (pedir todo junto)
+
+> Hola [nombre]. Te paso lo que me falta de tu lado para dejar el sitio listo para el
+> dominio, así lo resolvemos de una:
+> 1. **La lista de puntos de venta** (comercios o distribuidores con localidad y, si
+>    querés, teléfono). Mientras tanto la página dice «todavía no llegamos a tu zona» y
+>    manda a la tienda online.
+> 2. **Cuál Facebook es el oficial**: hay dos páginas dando vueltas y no quiero linkear
+>    la equivocada.
+> 3. **El mínimo mayorista**: la tienda dice 100 kg y el folleto 20 kg. ¿Cuál publico?
+> 4. **Azul con Palo, ¿existe en ½ kg?** En la tienda solo está en 1 kg; en el sitio
+>    dejé solo 1 kg.
+> 5. **El logo en vectorial** (AI, SVG, PDF o EPS). Hoy tengo un PNG de 600 px y en
+>    pantallas retina se nota.
+> 6. **Fotos de los tres envases en alta** (la foto original, sin comprimir). Las del
+>    folleto están al límite.
+> 7. **La foto de la fábrica sin el filtro**, la original que sacaron, y **el nombre del
+>    pueblo** donde está, para el pie de foto. Ojo que esa foto es de la fábrica de hoy,
+>    no de 1918: la puse como «La ervateira Seleme, hoy. Donde empezó todo».
+> Con eso cierro y pasamos al dominio. ¡Gracias!
 
 ---
 
@@ -241,11 +291,12 @@ y no se lo reemplazó con otro hilo. Lo que se hizo:
   mientras la tercera tarjeta todavía está entrando (stagger del reveal). Repetir la
   corrida antes de creerle; el 21-sep pasó las dos veces siguientes.
 
-### 3. Lo que sigue: Ritual como escena fijada (NO empezado)
+### 3. Ritual como escena fijada, Cierre e Historia (HECHOS el 21-sep, tarde)
 
-Lo que aprobó Lautaro el 21-sep, en este orden: **Ritual primero, mostrárselo al cliente,
-después el Cierre.** Historia queda opcional. Seis escenas fijadas cansan y la página
-mediría el triple: son dos o tres, las que tienen un protagonista natural.
+Lo que aprobó Lautaro el 21-sep: **Ritual primero, después el Cierre, Historia opcional.**
+Se hicieron los tres (ver el estado arriba). Seis escenas fijadas cansan y la página
+mediría el triple: es una sola fijada (Ritual, 4,6 pantallas) más dos gestos (el sol del
+cierre y el 1918 que cuenta). El plan original, para entender lo que hay:
 
 - **Ritual:** la sección se fija (pin) como el hero. El disco vuelve como **la boca del
   mate vista desde arriba** (era parte de la idea original aprobada: sol → sello → luna →
@@ -265,8 +316,9 @@ mediría el triple: son dos o tres, las que tienen un protagonista natural.
 
 ### La foto de la fábrica que mandó el cliente (21-sep)
 
-Está en `material/assets/foto-fabrica-hoy-filtro-sepia.png` (617×805) y **no viaja con el
-repo**: en otra máquina hay que copiarla o pedírsela de nuevo. ⚠️ **NO es de 1918**, aunque
+Está en `material/assets/foto-fabrica-hoy-filtro-sepia.jpeg` (el original mide 1098×1433,
+no 617×805) y **no viaja con el repo**; lo que se sirve sí: `img/fabrica-hoy-{480,800}.webp`,
+emitidos con `node tools/fabrica.cjs 20 20 1058 1393` (recorta el marco del filtro). ⚠️ **NO es de 1918**, aunque
 él la mandó como «cómo se veía la fábrica en 1918»: es la fábrica de hoy con filtro sepia y
 marco de app de celular (chapa galvanizada, portón moderno, cartel «Ervateira SELEME ·
 Desde 1918» con las franjas de la marca actual, araucarias). Presentarla como 1918 es un
@@ -294,15 +346,16 @@ unos 400 px, no para pantalla completa.
 
 ### Mío
 
-1. **Las tres páginas internas:** `/donde-comprar/`, `/vende-centenaria/`, `/contacto/`. Se
-   mantienen los slugs del WordPress, que están indexados.
-2. **Autohospedar las fuentes.** Hoy son de Google y el swap de Fraunces es el cuello del LCP;
-   de paso el sitio andaría sin internet abriendo el `index.html`.
-3. **El cache de `/img/`.** `vercel.json` le pone `immutable, max-age=31536000` pero los
-   archivos **no llevan hash en el nombre**: si se regenera una imagen con el mismo nombre,
-   quien ya entró sigue viendo la vieja un año. O se baja ese `max-age`, o se versionan los
-   nombres. **Decisión pendiente de Lautaro.**
-4. **Rechequear precios contra la tienda** antes de publicar (los relevados son del 30-ago).
+1. ~~Las tres páginas internas~~ HECHO 21-sep.
+2. ~~Autohospedar las fuentes~~ HECHO 21-sep (y GSAP también).
+3. **El cache de `/img/` (y ahora `/fonts/`).** `vercel.json` les pone `immutable,
+   max-age=31536000` pero los archivos **no llevan hash en el nombre**: si se regenera una
+   imagen con el mismo nombre, quien ya entró sigue viendo la vieja un año. O se baja ese
+   `max-age`, o se versionan los nombres (las escenas y frentes ya van con `-v3-`/`-v1-`).
+   **Decisión pendiente de Lautaro.**
+4. ~~Rechequear precios contra la tienda~~ HECHO 21-sep: coinciden; el sitio no publica precios.
+5. **La batería completa en la PC de casa** (ver arriba) y recién después mostrárselo al
+   cliente y mandarle el mensaje de la sección «Mensaje para el cliente».
 
 ### Decisión de hosting
 
@@ -337,6 +390,7 @@ node tools/entrada.cjs 4740     # cortina + LCP medido
 node tools/rodar.cjs 4740       # hoja de contactos (agregá 390 844 para móvil)
 node tools/cruce-contraste.cjs 4740   # contraste A MITAD de cada cruce (tiene que decir «sin texto en pantalla»)
 node tools/pasajes.cjs 4740     # hoja de contactos de los seis pasajes (agregá 390 844 para móvil)
+node tools/ritual.cjs 4740      # hoja de contactos del ritual fijado (agregá 390 844 para móvil)
 ```
 
 Al cerrar el 21-sep: 6/6 escenarios, toda la home en AA, sin texto a mitad de los cruces, LCP 2,4–2,8 s por software (máquina cargada; el árbol anterior daba 2,4–4,2 ese día).

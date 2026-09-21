@@ -4,7 +4,9 @@ Sitio de **Seleme Centenaria** (yerba mate, desde 1918) — reemplaza el WordPre
 de `yerbamatecentenaria.com.ar`, que hice yo. Vanilla, **sin build**: HTML + CSS + GSAP +
 un motor WebGL propio.
 
-**Estado: la home está completa y verificada. Faltan las tres páginas internas.**
+**Estado: home y las tres páginas internas (`/donde-comprar/`, `/vende-centenaria/`,
+`/contacto/`) completas. Falta la batería de verificación de lo hecho el 21-sep y lo que
+debe el cliente (ver [CONTINUAR](CONTINUAR.md)).**
 
 ---
 
@@ -112,10 +114,10 @@ de 600 px).
 precios mayoristas (envejecen solos y le muestran la estructura de costos a la competencia) y
 el Facebook.
 
-**Mío:** las tres páginas internas (`/donde-comprar/`, `/vende-centenaria/`, `/contacto/`),
-autohospedar las fuentes (hoy son de Google y el swap de Fraunces es el cuello del LCP; de
-paso el sitio andaría sin internet), y volver a chequear precios contra la tienda antes de
-publicar.
+**Mío:** la batería completa de verificación en la PC de casa (los pasos del 21-sep salvo
+el ritual no pasaron por Chrome) y la decisión sobre el cache `immutable` de `/img/` y
+`/fonts/` sin hash en los nombres. Las fuentes y GSAP ya están autohospedados
+(`fonts/`, `css/fuentes.css`, `js/vendor/`): el sitio anda sin internet.
 
 ## ⚠️ El repo es PÚBLICO
 
