@@ -22,6 +22,9 @@ const PASOS = [0, .07, .14, .21, .28, .35, .42, .50, .60, .72, .85, .96];
   });
   const pg = await b.newPage();
   await pg.setViewport({ width: W, height: H, deviceScaleFactor: 1 });
+  /* la maquina puede tener las animaciones apagadas (Windows: "Mostrar animaciones"),
+     y Chrome lo traduce a prefers-reduced-motion: el sitio tomaria el camino quieto */
+  await pg.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
 
   const errores = [];
   pg.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') errores.push(m.type() + ': ' + m.text()); });

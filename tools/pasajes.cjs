@@ -25,6 +25,9 @@ const PUNTOS = [-.45, -.22, -.05, .12, .30, .48, .66];   /* fraccion de pantalla
   });
   const pg = await b.newPage();
   await pg.setViewport({ width: W, height: H, deviceScaleFactor: 1 });
+  /* la maquina puede tener las animaciones apagadas (Windows: "Mostrar animaciones"),
+     y Chrome lo traduce a prefers-reduced-motion: el sitio tomaria el camino quieto */
+  await pg.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
   await pg.evaluateOnNewDocument(() => {
     let _M;
     Object.defineProperty(window, 'Monte', { configurable: true, get() { return _M; },

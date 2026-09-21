@@ -35,6 +35,9 @@ const NOM = ['hero→historia','historia→origen','origen→variedades','varied
   for (const vp of [{ w:1440, h:900, n:'escritorio' }, { w:390, h:844, n:'celular' }]) {
     const pg = await b.newPage();
     await pg.setViewport({ width: vp.w, height: vp.h });
+    /* la maquina puede tener las animaciones apagadas (Windows: "Mostrar animaciones"),
+       y Chrome lo traduce a prefers-reduced-motion: el sitio tomaria el camino quieto */
+    await pg.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
     await pg.evaluateOnNewDocument(() => {
       let _M;
       Object.defineProperty(window, 'Monte', { configurable:true, get(){return _M;},

@@ -48,6 +48,9 @@ async function correr(nombre, preparar, esperaMs = 3400) {
   });
   const pg = await b.newPage();
   await pg.setViewport({ width: 1440, height: 900 });
+  /* la maquina puede tener las animaciones apagadas (Windows: "Mostrar animaciones"),
+     y Chrome lo traduce a prefers-reduced-motion: el sitio tomaria el camino quieto */
+  await pg.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
   const errores = [];
   pg.on('pageerror', e => errores.push(e.message));
   await preparar(pg);

@@ -26,6 +26,7 @@
   var mundo = $('.mundo');
   var disco = $('#disco');
   var sello = $('.sello');
+  var dSello = $('#dSello');
   var aroExt = $('.sello__aro--ext');
   var aroInt = $('.sello__aro--int');
   var selloTexto = $('.sello__texto');
@@ -203,7 +204,13 @@
        sello, y se retira con el manifiesto. Lo que une los capitulos es el
        fondo continuo (e.escena + la sombra), no el disco: arrastrarlo por
        toda la pagina lo convertia en un circulo pegado que sobraba.
+       Vuelve UNA vez, en el ritual, y ya no como sello: como la boca del mate
+       (era parte de la idea original: sol -> sello -> boca del mate).
        --------------------------------------------------------------------- */
+
+    /* El pin del ritual se crea ACA, antes de los pasajes y las camaras: los
+       triggers que vienen despues miden posiciones que el pin corre. */
+    var conRitual = ritualFijo();
 
     function tramo(donde, a, b) {
       return { trigger: donde, start: a || 'top 82%', end: b || 'top 28%', scrub: .6 };
@@ -262,6 +269,9 @@
       /* la vegetacion del hero pertenece a ESE punto de vista: se retira en el
          primer cambio de mundo, no se arrastra al galpon ni al aereo */
       if (i === 0) tlP.fromTo(e, { frenteOp: 1 }, { frenteOp: 0, duration: .45 }, 0);
+      /* el mate se va con el ritual, en el pasaje al cierre: el disco ya
+         cumplio dos veces y el sol del cierre es del shader, no de este DOM */
+      if (i === 5 && conRitual) tlP.fromTo(disco, { opacity: 1 }, { opacity: 0, duration: .3 }, 0);
     });
 
     /* LA CAMARA NO PARA. Antes `e.avance` movia la camara solo en el hero y los
@@ -301,6 +311,96 @@
        lo comparten el mundo base y las escenas. */
 
     revelarCapitulos();
+  }
+
+  /* ---------------------------------------------------------------------
+     EL RITUAL, FIJADO (21-sep). El diagnostico del cliente era que los capitulos
+     eran fotos que cambian; el hero no, porque es un LUGAR: se fija, el texto se
+     va y algo se transforma a la vista. Este es el segundo lugar de la pagina.
+     La seccion se fija como el hero, el disco vuelve como la boca del mate vista
+     desde arriba y los cinco pasos lo transforman con el scroll, uno por vez,
+     sobre la escena de la mesa (la camara de ritual sigue corriendo por debajo).
+     El texto largo de los cinco pasos no entra en una pantalla fija: por eso
+     van apilados y se reemplazan (CSS: html.ritual-fijo).
+     Devuelve true si la escena quedo armada: sin eso, los pasos siguen siendo
+     la lista de siempre y el disco no vuelve. */
+  function ritualFijo() {
+    var sec = $('#ritual'), mate = $('#dMate');
+    if (!sec || !mate || !dSello) return false;
+    var movil = chico.matches;
+    /* en un celular bajo no entran cabeza, mate y paso en una pantalla fija */
+    if (movil && window.innerHeight < 640) return false;
+    document.documentElement.classList.add('ritual-fijo');
+
+    var pasos = $$('.paso', sec), tip = $('.tip', sec);
+    var m = {
+      yerba: $('#mtYerba'), hueco: $('#mtHueco'), mojado: $('#mtMojado'), hilo: $('#mtHilo'),
+      bombilla: $('#mtBombilla'), agua: $('#mtAgua'), espuma: $('#mtEspuma'), vapor: $('#mtVapor')
+    };
+    for (var k in m) if (!m[k]) return false;
+    var largo = m.hilo.getTotalLength();
+
+    /* estado inicial de las piezas: lo pone el JS, como todo lo que el JS anima */
+    gsap.set(m.yerba, { scale: 0, svgOrigin: '200 200' });
+    gsap.set(m.hueco, { scale: 0, svgOrigin: '250 246' });
+    gsap.set(m.hilo, { strokeDasharray: largo, strokeDashoffset: largo, opacity: 0 });
+    gsap.set(m.bombilla, { x: 150, y: 150, opacity: 0 });
+    gsap.set([m.espuma, m.vapor], { opacity: 0 });
+    gsap.set(pasos, { opacity: 0, y: 26 });
+    if (tip) gsap.set(tip, { opacity: 0, y: 14 });
+
+    var tl = gsap.timeline({
+      defaults: { ease: 'none', immediateRender: false },
+      scrollTrigger: {
+        trigger: sec, start: 'top top', end: '+=460%',
+        pin: true, pinSpacing: true, scrub: .65, anticipatePin: 1
+      }
+    });
+
+    /* 0. el disco vuelve, ya como mate. El sello se apaga mientras el disco
+          sigue invisible, asi que nadie ve el cambio: aparece directamente la
+          boca del mate, vacia. Sale de donde lo dejo el manifiesto (achicado y
+          corrido arriba a la derecha) y se acomoda: a la derecha del texto en
+          escritorio, entre la cabeza y el paso en el celular. */
+    tl.fromTo(dSello, { opacity: 1 }, { opacity: 0, duration: .001 }, 0)
+      .fromTo(mate, { opacity: 0 }, { opacity: 1, duration: .001 }, 0)
+      .fromTo(disco,
+        { opacity: 0, scale: .40, xPercent: 92, yPercent: -46, left: '50%', top: '50%' },
+        { opacity: 1, scale: movil ? .62 : 1.08, xPercent: 0, yPercent: 0,
+          left: movil ? '50%' : '73%', top: movil ? '41%' : '52%',
+          ease: 'power2.out', duration: .12 }, 0);
+
+    /* Cinco pasos en el tramo [.12, 1], a .176 cada uno. El texto de cada paso
+       entra, se queda, y se va justo antes de que entre el siguiente; el mate
+       cambia mientras el texto esta quieto, para que se lea la causa. */
+    var A0 = .12, K = .176;
+    pasos.forEach(function (p, i) {
+      var a = A0 + i * K;
+      tl.fromTo(p, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .035, ease: 'power2.out' }, a);
+      if (i < pasos.length - 1) tl.to(p, { opacity: 0, y: -22, duration: .03, ease: 'power2.in' }, a + K - .03);
+    });
+    var a1 = A0, a2 = A0 + K, a3 = A0 + 2 * K, a4 = A0 + 3 * K, a5 = A0 + 4 * K;
+
+    /* 01 · carga: la yerba entra por el centro y cubre la boca; la pared
+             sombreada del borde es lo que dice "tres cuartos", no hasta el ras */
+    tl.fromTo(m.yerba, { scale: 0 }, { scale: 1, duration: .11, ease: 'power2.out' }, a1 + .01);
+    /* 02 · inclina: la masa se corre arriba a la izquierda y abre el hueco */
+    tl.fromTo(m.hueco, { scale: 0 }, { scale: 1, duration: .10, ease: 'power2.inOut' }, a2 + .01)
+      .fromTo(m.yerba, { x: 0, y: 0 }, { x: -9, y: -8, duration: .10, ease: 'power2.inOut' }, a2 + .01);
+    /* 03 · el hilo de agua tibia baja hasta el hueco, moja el fondo y se corta */
+    tl.fromTo(m.hilo, { opacity: 0 }, { opacity: 1, duration: .01 }, a3 + .01)
+      .fromTo(m.hilo, { strokeDashoffset: largo }, { strokeDashoffset: 0, duration: .06 }, a3 + .01)
+      .fromTo(m.mojado, { attr: { rx: 0, ry: 0 } }, { attr: { rx: 44, ry: 34 }, duration: .07, ease: 'power2.out' }, a3 + .05)
+      .fromTo(m.hilo, { opacity: 1 }, { opacity: 0, duration: .03 }, a3 + .12);
+    /* 04 · la bombilla entra desde fuera del cuadro y se apoya en el hueco */
+    tl.fromTo(m.bombilla, { opacity: 0 }, { opacity: 1, duration: .02 }, a4 + .01)
+      .fromTo(m.bombilla, { x: 150, y: 150 }, { x: 0, y: 0, duration: .11, ease: 'power2.out' }, a4 + .01);
+    /* 05 · la cebada: el agua llena el hueco, espuma junto a la bombilla, vapor */
+    tl.fromTo(m.agua, { attr: { rx: 0, ry: 0 } }, { attr: { rx: 66, ry: 52 }, duration: .09, ease: 'power2.out' }, a5 + .01)
+      .fromTo(m.espuma, { opacity: 0 }, { opacity: 1, duration: .04 }, a5 + .06)
+      .fromTo(m.vapor, { opacity: 0 }, { opacity: 1, duration: .06 }, a5 + .08);
+    if (tip) tl.fromTo(tip, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .04, ease: 'power2.out' }, a5 + .07);
+    return true;
   }
 
   function escenaDom() {
@@ -345,6 +445,9 @@
       var lineasSec = titulo ? partirTitulo(titulo) : [];
       if (lineasSec.length) gsap.set(lineasSec, { yPercent: 108 });
       var piezas = $$('.reveal', sec).filter(function (el) { return !el.matches(TITULOS); });
+      /* con el ritual fijado, los pasos y el tip los maneja su propio timeline */
+      if (document.documentElement.classList.contains('ritual-fijo') && sec.id === 'ritual')
+        piezas = piezas.filter(function (el) { return !el.closest('.pasos, .tip'); });
       var tlSec = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 72%' } });
       if (lineasSec.length) tlSec.to(lineasSec, { yPercent: 0, duration: .9, stagger: .11, ease: 'power3.out' }, 0);
       tlSec.to(piezas, { opacity: 1, y: 0, duration: .85, stagger: .09, ease: 'power3.out' }, lineasSec.length ? .15 : 0);

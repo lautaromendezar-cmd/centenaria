@@ -47,6 +47,9 @@ const PLAN = [
   for (const vp of [{ w: 1440, h: 900, n: 'escritorio' }, { w: 390, h: 844, n: 'celular' }]) {
     const pg = await b.newPage();
     await pg.setViewport({ width: vp.w, height: vp.h });
+    /* la maquina puede tener las animaciones apagadas (Windows: "Mostrar animaciones"),
+       y Chrome lo traduce a prefers-reduced-motion: el sitio tomaria el camino quieto */
+    await pg.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
     await pg.goto(`http://localhost:${P}/`, { waitUntil: 'networkidle0' });
     await new Promise(r => setTimeout(r, 3000));
     console.log(`\n════ ${vp.n} ${vp.w}x${vp.h}`);

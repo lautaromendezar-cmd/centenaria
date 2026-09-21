@@ -26,6 +26,9 @@ const MARCAS = [120, 400, 700, 1000, 1400, 1800, 2300, 2900];
   });
   const pg = await b.newPage();
   await pg.setViewport({ width: W, height: H });
+  /* la maquina puede tener las animaciones apagadas (Windows: "Mostrar animaciones"),
+     y Chrome lo traduce a prefers-reduced-motion: el sitio tomaria el camino quieto */
+  await pg.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
   await pg.setCacheEnabled(false);
 
   await pg.evaluateOnNewDocument(() => {

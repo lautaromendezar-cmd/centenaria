@@ -11,6 +11,9 @@ const W = 1280, H = 720;
     args: ['--no-sandbox','--hide-scrollbars','--enable-unsafe-swiftshader','--use-angle=swiftshader'] });
   const pg = await b.newPage();
   await pg.setViewport({ width: W, height: H });
+  /* la maquina puede tener las animaciones apagadas (Windows: "Mostrar animaciones"),
+     y Chrome lo traduce a prefers-reduced-motion: el sitio tomaria el camino quieto */
+  await pg.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
   await pg.evaluateOnNewDocument(() => {
     let _M;
     Object.defineProperty(window, 'Monte', { configurable: true, get(){return _M;},
