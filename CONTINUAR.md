@@ -1,6 +1,6 @@
 # CONTINUAR · Centenaria
 
-Estado al **21-sep-2026 (tarde, desde la PC de la oficina)**. Para retomar desde otra máquina,
+Estado al **21-sep-2026 (noche, desde la PC de casa)**. Para retomar desde otra máquina,
 leer esto y después el [README](README.md), que explica cómo está armado y las
 decisiones que no son obvias.
 
@@ -27,15 +27,30 @@ decisiones que no son obvias.
   6. **Precios y presentaciones cotejados** contra la tienda: coinciden (Original y
      Essencial en ½ y 1 kg, Azul con Palo solo 1 kg). La tienda pide **100 kg** de mínimo
      mayorista; el folleto dice 20. Sigue sin publicarse hasta que el cliente confirme.
-- **⚠️ Los pasos 2 a 6 NO están verificados en Chrome.** En la oficina la CPU estaba
-  ocupada codificando video y el WebGL por software no puede correr en paralelo. Del paso 1
-  sí: robustez 6/6, pasajes OK (escritorio) y `tools/ritual.cjs` en escritorio y celular.
-  **Falta la batería completa en la PC de casa antes de mostrárselo al cliente**
-  (robustez, contraste, entrada, cruce-contraste, pasajes, ritual; escritorio y celular).
-  Lo que hay que mirar a ojo además: el `.historia__anio` (arriba a la derecha de Historia,
-  cae cerca del frente WebGL de la araucaria), el sol del cierre contra el velo `.60`, y
-  que `contraste.cjs` en `#ritual` ya no mide los pasos (están en opacidad 0 al inicio del
-  pin): si hace falta, sumar un punto a mitad del pin.
+- **✅ Batería completa corrida en la PC de casa el 21-sep a la noche** (robustez 6/6,
+  contraste, entrada, cruce-contraste, pasajes, ritual; escritorio y celular). Todo pasa.
+  Dos cosas aparecieron y se arreglaron (commit `3de818b`, publicado esa noche):
+  - **El mate pisaba el título en celular.** A 41% del viewport y escala .62 el aro
+    pisaba «paso a paso» 20 px a 667, 14 a 740 y 3 a 844 (a 915 quedaba libre): la
+    banda cambia con la altura y la cabeza no. Ahora se mide la banda entre la cabeza y
+    el paso, y ⚠️ **con valores por función de GSAP**, porque `revelarCapitulos()` parte
+    el título en líneas DESPUÉS de `ritualFijo()` y la cabeza crece 45 px: medida antes,
+    el mate caía sobre el título igual. Queda con 19 a 24 px de aire en las cuatro alturas.
+  - **El 1918 de Historia contaba fuera de pantalla en escritorio.** Se disparaba con los
+    hitos, que entran cuando el número (arriba a la derecha) ya se fue: al tope de la
+    sección decía 1941 y llegaba a hoy sin nadie mirando. Ahora se dispara con el número
+    mismo (`top 92%` → `top 10%`): en escritorio cuenta 1923 → 2026 a la vista y llega
+    justo cuando sale por arriba; en celular 1918 → 2026.
+  Lo mirado a ojo: el `.historia__anio` sobre la araucaria se lee (peor píxel 4.16:1,
+  texto grande, exige 3:1); la fábrica como copia de archivo con el pie honesto queda
+  bien; **el sol del cierre bajo el velo .60 queda como un disco pálido con halo tibio**:
+  se lee como sol entre bruma, pero sobre la escena oscura podría leerse como luna. No se
+  tocó: el shader es el del hero y `solFrio: 0` ya es lo más caliente que tiene. Si al
+  cliente no le cierra, la salida es un uniform de temperatura propio o bajar el velo del
+  cierre, con las tarjetas encima. ⚠️ `contraste.cjs` sigue dando falsos `1.00:1` y
+  «nada visible» sueltos (mide mientras el texto entra con stagger): en dos corridas
+  seguidas toda la home dio AA en al menos una y ningún `1.00:1` se repitió en el mismo
+  elemento. LCP por software en esta PC: 1060 / 1076 / 1640 ms (mediana 1076).
 - **Bugs que aparecieron de paso (arreglados):** `--display-3`, `--radio-card` y
   `--radio-chip` se habían perdido en el commit de la home nueva (8297af5) y los títulos de
   fichas, pasos, puertas y contacto caían a 1rem. Restaurados con los valores originales:
@@ -354,8 +369,9 @@ unos 400 px, no para pantalla completa.
    `max-age`, o se versionan los nombres (las escenas y frentes ya van con `-v3-`/`-v1-`).
    **Decisión pendiente de Lautaro.**
 4. ~~Rechequear precios contra la tienda~~ HECHO 21-sep: coinciden; el sitio no publica precios.
-5. **La batería completa en la PC de casa** (ver arriba) y recién después mostrárselo al
-   cliente y mandarle el mensaje de la sección «Mensaje para el cliente».
+5. ~~La batería completa en la PC de casa~~ HECHA el 21-sep a la noche (ver arriba).
+   **Sigue: mostrárselo al cliente** y mandarle el mensaje de la sección «Mensaje para el
+   cliente».
 
 ### Decisión de hosting
 
@@ -417,4 +433,7 @@ con `cmp` contra `git show HEAD:<archivo>`.
 saca los textos en CRLF y el `cmp` contra el commit (que es LF) difiere en exactamente una
 cantidad de bytes igual a las líneas. Se sirve igual, pero para que el cotejo sea 1:1 va el
 `-c core.autocrlf=false`. El deploy del 21-sep (tarde) salió así, en CRLF: contenido
-idéntico al commit 74ce1c6 salvo los fines de línea.
+idéntico al commit 74ce1c6 salvo los fines de línea. El del 21-sep a la noche (casa) fue del
+commit `3de818b` con el `-c`: cotejo 1:1 en los cuatro HTML, `js/main.js`, `js/monte.js` y
+`css/estilo.css`. ⚠️ Para cotejar los HTML hay que pedir la URL limpia (`/`, `/contacto/`):
+`/index.html` responde un redirect de 15 bytes («Redirecting...») y el `cmp` da DIFF falso.
