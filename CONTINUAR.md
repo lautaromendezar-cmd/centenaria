@@ -402,11 +402,19 @@ limpia (el árbol de trabajo tiene `_gen/` y `material/`, que no están en `.ver
 
 ```bash
 D=$TEMP/cent-deploy && rm -rf "$D" && mkdir -p "$D"
-git archive HEAD | tar -x -C "$D" && cp -r .vercel "$D/.vercel"
+git -c core.autocrlf=false archive HEAD | tar -x -C "$D" && cp -r .vercel "$D/.vercel"
 (cd "$D" && vercel deploy --prod --yes)
 vercel ls          # tiene que aparecer un deploy de hace segundos, Ready, Production
 ```
 
 `.vercel/` es la carpeta que deja `vercel link` (gitignoreada): si en una máquina nueva no
-está, correr `vercel link` una vez dentro del repo. Después cotejar lo publicado contra el
-commit bajando `index.html`, `css/`, `js/` e `img/` con `curl` y comparando con `cmp`.
+está, correr `vercel link --yes --project centenaria` una vez dentro del repo (deja también
+un `.env.local`, ignorado). Después cotejar lo publicado contra el commit bajando
+`index.html`, las tres páginas, `css/`, `js/`, `fonts/` e `img/` con `curl` y comparando
+con `cmp` contra `git show HEAD:<archivo>`.
+
+⚠️ En una PC con `core.autocrlf=true` (la oficina), `git archive` sin el `-c` de arriba
+saca los textos en CRLF y el `cmp` contra el commit (que es LF) difiere en exactamente una
+cantidad de bytes igual a las líneas. Se sirve igual, pero para que el cotejo sea 1:1 va el
+`-c core.autocrlf=false`. El deploy del 21-sep (tarde) salió así, en CRLF: contenido
+idéntico al commit 74ce1c6 salvo los fines de línea.
