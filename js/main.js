@@ -329,17 +329,22 @@
     revelarCapitulos();
   }
 
-  /* HISTORIA: el 1918 de la cortina vuelve y cuenta hasta hoy mientras se
-     recorren los hitos. Es el mismo gesto de la entrada —los cien anios se
+  /* HISTORIA: el 1918 de la cortina vuelve y cuenta hasta hoy mientras se lee
+     la cabeza del capitulo. Es el mismo gesto de la entrada —los cien anios se
      cuentan, no se escriben— puesto donde se cuenta la historia. Con scrub, asi
-     que al volver arriba descuenta. */
+     que al volver arriba descuenta.
+     El disparador es el NUMERO, no los hitos: en escritorio el numero vive
+     arriba a la derecha y los hitos entran cuando ya salio de pantalla (con el
+     disparador en los hitos, al tope de la seccion ya decia 1941 y llegaba a
+     hoy sin nadie mirando; medido el 21-sep). Asi cuenta entero a la vista:
+     arranca al asomar por abajo y termina cerca del borde de arriba. */
   function contarHistoria() {
-    var el = $('#historiaAnio'), hitos = $('#historia .hitos');
-    if (!el || !hitos) return;
+    var el = $('#historiaAnio');
+    if (!el) return;
     var n = { v: DESDE };
     gsap.fromTo(n, { v: DESDE }, {
       v: HASTA, ease: 'none', immediateRender: false, snap: { v: 1 },
-      scrollTrigger: { trigger: hitos, start: 'top 90%', end: 'bottom 55%', scrub: .5 },
+      scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 10%', scrub: .5 },
       onUpdate: function () { el.textContent = String(Math.round(n.v)); }
     });
   }
@@ -371,6 +376,34 @@
     for (var k in m) if (!m[k]) return false;
     var largo = m.hilo.getTotalLength();
 
+    /* En el celular el mate va en la banda que queda entre la cabeza y el paso,
+       MEDIDA, no a un porcentaje del viewport: a 41% y escala .62 el aro pisaba
+       «paso a paso» 20 px en un telefono de 667 y 3 px en uno de 844, porque la
+       banda cambia con la altura y la cabeza no (medido el 21-sep con
+       tools/ritual.cjs en cuatro alturas).
+       ⚠ Se mide RECIEN cuando el tween se inicializa (valores por funcion de
+       GSAP: corren en el primer render, en el refresh de ScrollTrigger), no
+       aca: revelarCapitulos() parte el titulo en lineas despues de esta funcion
+       y la cabeza crece 45 px; medida antes, el mate caia sobre el titulo igual.
+       Las distancias al borde superior de la seccion valen fijada o no (pin en
+       'top top'). Va en px y no en %: GSAP convierte el 50% de partida contra
+       el alto del body, no del viewport, y el mate entraria desde muy abajo. */
+    var escMate = 1.08, izq = '73%', arr = '52%', arrDesde = '50%';
+    if (movil) {
+      var banda = function () {
+        var secTop = sec.getBoundingClientRect().top;
+        var fin = $('.cap__cabeza', sec).getBoundingClientRect().bottom - secTop + 4;  /* +4: descendentes */
+        var ini = $('.pasos', sec).getBoundingClientRect().top - secTop;
+        var base = disco.offsetWidth, margen = 14;
+        var diam = Math.max(100, Math.min(ini - fin - 2 * margen, base * .64));
+        return { esc: diam / base, top: Math.round((fin + ini) / 2) + 'px' };
+      };
+      escMate = function () { return banda().esc; };
+      arr = function () { return banda().top; };
+      izq = '50%';
+      arrDesde = Math.round(window.innerHeight / 2) + 'px';
+    }
+
     /* estado inicial de las piezas: lo pone el JS, como todo lo que el JS anima */
     gsap.set(m.yerba, { scale: 0, svgOrigin: '200 200' });
     gsap.set(m.hueco, { scale: 0, svgOrigin: '250 246' });
@@ -396,9 +429,8 @@
     tl.fromTo(dSello, { opacity: 1 }, { opacity: 0, duration: .001 }, 0)
       .fromTo(mate, { opacity: 0 }, { opacity: 1, duration: .001 }, 0)
       .fromTo(disco,
-        { opacity: 0, scale: .40, xPercent: 92, yPercent: -46, left: '50%', top: '50%' },
-        { opacity: 1, scale: movil ? .62 : 1.08, xPercent: 0, yPercent: 0,
-          left: movil ? '50%' : '73%', top: movil ? '41%' : '52%',
+        { opacity: 0, scale: .40, xPercent: 92, yPercent: -46, left: '50%', top: arrDesde },
+        { opacity: 1, scale: escMate, xPercent: 0, yPercent: 0, left: izq, top: arr,
           ease: 'power2.out', duration: .12 }, 0);
 
     /* Cinco pasos en el tramo [.12, 1], a .176 cada uno. El texto de cada paso
