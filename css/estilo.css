@@ -294,6 +294,15 @@ main{position:relative;z-index:3}
    El mundo sigue detras de todo esto. Las secciones no traen fondo propio: lo que
    las hace legibles es .mundo__sombra, que el JS sube al entrar al primer capitulo.
    Asi el scroll es una sola toma y no una pila de bloques. */
+/* ============================== PASAJES ==============================
+   El tramo vacio entre capitulo y capitulo donde el mundo recupera la pantalla:
+   el texto ya se fue, el velo se levanta y el cruce de escenas pasa a la vista
+   (main.js). Solo existen con el motor andando y con scroll animado
+   (html.con-pasajes): sin JS o sin WebGL serian agujeros en blanco. */
+.pasaje{height:0}
+.con-pasajes .pasaje{height:130vh}
+@media (max-width:900px){.con-pasajes .pasaje{height:120vh}}
+
 .cap{position:relative;max-width:var(--ancho);margin:0 auto;
   padding:var(--seccion) var(--gotera)}
 .cap__cabeza{max-width:min(32rem,62%)}
@@ -307,15 +316,14 @@ main{position:relative;z-index:3}
 
 /* ============================== LA RAMA ==============================
    La misma rama de yerba del frente del hero (recortada por tools/rama.cjs),
-   suelta en primer plano de algunos capitulos. Se mueve a otra velocidad que el
+   suelta en primer plano del cierre. En historia y ritual se saco el 20-sep:
+   caia sobre el mismo rincon que el primer plano WebGL de la escena (frentes.cjs)
+   y quedaban dos ramas apiladas. Se mueve a otra velocidad que el
    fondo (main.js) y esa diferencia es la profundidad. z-index negativo: queda
    arriba del mundo pero abajo de todo el contenido de main. El sangrado hasta
    el borde del viewport lo clipa el overflow-x:hidden del body. */
 .rama{position:absolute;z-index:-1;pointer-events:none}
 .rama img{width:100%;height:auto;filter:brightness(.9) blur(1px)}
-.rama--historia{top:3%;right:calc((100% - 100vw)/2);width:clamp(240px,24vw,370px)}
-.rama--ritual{top:32%;left:calc((100% - 100vw)/2);width:clamp(300px,30vw,480px)}
-.rama--ritual img{transform:scaleX(-1)}
 .rama--cierre{top:1%;right:calc((100% - 100vw)/2);width:clamp(220px,21vw,330px)}
 /* en pantalla angosta se pisaria con el texto: no va */
 @media (max-width:760px){.rama{display:none}}

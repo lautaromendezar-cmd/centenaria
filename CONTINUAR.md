@@ -1,25 +1,27 @@
 # CONTINUAR · Centenaria
 
-Estado al **1-sep-2026 (tarde, desde la notebook)**. Para retomar desde otra máquina,
+Estado al **21-sep-2026 (madrugada, desde la PC de casa)**. Para retomar desde otra máquina,
 leer esto y después el [README](README.md), que explica cómo está armado y las
 decisiones que no son obvias.
 
 - **Online:** https://centenaria.vercel.app/ (Vercel, preset *Other*, sin build, push a `main` redespliega)
-- **Repo:** `lautaromendezar-cmd/centenaria` · **PÚBLICO** · commit `13541b2`
-- **Estado: esperando la devolución del cliente** sobre la ronda de ajustes del 1-sep:
-  - El disco termina su viaje en el hero (sol → sello y se retira con el manifiesto);
-    fuera la luna, la boca del mate y el círculo de oro.
-  - Variedades dejó el velo claro: misma noche que el resto, la luz la ponen las tarjetas.
-  - Menú móvil de pantalla completa (X, links centrados, contactos abajo); la cabecera
-    móvil quedó solo con marca y hamburguesa.
-  - `og:image` apunta a la URL de Vercel para que WhatsApp arme la tarjeta —
-    **volverla al dominio propio cuando salga** (comentario en el head).
-  - Fix real de scrub: volver al hero restaura bajada/botones/sello (fromTo + cajas;
-    la nota larga está en el timeline del hero de `main.js`).
-  - Títulos de capítulo entran por líneas (máscara del hero) y hay un gajo de yerba
-    en primer plano con parallax en historia, ritual y cierre (`tools/rama.cjs`,
-    `img/gajo-*.webp` — nombre nuevo por el caché inmutable de `/img/`).
-- Las herramientas de `tools/` ahora resuelven `node_modules` y Chrome por máquina
+- **Repo:** `lautaromendezar-cmd/centenaria` · **PÚBLICO** · último commit: ver `git log -1`
+- **Estado:** al cliente le fascinó la intro (el zoom a la selva y el sol que se vuelve
+  sello) y el resto le pareció plano: «imágenes que cambian pero no están conectadas».
+  A Lautaro también. El 20/21-sep se hizo la primera parte de la respuesta y está en la
+  URL de revisión, **todavía sin mostrársela al cliente**:
+  1. **Cada escena tiene dos planos** (fondo + primer plano con alfa en una esquina) y la
+     cámara entra como en el hero. Ver «Planos y pasajes» más abajo.
+  2. **Pasajes entre capítulos:** el mundo recupera la pantalla entre capítulo y capítulo,
+     con el velo levantado y sin texto encima.
+  3. **Sigue: Ritual como primera escena fijada** (el disco vuelve como boca del mate y los
+     cinco pasos lo transforman). Mostrársela al cliente antes de hacer el Cierre.
+     **No está empezado**; el plan está escrito abajo.
+- Batería del 21-sep en la PC de casa: robustez 6/6, contraste AA en toda la home, ningún
+  texto en pantalla a mitad de los seis cruces (escritorio y celular), LCP 2,4–2,8 s por
+  software. Ese mismo día el árbol anterior medía 2,4–4,2 s: la máquina estaba cargada,
+  no es una regresión.
+- Las herramientas de `tools/` resuelven `node_modules` y Chrome por máquina
   vía `tools/_entorno.cjs` (casa: `latina/node_modules`; notebook: `Desktop\Claude`).
   En la notebook NO correr `contraste.cjs`/`entrada.cjs` (WebGL por software clava la
   CPU): la suite completa se corre en la PC de casa antes de publicar.
@@ -65,6 +67,8 @@ del `.gitignore` y commitearlo).
 - `_gen/esc-v2/` — los PNG fuente de las seis escenas, los `.txt` de cada prompt, y las dos
   descartadas (`_ritual-dia-descartada.png`, `_variedades-nubes-descartada.png`).
 - `_gen/packs/` — los recortes con alfa a resolución nativa.
+- `_gen/frentes/` — los seis PNG con alfa de los primeros planos (21-sep) y sus prompts
+  (`*.txt` + `comun.txt`). Sin esto no se puede rehacer ninguno.
 - El respaldo del mundo v1 vive **fuera del repo**, en
   `Desktop/Claude/_centenaria-fondos-v1-20260902` (140 MB).
 
@@ -84,6 +88,7 @@ Cómo se generaron, por si hay que rehacerlas:
 | Rama de yerba (frente) | `seedream_v5_pro` con `remove_bg` | Devuelve el recorte con alfa ya hecho |
 | Vegetación media | `recraft_v4_1` sobre negro + `remove_background` | |
 | Las 6 escenas (v2) | `nano_banana_pro` 21:9 2k | **Una sola película**, ver abajo. Los prompts están en `material/PROMPTS-ESCENAS.md` |
+| Primeros planos de las 6 escenas (21-sep) | `seedream_v5_pro` 4:3 2k `remove_bg` | Sobre gris plano, 3 créditos c/u. Prompts en `_gen/frentes/`; se emiten con `tools/frentes.cjs` |
 
 Ojo con `models_explore action:'recommend'`: devuelve 4-5 modelos y **se come los mejores**.
 Nano Banana Pro no aparece ahí; hay que listar el catálogo entero.
@@ -173,6 +178,103 @@ repo) y los PNG fuente también en `_gen/esc-v1/`.
 
 ---
 
+## Planos y pasajes — la respuesta a «se siente plano» (20/21-sep)
+
+Diagnóstico, que el cliente confirmó sin saberlo: el hero es un LUGAR (tres planos que se
+separan, un sol que se transforma, el texto se va y el mundo actúa) y los capítulos eran un
+FONDO DE PANTALLA: una foto chata con zoom (Ken Burns, no profundidad), detrás de un velo al
+55–70% durante toda la página, y el cruce entre escenas pasaba debajo del título nuevo,
+donde nadie lo veía. Además, el 1-sep se había sacado el viaje del disco después del hero
+y no se lo reemplazó con otro hilo. Lo que se hizo:
+
+### 1. Cada escena son dos planos (`tools/frentes.cjs`, `js/monte.js`)
+
+- Fondo: la misma foto entera de siempre (`img/esc-<n>-v3-*.webp`, no se tocó).
+- **Primer plano con alfa apoyado en una esquina:** rama de araucaria (historia), copa de
+  araucaria desde arriba (origen), rama de yerba desde la izquierda (variedades), hojas con
+  rocío (porque), atado de yerba seca colgado (ritual), brotes al amanecer (cierre).
+  Se sirven como `img/frente-<n>-v1-{1000,1600}.webp`, **cuadrados**.
+- Generados con **seedream_v5_pro 4:3 2k `remove_bg: true`** sobre fondo gris plano,
+  3 créditos cada uno (18 en total). Prompts en `_gen/frentes/*.txt` más `comun.txt`
+  (bloque de óptica compartido, distinto al de las escenas porque el sujeto va aislado).
+  Los PNG fuente están en `_gen/frentes/` (**no viajan con el repo**).
+- El motor dibuja el frente con **`uFit=1`**: la textura se ajusta al lado CORTO del
+  viewport y se ancla a la esquina (`uAncla`), no cover-fit. Con cover-fit una rama pegada
+  a una esquina desaparece en vertical (el 21:9 se recorta a su centro). El zoom se hace
+  sobre el centro del VIEWPORT, así que al avanzar la esquina se abre hacia afuera.
+- El frente viaja con el mismo empuje de cámara que el fondo, **amplificado ×2,7**, con más
+  deriva de puntero y viento propio. Esa diferencia de velocidad es la profundidad.
+- ⚠️ El anclaje de cada frente está en DOS lugares y tienen que coincidir: `FRENTES` en
+  `tools/frentes.cjs` y el segundo argumento de `cargarEscenas` en `main.js`
+  (`pedirEscenas`).
+- ⚠️ `dibujarCapa` (las capas del hero) comparte programa con los frentes y **tiene que
+  volver a poner `uFit=0`** en cada dibujo, o hereda el anclaje del último frente.
+- Los gajos DOM de historia y ritual (`.rama--historia`, `.rama--ritual`) se sacaron:
+  caían sobre el mismo rincón que el frente WebGL y quedaban dos ramas apiladas. Queda
+  solo el del cierre.
+- Las doce texturas se piden **recién cuando la cortina salió** (`pedirEscenas`, llamado
+  desde `retirarCortina`) y se suben **de a una por cuadro** (cola en `cargarEscenas`).
+  Antes se pedían al arrancar el motor y las subidas caían justo sobre la salida de la
+  cortina: por software el LCP se iba a 4,1–4,4 s; diferidas, 2,4–2,8 s.
+
+### 2. Pasajes: el mundo recupera la pantalla entre capítulos (`index.html`, `main.js`, CSS)
+
+- Un `<div class="pasaje">` antes de cada capítulo (seis). Miden **130vh** en escritorio
+  y **120vh** en celular, y **solo existen con `html.con-pasajes`**, que la pone
+  `escena()` en main.js (o sea: con motor y con scroll animado). Sin JS o sin WebGL
+  quedan en alto 0, nada de agujeros. La página pasó de 12,7 a 20,5 pantallas en
+  escritorio y de 16,4 a 23,6 en celular.
+- Cada pasaje es UN timeline con scrub (`top 22%` → `bottom 84%` del pasaje): velo del
+  capítulo anterior → **.12** → velo del capítulo nuevo (`VELO = [.58,.62,.52,.64,.58,.60]`),
+  y en el medio el cruce `e.escena i → i+1` y el arranque de la cámara nueva. Dos tweens
+  sobre `.mundo__sombra` en secuencia dentro del mismo timeline no se pisan: la trampa
+  era entre scrollTriggers distintos.
+- Se fueron los tramos de velo por sección, incluido el «dos tiempos» de variedades: con
+  el cruce dentro del pasaje no hay texto en pantalla, y `cruce-contraste.cjs` dice «sin
+  texto en pantalla» en los seis cruces, en escritorio y en celular.
+- `node tools/pasajes.cjs 4740 [390 844]` arma la hoja de contactos de los seis pasajes
+  (`tools/_qc-pasajes*.jpg`) e imprime `e.escena` y el velo en siete puntos de cada uno.
+- ⚠️ `contraste.cjs` puede dar un **falso `1.00:1` en `.proceso`** (#comprar): mide
+  mientras la tercera tarjeta todavía está entrando (stagger del reveal). Repetir la
+  corrida antes de creerle; el 21-sep pasó las dos veces siguientes.
+
+### 3. Lo que sigue: Ritual como escena fijada (NO empezado)
+
+Lo que aprobó Lautaro el 21-sep, en este orden: **Ritual primero, mostrárselo al cliente,
+después el Cierre.** Historia queda opcional. Seis escenas fijadas cansan y la página
+mediría el triple: son dos o tres, las que tienen un protagonista natural.
+
+- **Ritual:** la sección se fija (pin) como el hero. El disco vuelve como **la boca del
+  mate vista desde arriba** (era parte de la idea original aprobada: sol → sello → luna →
+  boca del mate) y los cinco pasos lo transforman con el scroll: se llena a tres cuartos,
+  se inclina, entra el hilo de agua, la bombilla, la cebada. Los pasos se reemplazan uno a
+  uno sobre la escena de la mesa mientras la cámara sigue. Dibujarlo en SVG sobre
+  `#disco` (ya existe, fixed, hoy se retira en el manifiesto) y moverlo con scroll como el
+  hero. El frente actual de ritual (atado seco, arriba a la izquierda) puede quedar o irse
+  según estorbe. El texto largo de los cinco pasos no entra en una pantalla fija: va de a
+  un paso por vez.
+- **Cierre:** el sol sale de nuevo sobre el monte al amanecer y cierra contra «El día
+  empieza con yerba mate». Es el mismo `FS_SOL` del hero (`e.sol*`, `solSobre`). Para que
+  se oculte tras el monte la escena de cierre necesitaría alfa en el cielo; dibujarlo
+  delante con halo es más simple y probablemente alcance.
+- **Historia (opcional):** el `1918` de la cortina contando hasta hoy sobre la fábrica,
+  con la foto real del cliente como copia de archivo (ver abajo).
+
+### La foto de la fábrica que mandó el cliente (21-sep)
+
+Está en `material/assets/foto-fabrica-hoy-filtro-sepia.png` (617×805) y **no viaja con el
+repo**: en otra máquina hay que copiarla o pedírsela de nuevo. ⚠️ **NO es de 1918**, aunque
+él la mandó como «cómo se veía la fábrica en 1918»: es la fábrica de hoy con filtro sepia y
+marco de app de celular (chapa galvanizada, portón moderno, cartel «Ervateira SELEME ·
+Desde 1918» con las franjas de la marca actual, araucarias). Presentarla como 1918 es un
+error que cualquiera nota. Vale igual: es el lugar real y tiene las mismas araucarias que
+la escena de historia. Va como copia de archivo en el hito 1918 de Historia, recortando el
+marco del filtro, con pie honesto («La ervateira Seleme, hoy. Donde empezó todo»).
+Pedirle el original sin filtro y el nombre del pueblo. A 617 px alcanza para una copia de
+unos 400 px, no para pantalla completa.
+
+---
+
 ## Lo que falta
 
 ### Del cliente (bloquea publicar en el dominio)
@@ -230,6 +332,8 @@ node tools/robustez.cjs 4740    # 6 escenarios de FALLA — el que más importa
 node tools/contraste.cjs 4740   # peor píxel detrás de cada línea, toda la home
 node tools/entrada.cjs 4740     # cortina + LCP medido
 node tools/rodar.cjs 4740       # hoja de contactos (agregá 390 844 para móvil)
+node tools/cruce-contraste.cjs 4740   # contraste A MITAD de cada cruce (tiene que decir «sin texto en pantalla»)
+node tools/pasajes.cjs 4740     # hoja de contactos de los seis pasajes (agregá 390 844 para móvil)
 ```
 
-Los cuatro pasaban al cerrar: 6/6 escenarios, toda la home en AA, LCP 964 ms.
+Al cerrar el 21-sep: 6/6 escenarios, toda la home en AA, sin texto a mitad de los cruces, LCP 2,4–2,8 s por software (máquina cargada; el árbol anterior daba 2,4–4,2 ese día).

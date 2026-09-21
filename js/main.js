@@ -48,12 +48,6 @@
     monte = window.Monte && window.Monte.iniciar({ lienzo: lienzo, capas: capas });
     if (monte) {
       mundo.classList.add('mundo--webgl');
-      /* Una escena por capitulo. Se piden DESPUES del hero y por JS: no pasan por
-         el DOM, no bloquean la cortina y no pelean por el LCP. Las seis a 1600
-         suman ~234 KB. */
-      if (monte.cargarEscenas) {
-        monte.cargarEscenas(['historia', 'origen', 'variedades', 'porque', 'ritual', 'cierre']);
-      }
       if (chico.matches || tocable) monte.estado.linterna = 0;
       if (quieto.matches) { monte.estado.linterna = 0; }
       escena();
@@ -61,6 +55,24 @@
       /* Sin WebGL el paralaje lo hace el DOM: mas pobre, pero el sitio funciona. */
       escenaDom();
     }
+  }
+
+  /* Las escenas de los capitulos (fondo + primer plano de cada una) se piden
+     recien cuando la cortina ya salio: por JS, sin pasar por el DOM, y de a una
+     textura por cuadro (ver cargarEscenas en monte.js). Antes se pedian al
+     arrancar el motor y las doce subidas caian justo sobre la salida de la
+     cortina y la entrada del hero. El primer capitulo esta a mas de tres
+     pantallas de scroll: sobra tiempo. */
+  var escenasPedidas = false;
+  function pedirEscenas() {
+    if (escenasPedidas || !monte || !monte.cargarEscenas) return;
+    escenasPedidas = true;
+    /* el segundo argumento es el anclaje del PRIMER PLANO de cada escena
+       (x: 0 izq / 1 der, y: 0 abajo / 1 arriba). Ver tools/frentes.cjs. */
+    monte.cargarEscenas(['historia', 'origen', 'variedades', 'porque', 'ritual', 'cierre'], {
+      historia: [1, 1], origen: [1, 0], variedades: [0, .5],
+      porque: [1, 0], ritual: [0, 1], cierre: [1, 0]
+    });
   }
 
   var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -119,6 +131,10 @@
       entrada.progress(1).pause();
       return;
     }
+
+    /* los pasajes entre capitulos solo existen con el motor andando y con scroll
+       animado: sin eso serian agujeros vacios (el CSS los deja en alto 0) */
+    document.documentElement.classList.add('con-pasajes');
 
     /* DOS REGLAS que costaron un bug real (la bajada y los botones no volvian al
        scrollear de vuelta al hero, y a veces quedaba el sello como circulo verde
@@ -209,38 +225,64 @@
     /* ---------------------------------------------------------------------
        LAS ESCENAS. `e.escena` es un solo numero continuo: 0 es el mundo del hero,
        1 la primera escena, 2,4 el 40% del camino entre la segunda y la tercera.
-       Cada capitulo mueve ese numero un paso y el motor resuelve el cruce solo.
+       Cada pasaje mueve ese numero un paso y el motor resuelve el cruce solo.
        Al ser un unico valor no hay estados que coordinar entre secciones.
-       --------------------------------------------------------------------- */
+
+       LOS PASAJES (20-sep). Hasta aca el cruce entre escenas pasaba DEBAJO del
+       texto: la escena cambiaba mientras el lector leia el titulo nuevo, y nadie
+       lo veia. Por eso el hero se sentia vivo y los capitulos eran fotos que
+       cambian. Ahora entre capitulo y capitulo hay un tramo vacio (.pasaje, solo
+       existe con el motor andando) donde el texto ya se fue, el velo se levanta,
+       y el cruce y el empuje de camara pasan A LA VISTA. Despues el velo vuelve
+       a cerrarse y recien entra el titulo siguiente. Es la gramatica del hero
+       —el texto se va, el mundo actua— repetida en cada cambio de mundo.
+       Cada pasaje es UN timeline: la apertura y el cierre del velo son dos tweens
+       sobre la misma propiedad, pero en secuencia dentro del mismo timeline, asi
+       que no se pisan (la trampa de abajo es entre scrollTriggers distintos). */
     var ESCENAS = ['#historia', '#origen', '#variedades', '#porque', '#ritual', '#comprar'];
+    /* el velo con que se lee cada capitulo: se fija al cerrar su pasaje y no se
+       toca hasta el siguiente. Variedades va mas abierto porque los envases se
+       paran dentro del yerbal y la escena tiene que leerse. */
+    var VELO = [.58, .62, .52, .64, .58, .60];
+    var pasajes = $$('.pasaje');
     ESCENAS.forEach(function (sec, i) {
-      escalon(e, 'escena', i, i + 1, tramo(sec));
+      var p = pasajes[i];
+      if (!p) return;
+      var tlP = gsap.timeline({
+        defaults: { ease: 'none', immediateRender: false },
+        /* arranca cuando el ultimo texto del capitulo anterior ya paso debajo de
+           la cabecera, y termina antes de que asome el titulo del siguiente
+           (que se revela a 'top 72%' de su seccion). Medido con
+           tools/cruce-contraste.cjs, que busca los cruces por e.escena. */
+        scrollTrigger: { trigger: p, start: 'top 22%', end: 'bottom 84%', scrub: .6 }
+      });
+      tlP.fromTo('.mundo__sombra', { opacity: i ? VELO[i - 1] : .58 }, { opacity: .12, duration: .42 }, 0)
+         .fromTo('.mundo__sombra', { opacity: .12 }, { opacity: VELO[i], duration: .42 }, .58)
+         .fromTo(e, { escena: i }, { escena: i + 1, duration: .66 }, .17);
+      /* la vegetacion del hero pertenece a ESE punto de vista: se retira en el
+         primer cambio de mundo, no se arrastra al galpon ni al aereo */
+      if (i === 0) tlP.fromTo(e, { frenteOp: 1 }, { frenteOp: 0, duration: .45 }, 0);
     });
 
     /* LA CAMARA NO PARA. Antes `e.avance` movia la camara solo en el hero y los
        capitulos quedaban con el encuadre clavado: por eso el mundo se sentia vivo
        arriba y se volvia un pase de diapositivas abajo.
-       Cada escena tiene ahora su propio empuje lento, que corre durante toda su
-       vida en pantalla — desde que empieza a aparecer hasta que la reemplaza la
-       siguiente— no solo durante el cruce.
+       Cada escena tiene su propio empuje lento, que corre durante toda su vida
+       en pantalla — desde que asoma en su pasaje hasta que la reemplaza la
+       siguiente al final del pasaje que viene— no solo durante el cruce.
        Como cada una anima SU objeto (e.camaras[i]) no hay dos tweens peleando por
        la misma propiedad, que es la trampa que ya nos comimos con la sombra. */
     ESCENAS.forEach(function (sec, i) {
       var cam = e.camaras[i];
       if (!cam) return;
-      var sig = ESCENAS[i + 1];
-      var hasta = sig
-        ? { endTrigger: sig, end: 'top 28%' }
-        : { end: 'bottom bottom' };
-      var cfg = { trigger: sec, start: 'top 92%', scrub: .8 };
-      for (var k in hasta) cfg[k] = hasta[k];
+      var desde = pasajes[i] || sec, sig = pasajes[i + 1];
+      var cfg = { trigger: desde, start: 'top bottom', scrub: .8 };
+      if (sig) { cfg.endTrigger = sig; cfg.end = 'bottom 84%'; }
+      else { cfg.endTrigger = sec; cfg.end = 'bottom bottom'; }
       gsap.fromTo(cam,
         { z: 1.04, dy: .012 },
         { z: 1.15, dy: -.012, ease: 'none', immediateRender: false, scrollTrigger: cfg });
     });
-    /* la vegetacion del hero pertenece a ESE punto de vista: se retira con el
-       primer cambio de mundo, no se arrastra al galpon ni al aereo */
-    escalon(e, 'frenteOp', 1, 0, tramo('#historia', 'top 88%', 'top 45%'));
 
     /* MANIFIESTO — el sello se corre, se achica y se VA: despues del hero no
        vuelve a aparecer. Dejarlo de marca de agua lo convertia en un circulo
@@ -251,38 +293,12 @@
         immediateRender: false, scrollTrigger: tramo('#manifiesto', 'top 92%', 'top 45%') });
     sombra(0, .58, tramo('#manifiesto', 'top 88%', 'top 30%'));
 
-    /* 02 · ORIGEN — de noche el mundo se apaga mas. */
-    /* nada de tocar la saturacion por capitulo: el uniform lo comparten el mundo
-       base y las escenas, y cada escena ya viene con su propio grado. */
-    sombra(.58, .62, tramo('#origen'));
-
-    /* 03 · VARIEDADES — el velo AFLOJA. Cuando los envases estaban sobre tarjetas
-       blancas la seccion tenia que quedar oscura para que las tarjetas fueran lo
-       mas luminoso del cuadro. Ahora los envases se paran DENTRO del yerbal, asi
-       que el velo se abre para que la escena se lea y vuelve a cerrarse enseguida.
-
-       VA EN DOS TIEMPOS, y no es capricho. La escena del yerbal es bastante mas
-       luminosa que la de las nubes que reemplazo, y DURANTE el cruce entra detras
-       del texto de #origen: `.cadena__sentis` —dorado, 17px— caia a 4.07:1 contra
-       los 4.5 que exige. Retrasar la apertura no alcanzaba (4.41). Asi que el velo
-       primero se CIERRA mientras cruzan las dos escenas, y recien despues se abre.
-       Medido con tools/cruce-contraste.cjs. */
-    sombra(.62, .70, tramo('#variedades', 'top 82%', 'top 32%'));
-    sombra(.70, .52, tramo('#variedades', 'top 30%', 'top -10%'));
-
-    /* 04 · POR QUE ELEGIRLA — manda el texto: el velo vuelve a cerrarse, que es lo
-       que pide la grilla de beneficios sobre los haces de luz.
-
-       Arranca a 'top bottom' y no al 82% por defecto: `.escala__quien` vive al final
-       de #variedades y con el velo todavia abierto se quedaba en 4.34:1 cuando la
-       escena de las hojas —calida, a contraluz— empezaba a entrar detras. */
-    sombra(.52, .64, tramo('#porque', 'top bottom', 'top 45%'));
-
-    /* 05 · EL RITUAL */
-    sombra(.64, .58, tramo('#ritual'));
-
-    /* 06 · CIERRE */
-    sombra(.58, .60, tramo('#comprar'));
+    /* Del velo de cada capitulo se encargan los pasajes (VELO, arriba). Antes
+       habia un tramo por seccion, y en variedades iba en dos tiempos porque la
+       escena del yerbal entraba detras del texto de #origen y `.cadena__sentis`
+       caia a 4.07:1. Con el cruce movido al pasaje —sin texto en pantalla— ese
+       problema ya no existe. Nada de tocar la saturacion por capitulo: el uniform
+       lo comparten el mundo base y las escenas. */
 
     revelarCapitulos();
   }
@@ -418,8 +434,8 @@
   }
 
   function retirarCortina() {
-    if (!cortina) { raiz.classList.remove('cargando'); entrada.play(); return; }
-    if (quieto.matches) { raiz.classList.remove('cargando'); entrada.play(); return; }
+    if (!cortina) { raiz.classList.remove('cargando'); entrada.play(); pedirEscenas(); return; }
+    if (quieto.matches) { raiz.classList.remove('cargando'); entrada.play(); pedirEscenas(); return; }
     gsap.to(carga, { v: 1, duration: .3, ease: 'power2.out', onUpdate: pintarCarga });
     /* OJO: la clase .cargando se saca al FINAL. El CSS es `.cargando .cortina{display:flex}`,
        asi que sacarla antes hace desaparecer la cortina de golpe y el transform termina
@@ -427,7 +443,7 @@
     gsap.timeline({ delay: .04 })
       .to(cortina, {
         yPercent: -101, duration: .9, ease: 'power3.inOut',
-        onComplete: function () { raiz.classList.remove('cargando'); cortina.style.display = 'none'; }
+        onComplete: function () { raiz.classList.remove('cargando'); cortina.style.display = 'none'; pedirEscenas(); }
       })
       /* La entrada arranca JUNTO con el telon, no despues: el texto pinta detras
          mientras sube (el LCP no mira oclusion, asi que cuenta igual) y arriba

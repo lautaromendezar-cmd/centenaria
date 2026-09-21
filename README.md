@@ -66,6 +66,14 @@ sola toma y no una pila de bloques.
   usar el 98% — y todo demo de three.js termina pareciéndose al anterior.
 - **Tres capas, no cuatro.** Con foto real cada matte de más es un borde de más para que se
   note. La profundidad la completan la niebla, las motas y la linterna.
+- **Cada escena de capítulo son dos planos, y el cruce pasa en un pasaje** (21-sep). El fondo
+  es la foto entera; el primer plano es un recorte con alfa apoyado en una esquina, dibujado
+  con anclaje (`uFit=1`, se ajusta al lado corto del viewport) y con más empuje de cámara
+  que el fondo: esa diferencia es la profundidad, la misma gramática del hero. Y entre
+  capítulo y capítulo hay un tramo vacío (`.pasaje`, solo con el motor andando) donde el
+  velo baja y el cruce de escenas pasa a la vista, sin texto encima. Antes el cruce pasaba
+  debajo del título nuevo y los capítulos se sentían fotos que cambian. `tools/frentes.cjs`
+  emite los planos, `tools/pasajes.cjs` los verifica.
 - **El mundo se genera; el paquete jamás.** La IA le reescribe el microtexto de la etiqueta.
   Los tres envases son fotos reales recortadas por detección.
 - **La fuente de luz quedó FUERA de cuadro a propósito** al elegir la imagen. Un sol quemado

@@ -19,14 +19,29 @@
      grabado y no el relleno: es lo que hace que se lea como tinta iluminada. */
   var FS_CAPA =
     'precision mediump float;varying vec2 v;' +
-    'uniform sampler2D uTex;uniform vec2 uRes;uniform float uAsp,uEsc,uNieblaC,uLamp,uBrillo,uSat,uCA,uRayos,uT,uOp,uCorte,uEntra;' +
-    'uniform vec2 uOff,uPtr;uniform vec3 uNiebla;' +
+    'uniform sampler2D uTex;uniform vec2 uRes;uniform float uAsp,uEsc,uNieblaC,uLamp,uBrillo,uSat,uCA,uRayos,uT,uOp,uCorte,uEntra,uFit;' +
+    'uniform vec2 uOff,uPtr,uAncla;uniform vec3 uNiebla;' +
     'float luma(vec3 c){return dot(c,vec3(.299,.587,.114));}' +
     'void main(){' +
     ' float ca=uRes.x/uRes.y;' +
-    ' vec2 k=(ca>uAsp)?vec2(1.,uAsp/ca):vec2(ca/uAsp,1.);' +
-    ' vec2 uv=(v-.5)*k+.5;' +
-    ' uv=(uv-vec2(.5,.44))/uEsc+vec2(.5,.44)+uOff;' +
+    ' vec2 uv;' +
+    ' if(uFit<.5){' +
+    '  vec2 k=(ca>uAsp)?vec2(1.,uAsp/ca):vec2(ca/uAsp,1.);' +
+    '  uv=(v-.5)*k+.5;' +
+    '  uv=(uv-vec2(.5,.44))/uEsc+vec2(.5,.44)+uOff;' +
+    ' } else {' +
+    /* PRIMER PLANO ANCLADO (uFit=1). Una rama pegada a una esquina no puede ir
+       con cover-fit: en vertical el 21:9 se recorta a su centro y la esquina
+       desaparece. Aca la textura se ajusta al lado CORTO del viewport y se apoya
+       en la esquina que dice uAncla (1,1 = arriba a la derecha, 0,.5 = borde
+       izquierdo al medio). El zoom de camara se hace sobre el centro del VIEWPORT,
+       no de la textura: al avanzar, la esquina se abre hacia afuera. Eso es lo
+       que la separa del fondo y se lee como profundidad. */
+    '  vec2 w=(v-.5)/uEsc+.5+uOff;' +
+    '  vec2 k=(ca>uAsp)?vec2(ca/uAsp,1.):vec2(1.,uAsp/ca);' +
+    '  uv=uAncla+(w-uAncla)*k;' +
+    '  if(uv.x<0.||uv.x>1.||uv.y<0.||uv.y>1.){discard;}' +
+    ' }' +
     ' vec4 c=texture2D(uTex,uv);' +
     /* Aberracion cromatica: los canales se separan hacia los bordes, como una optica
        de verdad. Sutil y radial — de frente no se ve, en las esquinas si. */
@@ -308,43 +323,59 @@
       if (!e.quieto) raf = requestAnimationFrame(dibujar);
     }
 
-    /* Una escena es una foto entera, sin capas: la profundidad de tres planos vale
-       para el hero, donde la camara entra al monte. En un aereo o en un interior
-       seria falsa. Lo que la mantiene viva es el avance de camara, el grado, el
-       grano y la linterna — las mismas herramientas, no una estetica distinta. */
+    /* UNA ESCENA SON DOS PLANOS: la foto entera de fondo y un primer plano con
+       alfa apoyado en una esquina (una rama, la copa de una araucaria, el marco
+       de la ventana). Hasta el 20-sep era una sola foto y el "empuje de camara"
+       sobre una foto chata es un Ken Burns: zoom, no profundidad. Con el primer
+       plano viajando mas rapido que el fondo —mismo empuje, amplificado— la
+       camara ENTRA a la escena como entra al monte en el hero. Es la misma
+       gramatica del hero llevada a los capitulos, no una estetica distinta.
+       Las capas se dibujan en orden de profundidad y las dos cortan con el mismo
+       barrido, asi que en el cruce la escena se va entera, no por partes. */
     function dibujarEscena(i, op, mez, t, saliendo) {
       var esc = escenas[i];
       if (!esc || op < .004) return;
-      gl.useProgram(progCapa.p);
-      atributo(progCapa.p, 'a', quad, 2);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, esc.tex);
-      gl.uniform1i(progCapa.u.uTex, 0);
-      gl.uniform2f(progCapa.u.uRes, W, H);
-      gl.uniform1f(progCapa.u.uAsp, esc.asp);
       /* La camara de ESTA escena, que viene corriendo desde que el capitulo entro.
          A la que se va se le suma un envion extra durante el cruce: acelera y se
          aleja mientras la nueva recién empieza su propio empuje. Es lo que separa
          un cruce con camara de un fundido. */
       var cam = e.camaras[i] || { z: 1.04, dy: 0 };
-      gl.uniform1f(progCapa.u.uEsc, cam.z + (saliendo ? mez * .07 : 0));
-      var px = (ptrSuave[0] - .5) * -.016;
-      var py = (ptrSuave[1] - .5) * .011 + cam.dy;
-      gl.uniform2f(progCapa.u.uOff, px, py);
-      gl.uniform3f(progCapa.u.uNiebla, .38, .35, .30);
-      gl.uniform1f(progCapa.u.uNieblaC, 0);
-      gl.uniform2f(progCapa.u.uPtr, ptrSuave[0], 1 - ptrSuave[1]);
-      gl.uniform1f(progCapa.u.uLamp, .34 * e.linterna);
-      gl.uniform1f(progCapa.u.uBrillo, 1);
-      gl.uniform1f(progCapa.u.uSat, e.saturacion);
-      gl.uniform1f(progCapa.u.uCA, .010);
-      gl.uniform1f(progCapa.u.uRayos, .07 * e.vida);
-      gl.uniform1f(progCapa.u.uT, t);
-      /* la opacidad la resuelve el barrido pixel a pixel, no un alfa global */
-      gl.uniform1f(progCapa.u.uCorte, mez);
-      gl.uniform1f(progCapa.u.uEntra, saliendo ? 0 : 1);
-      gl.uniform1f(progCapa.u.uOp, 1);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      for (var k = 0; k < esc.capas.length; k++) {
+        var c = esc.capas[k], prof = c.prof;   /* 0 = fondo, 1 = primer plano */
+        var amp = 1 + prof * 1.7;
+        gl.useProgram(progCapa.p);
+        atributo(progCapa.p, 'a', quad, 2);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, c.tex);
+        gl.uniform1i(progCapa.u.uTex, 0);
+        gl.uniform2f(progCapa.u.uRes, W, H);
+        gl.uniform1f(progCapa.u.uAsp, c.asp);
+        gl.uniform1f(progCapa.u.uFit, prof ? 1 : 0);
+        gl.uniform2f(progCapa.u.uAncla, c.ancla[0], c.ancla[1]);
+        gl.uniform1f(progCapa.u.uEsc, 1 + (cam.z - 1) * amp + (saliendo ? mez * .07 * amp : 0));
+        /* el puntero y el empuje vertical corren mas al primer plano; y el
+           primer plano tiene viento propio, como la rama del hero */
+        var px = (ptrSuave[0] - .5) * -.016 * (1 + prof * 1.8);
+        var py = (ptrSuave[1] - .5) * .011 * (1 + prof * 1.8) + cam.dy * (1 + prof * .9);
+        var w = prof * e.vida * .0011;
+        var vx = (Math.sin(t * .21 + i * 1.7) + .5 * Math.sin(t * .53 + i * 2.9)) * w;
+        var vy = (Math.cos(t * .17 + i * 2.3) + .4 * Math.sin(t * .41 + i)) * w * .6;
+        gl.uniform2f(progCapa.u.uOff, px + vx, py + vy);
+        gl.uniform3f(progCapa.u.uNiebla, .38, .35, .30);
+        gl.uniform1f(progCapa.u.uNieblaC, 0);
+        gl.uniform2f(progCapa.u.uPtr, ptrSuave[0], 1 - ptrSuave[1]);
+        gl.uniform1f(progCapa.u.uLamp, (prof ? .55 : .34) * e.linterna);
+        gl.uniform1f(progCapa.u.uBrillo, 1);
+        gl.uniform1f(progCapa.u.uSat, e.saturacion);
+        gl.uniform1f(progCapa.u.uCA, prof ? .004 : .010);
+        gl.uniform1f(progCapa.u.uRayos, prof ? 0 : .07 * e.vida);
+        gl.uniform1f(progCapa.u.uT, t);
+        /* la opacidad la resuelve el barrido pixel a pixel, no un alfa global */
+        gl.uniform1f(progCapa.u.uCorte, mez);
+        gl.uniform1f(progCapa.u.uEntra, saliendo ? 0 : 1);
+        gl.uniform1f(progCapa.u.uOp, 1);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      }
     }
 
     function dibujarSol(t, mezcla) {
@@ -372,6 +403,10 @@
       gl.uniform2f(progCapa.u.uRes, W, H);
       gl.uniform1f(progCapa.u.uAsp, c.asp);
       gl.uniform1f(progCapa.u.uEsc, cf.esc0 + a * cf.esc);
+      /* comparte programa con los primeros planos anclados: hay que volver a
+         cover-fit a mano, o hereda el anclaje del ultimo frente dibujado */
+      gl.uniform1f(progCapa.u.uFit, 0);
+      gl.uniform2f(progCapa.u.uAncla, .5, .5);
 
       /* deriva del puntero: la capa cercana se corre mucho mas que el cielo */
       var px = (ptrSuave[0] - .5) * -.030 * cf.z;
@@ -409,18 +444,58 @@
        demorar la cortina ni pelear por el LCP. Cada una se dibuja recien cuando
        llego; hasta entonces se ve el mundo de abajo. */
     var escenas = [];
-    function cargarEscenas(nombres) {
-      var ancho = window.innerWidth * (window.devicePixelRatio || 1);
+
+    /* Las texturas se suben DE A UNA POR CUADRO. Son doce (seis fondos y seis
+       primeros planos) y llegan casi juntas: subirlas en el onload de cada una
+       era una rafaga de texImage2D en el hilo principal justo cuando la cortina
+       sale y el hero entra. En una GPU real son milisegundos; en un celular flojo
+       o con WebGL por software, no. */
+    var cola = [], bombeando = false;
+    function bombear() {
+      if (!cola.length) { bombeando = false; return; }
+      cola.shift()();
+      requestAnimationFrame(bombear);
+    }
+    function encolar(fn) {
+      cola.push(fn);
+      if (!bombeando) { bombeando = true; requestAnimationFrame(bombear); }
+    }
+
+    /* `frentes` es opcional: { historia: [1, 1], ... } con el anclaje del primer
+       plano de cada escena (x: 0 izq, 1 der; y: 0 abajo, 1 arriba; .5 centro).
+       El fondo y el frente se piden por separado y cada uno se dibuja en cuanto
+       llega: si el frente falla o tarda, la escena sigue siendo la foto entera. */
+    function cargarEscenas(nombres, frentes) {
+      var dpr = window.devicePixelRatio || 1;
+      var ancho = window.innerWidth * dpr;
       var w = ancho <= 1100 ? 1100 : (ancho <= 1600 ? 1600 : 2200);
+      /* el frente es cuadrado y se ajusta al lado corto del viewport */
+      var corto = Math.min(window.innerWidth, window.innerHeight) * dpr;
+      var l = corto <= 1000 ? 1000 : 1600;
       nombres.forEach(function (n, i) {
-        var img = new Image();
-        img.decoding = 'async';
-        img.onload = function () {
-          escenas[i] = { tex: textura(gl, img), asp: img.naturalWidth / img.naturalHeight };
-        };
+        escenas[i] = { capas: [] };
+        function pedir(src, prof, ancla) {
+          var img = new Image();
+          img.decoding = 'async';
+          img.onload = function () {
+            /* decode() saca la decodificacion del hilo principal; la subida a la
+               GPU espera su turno en la cola */
+            var listo = img.decode ? img.decode().catch(function () {}) : Promise.resolve();
+            listo.then(function () {
+              encolar(function () {
+                escenas[i].capas.push({ tex: textura(gl, img), asp: img.naturalWidth / img.naturalHeight, prof: prof, ancla: ancla });
+                escenas[i].capas.sort(function (a, b) { return a.prof - b.prof; });
+              });
+            });
+          };
+          img.src = src;
+        }
         /* la version va en el NOMBRE: /img/ se sirve immutable un anio y los
            archivos no llevan hash (ver tools/escenas.cjs) */
-        img.src = 'img/esc-' + n + '-v3-' + w + '.webp';
+        pedir('img/esc-' + n + '-v3-' + w + '.webp', 0, [.5, .5]);
+        var ancla = frentes && frentes[n];
+        /* version propia (tools/frentes.cjs): se sube cada vez que se rehace uno */
+        if (ancla) pedir('img/frente-' + n + '-v1-' + l + '.webp', 1, ancla);
       });
     }
 
