@@ -22,9 +22,11 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..700&family=Montserrat:wght@300;400;500;600;700&display=swap">
+<!-- Fuentes autohospedadas (css/fuentes.css). Las dos que pintan la primera
+     pantalla se precargan: el LCP es el texto del hero y antes esperaba el swap. -->
+<link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/fraunces-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/montserrat-latin.woff2">
+<link rel="stylesheet" href="/css/fuentes.css">
 <link rel="stylesheet" href="/css/estilo.css">
 </head>
 
