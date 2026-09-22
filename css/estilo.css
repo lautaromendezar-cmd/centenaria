@@ -683,22 +683,27 @@ main{position:relative;z-index:3}
   color:var(--crema);background:rgba(248,221,0,.08)}
 .formulario__ok a{color:var(--oro)}
 .formulario__nota{margin:1.2rem 0 0;max-width:34rem;font-size:.875rem;color:var(--crema);opacity:.62}
-/* la linea de variedades, en lista: nombre, subtitulo y presentaciones */
-.linea{list-style:none;margin:clamp(1.6rem,4vh,2.4rem) 0 0;padding:0;max-width:44rem}
-.linea>li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.3rem 1.5rem;align-items:center;
+/* La linea de variedades, en lista: nombre, subtitulo y presentaciones.
+   ⚠️ Se llama .gama y NO .linea a proposito: `.linea` ya es la mascara de cada
+   renglon de los titulares (arriba, y la crea partirTitulo en main.js). Cuando
+   esto se llamaba .linea, al ser la regla POSTERIOR le imponia su margin-top,
+   su padding:0 y su max-width:44rem a TODOS los titulos del sitio: 36 px de
+   aire de mas entre renglones y el titulo del manifiesto partido en tres. */
+.gama{list-style:none;margin:clamp(1.6rem,4vh,2.4rem) 0 0;padding:0;max-width:44rem}
+.gama>li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.3rem 1.5rem;align-items:center;
   padding:1.1rem 0;border-top:1px solid rgba(241,239,226,.14)}
-.linea>li:last-child{border-bottom:1px solid rgba(241,239,226,.14)}
-.linea__nombre{font-family:Fraunces,Georgia,serif;font-size:1.5rem;line-height:1.1;color:var(--crema)}
-.linea__sub{grid-column:1;font-size:var(--etiqueta);font-weight:700;letter-spacing:.2em;
+.gama>li:last-child{border-bottom:1px solid rgba(241,239,226,.14)}
+.gama__nombre{font-family:Fraunces,Georgia,serif;font-size:1.5rem;line-height:1.1;color:var(--crema)}
+.gama__sub{grid-column:1;font-size:var(--etiqueta);font-weight:700;letter-spacing:.2em;
   text-transform:uppercase;color:var(--oro)}
-.linea .chips{grid-column:2;grid-row:1 / span 2;margin:0}
-.linea--compacta{margin-top:1.2rem;max-width:none}
-.linea--compacta>li{padding:.75rem 0}
-.linea--compacta .linea__nombre{font-size:1.2rem}
-.linea--compacta .chips{grid-row:1}
+.gama .chips{grid-column:2;grid-row:1 / span 2;margin:0}
+.gama--compacta{margin-top:1.2rem;max-width:none}
+.gama--compacta>li{padding:.75rem 0}
+.gama--compacta .gama__nombre{font-size:1.2rem}
+.gama--compacta .chips{grid-row:1}
 @media (max-width:600px){
-  .linea>li{grid-template-columns:1fr}
-  .linea .chips,.linea--compacta .chips{grid-column:1;grid-row:auto;margin-top:.5rem}
+  .gama>li{grid-template-columns:1fr}
+  .gama .chips,.gama--compacta .chips{grid-column:1;grid-row:auto;margin-top:.5rem}
 }
 
 /* ============================== MOTION ==============================
