@@ -92,6 +92,21 @@ decisiones que no son obvias.
   `--radio-chip` se habían perdido en el commit de la home nueva (8297af5) y los títulos de
   fichas, pasos, puertas y contacto caían a 1rem. Restaurados con los valores originales:
   **esos títulos ahora se ven más grandes que en lo publicado** el 21-sep a la madrugada.
+- **21-sep (noche): «yerba mate» se enciende en dorado en el titular del hero.** Arranca
+  crema y pasa a `--oro` cuando la segunda línea ya se asentó. El default del CSS es el
+  dorado (el estado FINAL), como `.reveal`: si `main.js` no corre, el titular se lee igual.
+  Medido: 10.37:1 en escritorio y 8.05:1 en celular (exige 3:1, texto grande).
+- **⚠️ 21-sep (noche): había DOS clases `.linea` peleando, y rompían el interlineado de
+  TODOS los títulos.** `.linea` es la máscara de cada renglón de los titulares (la crea
+  `partirTitulo` en `main.js`); el 21-sep entró otra `.linea` para la lista de variedades de
+  las páginas internas y, por ser posterior, les imponía `margin-top` de 36 px, `padding:0`
+  (se comía el `padding-bottom:.06em` que evita que los descendentes se corten contra el
+  `overflow:hidden`) y `max-width:44rem` (por eso el título del manifiesto se partía en
+  tres). La lista se llama ahora **`.gama`**. El paso entre renglones sobre el cuerpo pasó
+  de 1.287 a 1.00 en el hero y de 1.509 a 1.04 en los capítulos; la home mide 254 px menos
+  en escritorio. **Al comparar interlineados hay que mirar ese paso real, no el
+  `line-height` declarado**: el `font-size` cambia entre el hero y los capítulos, así que
+  los `line-height` no son comparables entre sí.
 - Las herramientas de `tools/` resuelven `node_modules` y Chrome por máquina
   vía `tools/_entorno.cjs` (casa: `latina/node_modules`; notebook y oficina:
   `Desktop\Claude`). En la notebook y en la oficina NO correr `contraste.cjs`/`entrada.cjs`
@@ -467,15 +482,17 @@ un `.env.local`, ignorado). Después cotejar lo publicado contra el commit bajan
 `index.html`, las tres páginas, `css/`, `js/`, `fonts/` e `img/` con `curl` y comparando
 con `cmp` contra `git show HEAD:<archivo>`.
 
-⚠️ En una PC con `core.autocrlf=true` (la oficina), `git archive` sin el `-c` de arriba
-saca los textos en CRLF y el `cmp` contra el commit (que es LF) difiere en exactamente una
-cantidad de bytes igual a las líneas. Se sirve igual, pero para que el cotejo sea 1:1 va el
-`-c core.autocrlf=false`. El deploy del 21-sep (tarde) salió así, en CRLF: contenido
-idéntico al commit 74ce1c6 salvo los fines de línea. El del 21-sep a la noche (casa) fue del
-commit `3de818b` con el `-c`: cotejo 1:1 en los cuatro HTML, `js/main.js`, `js/monte.js` y
-`css/estilo.css`. ⚠️ Para cotejar los HTML hay que pedir la URL limpia (`/`, `/contacto/`):
+⚠️ **El `-c core.autocrlf=false` ya NO va** (21-sep, noche): ahora hay un `.gitattributes`
+con `* text=auto eol=lf` que fija LF en las dos máquinas, así que `git archive` solo ya sale
+en LF y el cotejo da 1:1. **Y ojo: ese `-c` era para `git archive`, nunca para `commit`.**
+Usarlo al commitear fue lo que metió CRLF en el repo (mis commits `10e6385` y `09bf264`) y se
+notó recién al editar de nuevo: un `sed` sobre `css/estilo.css` lo devolvió a LF y el diff
+salió con 1429 líneas cambiadas para un cambio de 15. Se normalizó todo en el commit
+`947b3eb`, que es solo fines de línea.
+
+⚠️ **Para cotejar los HTML hay que pedir la URL limpia** (`/`, `/contacto/`):
 `/index.html` responde un redirect de 15 bytes («Redirecting...») y el `cmp` da DIFF falso.
 
-Un segundo deploy esa misma noche, del commit `10e6385` (Dónde comprar y Distribuí como
-secciones aparte), cotejó 1:1 las nueve rutas: los cuatro HTML, `js/main.js`, los tres JS
-nuevos (`buscador.js`, `formulario.js`, `puntos.js`) y `css/estilo.css`.
+Deploys del 21-sep, todos cotejados: `3de818b` (ritual en celular), `10e6385` (Dónde comprar
+y Distribuí como secciones), `09bf264` («yerba mate» en dorado) y `a59fea3` (el interlineado
+de los títulos), este último ya sin el `-c` y 1:1 en las seis rutas miradas.
