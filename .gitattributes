@@ -1,0 +1,22 @@
+# Este repo va en LF, siempre.
+#
+# Se trabaja desde dos PCs con Windows, las dos con core.autocrlf=true. Sin
+# este archivo, cada checkout escribia los textos en CRLF, y despues:
+#   - un commit hecho con `-c core.autocrlf=false` (que es lo que pide la
+#     receta de «Publicar» del CONTINUAR, pero para `git archive`, NO para
+#     commitear) guardaba esos CRLF en el repo;
+#   - el siguiente cambio de una linea salia como el archivo ENTERO cambiado,
+#     y ahi se pierde el diff;
+#   - y el cotejo del deploy (`cmp` de lo servido contra `git show`) fallaba
+#     por una diferencia de exactamente un byte por linea.
+# Pasó el 21-sep con index.html, main.js y css/estilo.css.
+#
+# Con esto, los textos se guardan y se sacan en LF en las dos maquinas, y el
+# `git archive` de la receta sale en LF sin necesidad del `-c`.
+* text=auto eol=lf
+
+# Binarios: que git no los mire como texto ni les toque un byte.
+*.webp binary
+*.png binary
+*.jpg binary
+*.woff2 binary
