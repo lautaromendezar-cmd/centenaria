@@ -1,6 +1,7 @@
 # CONTINUAR · Centenaria
 
-Estado al **21-sep-2026 (noche, desde la PC de casa)**. Para retomar desde otra máquina,
+Estado al **21-sep-2026 (noche, desde la PC de casa, después de partir el cierre en
+secciones)**. Para retomar desde otra máquina,
 leer esto y después el [README](README.md), que explica cómo está armado y las
 decisiones que no son obvias.
 
@@ -474,3 +475,7 @@ idéntico al commit 74ce1c6 salvo los fines de línea. El del 21-sep a la noche 
 commit `3de818b` con el `-c`: cotejo 1:1 en los cuatro HTML, `js/main.js`, `js/monte.js` y
 `css/estilo.css`. ⚠️ Para cotejar los HTML hay que pedir la URL limpia (`/`, `/contacto/`):
 `/index.html` responde un redirect de 15 bytes («Redirecting...») y el `cmp` da DIFF falso.
+
+Un segundo deploy esa misma noche, del commit `10e6385` (Dónde comprar y Distribuí como
+secciones aparte), cotejó 1:1 las nueve rutas: los cuatro HTML, `js/main.js`, los tres JS
+nuevos (`buscador.js`, `formulario.js`, `puntos.js`) y `css/estilo.css`.
