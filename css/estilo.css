@@ -267,6 +267,12 @@ main{position:relative;z-index:3}
 .hero__titulo{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
   font-size:var(--display-1);line-height:.94;letter-spacing:-.018em;
   color:var(--crema)}
+/* "yerba mate" cambia de color: el resto del titular queda crema. El default
+   es DORADO -el estado final-, no crema: si main.js no corre (sin GSAP) el
+   titulo se lee igual, ya con el acento puesto. Es main.js el que lo empieza
+   en crema y lo trae a este color en la entrada (mismo patron que .reveal:
+   el respaldo CSS es el estado visible, el JS es el que lo oculta primero). */
+.hero__acento{color:var(--oro)}
 .linea{display:block;overflow:hidden;padding-bottom:.06em}
 .linea>span{display:block;will-change:transform}
 .hero__bajada{margin:clamp(1.2rem,3vh,2rem) 0 0;max-width:38rem;font-size:var(--body-lg);

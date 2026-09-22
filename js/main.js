@@ -22,6 +22,16 @@
   gsap.set(reveals, { opacity: 0, y: 18 });
   gsap.set(lineas, { yPercent: 108 });
 
+  /* "yerba mate" en el hero: arranca crema, como el resto del titulo, y en la
+     entrada se enciende a dorado (ver .hero__acento en el CSS, que es el
+     estado final por si esto no corre). Los colores salen de los tokens, no
+     hardcodeados: si --crema u --oro cambian, esto los sigue. */
+  var acento = $('.hero__acento');
+  var tokens = getComputedStyle(document.documentElement);
+  var CREMA = tokens.getPropertyValue('--crema').trim();
+  var ORO = tokens.getPropertyValue('--oro').trim();
+  if (acento) gsap.set(acento, { color: CREMA });
+
   var lienzo = $('#lienzo');
   var mundo = $('.mundo');
   var disco = $('#disco');
@@ -92,6 +102,14 @@
     .to($('.hero__bajada'), { opacity: 1, y: 0, duration: .38 }, .10)
     .to($('.hero__acciones'), { opacity: 1, y: 0, duration: .6 }, .42)
     .to($('.hero__pista'), { opacity: .75, y: 0, duration: .6 }, .58);
+  /* el acento se enciende cuando la segunda linea ya esta asentada (arranca en
+     .07, dura .95: llega quieta cerca de 1.0), no mientras todavia se mueve.
+     clearProps al final: que la vuelva a gobernar el CSS, no un color que
+     quedo fijado por JS, para el dia que cambie el token. */
+  if (acento) entrada.fromTo(acento, { color: CREMA }, {
+    color: ORO, duration: .6, ease: 'power2.out',
+    onComplete: function () { gsap.set(acento, { clearProps: 'color' }); }
+  }, 1.0);
 
   /* ------------------------------------------------------- puntero = farol */
   if (!tocable) {
