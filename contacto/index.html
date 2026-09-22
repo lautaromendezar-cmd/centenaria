@@ -72,6 +72,7 @@
     <a href="/#variedades">Variedades</a>
     <a href="/#ritual">El ritual</a>
     <a href="/donde-comprar/">Dónde comprar</a>
+    <a href="/vende-centenaria/">Vendé Centenaria</a>
     <a class="menu__tienda" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Tienda</a>
   </nav>
   <div class="menu__contacto">
@@ -109,7 +110,7 @@
   <p class="pagina__bajada">Para comprar, para distribuir o para preguntar por tu zona: escribinos por donde te quede m&aacute;s c&oacute;modo.</p>
   <p class="pagina__acciones">
     <a class="boton boton--oro" href="https://wa.me/5493446239393" target="_blank" rel="noopener">Escribir por WhatsApp</a>
-    <a class="boton boton--linea" href="mailto:persaimportadora.ventas@gmail.com">Escribir por email</a>
+    <a class="boton boton--linea" href="#formulario">Dejar un mensaje</a>
   </p>
 
   <section class="pagina__bloque">
@@ -125,19 +126,41 @@
          dijo cual es el bueno (CONTINUAR.md). -->
   </section>
 
+  <section class="pagina__bloque" id="formulario">
+    <p class="volanta">Dejanos un mensaje</p>
+    <h2 class="pagina__subtitulo">Te respondemos por WhatsApp</h2>
+    <!-- El formulario arma un WhatsApp (js/formulario.js). Sin JS manda por
+         mailto con el action. Los campos son los del WordPress
+         (material/CONTENIDO.md) sin la casilla de terminos y condiciones: no
+         hay pagina de terminos que aceptar. -->
+    <form class="formulario" data-whatsapp="5493446239393" data-saludo="Hola, les escribo desde la web de Centenaria." action="mailto:persaimportadora.ventas@gmail.com?subject=Consulta%20desde%20la%20web" method="post" enctype="text/plain">
+      <div class="campos">
+        <label class="campo"><span>Nombre</span><input name="nombre" data-etiqueta="Nombre" type="text" autocomplete="name" required></label>
+        <label class="campo"><span>Email</span><input name="email" data-etiqueta="Email" type="email" autocomplete="email" required></label>
+        <label class="campo campo--ancho"><span>Mensaje</span><textarea name="mensaje" data-etiqueta="Mensaje" required></textarea></label>
+      </div>
+      <p class="formulario__pie">
+        <button class="boton boton--oro" type="submit">Enviar por WhatsApp</button>
+        <a class="enlace" data-email="persaimportadora.ventas@gmail.com" data-asunto="Consulta desde la web" href="mailto:persaimportadora.ventas@gmail.com?subject=Consulta%20desde%20la%20web">O mandarlo por email <span aria-hidden="true">&rarr;</span></a>
+      </p>
+      <p class="formulario__ok oculto" role="status">Se abri&oacute; WhatsApp con tu mensaje armado, para que lo mandes vos. Si no se abri&oacute;, <a href="https://wa.me/5493446239393" target="_blank" rel="noopener">toc&aacute; ac&aacute;</a>.</p>
+      <p class="formulario__nota">Al enviar se abre WhatsApp con el mensaje ya escrito. No guardamos tus datos en ning&uacute;n lado.</p>
+    </form>
+  </section>
+
   <section class="pagina__bloque">
-    <div class="puertas">
-      <article class="puerta">
-        <h2 class="puerta__titulo">Quiero comprar</h2>
-        <p class="puerta__texto">Online con env&iacute;o a todo el pa&iacute;s, o en tu zona.</p>
-        <a class="enlace" href="/donde-comprar/">D&oacute;nde comprar <span aria-hidden="true">&rarr;</span></a>
-      </article>
-      <article class="puerta">
-        <h2 class="puerta__titulo">Quiero vender</h2>
-        <p class="puerta__texto">Precio competitivo para distribuci&oacute;n y comercios.</p>
-        <a class="enlace" href="/vende-centenaria/">Vend&eacute; Centenaria <span aria-hidden="true">&rarr;</span></a>
-      </article>
-    </div>
+    <ul class="salidas">
+      <li class="salida">
+        <h2 class="salida__titulo">Quiero comprar</h2>
+        <p class="salida__texto">Online con env&iacute;o a todo el pa&iacute;s, o en los puntos de venta de tu zona.</p>
+        <p class="salida__accion"><a class="enlace" href="/donde-comprar/">D&oacute;nde comprar <span aria-hidden="true">&rarr;</span></a></p>
+      </li>
+      <li class="salida">
+        <h2 class="salida__titulo">Quiero vender</h2>
+        <p class="salida__texto">Precio competitivo para distribuci&oacute;n y comercios, y un proceso simple para empezar.</p>
+        <p class="salida__accion"><a class="enlace" href="/vende-centenaria/">Vend&eacute; Centenaria <span aria-hidden="true">&rarr;</span></a></p>
+      </li>
+    </ul>
   </section>
 </main>
 
@@ -155,5 +178,6 @@
   </div>
 </footer>
 
+<script src="/js/formulario.js"></script>
 </body>
 </html>

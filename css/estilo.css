@@ -242,6 +242,7 @@ html.menu-abierto .menu__nav a:nth-child(3){transition-delay:.08s}
 html.menu-abierto .menu__nav a:nth-child(4){transition-delay:.12s}
 html.menu-abierto .menu__nav a:nth-child(5){transition-delay:.16s}
 html.menu-abierto .menu__nav a:nth-child(6){transition-delay:.2s}
+html.menu-abierto .menu__nav a:nth-child(7){transition-delay:.24s}
 .menu__contacto{position:relative;display:flex;flex-direction:column;gap:.55rem;
   padding-top:1.4rem}
 .menu__contacto::before{content:'';position:absolute;top:0;left:50%;width:3rem;height:1px;
@@ -514,32 +515,60 @@ main{position:relative;z-index:3}
 .cita p{margin:0;font-family:Fraunces,Georgia,serif;font-style:italic;font-weight:400;
   font-size:clamp(1.6rem,3.6vw,3rem);line-height:1.12;letter-spacing:-.01em;color:var(--oro)}
 
-/* ============================== CIERRE ============================== */
-.cierre{position:relative;max-width:var(--ancho);margin:0 auto;
-  padding:var(--seccion) var(--gotera) clamp(4rem,10vh,7rem)}
-/* el circulo se cierra con la frase del hero, en el mismo tono que el remate
-   del manifiesto */
-.cierre__remate{margin:clamp(1.2rem,2.6vh,1.8rem) 0 0;font-family:Fraunces,Georgia,serif;
-  font-style:italic;font-size:clamp(1.2rem,1.9vw,1.6rem);line-height:1.25;color:var(--oro)}
-.puertas{display:grid;gap:clamp(1.2rem,2.4vw,2rem);margin:clamp(3rem,7vh,5rem) 0 0;
-  grid-template-columns:repeat(3,1fr)}
-@media (max-width:960px){.puertas{grid-template-columns:1fr;max-width:34rem}}
-.puerta{background:rgba(6,56,28,.42);border:1px solid rgba(241,239,226,.12);
-  border-radius:var(--radio-card);padding:clamp(1.6rem,3vw,2.4rem);
-  display:flex;flex-direction:column;backdrop-filter:blur(6px)}
-.puerta--principal{background:rgba(13,102,49,.42);border-color:rgba(248,221,0,.28)}
-.puerta__titulo{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
+/* ============================== DONDE COMPRAR / DISTRIBUI ==============================
+   Las dos secciones de negocio del plan (material/ARQUITECTURA-Y-SEO.md, 9 y 10)
+   como capitulos editoriales sobre la escena del amanecer. Nada de tarjetas:
+   hasta el 21-sep eran tres cajas en un solo cierre, la unica grilla que
+   quedaba en la home, justo en el remate. */
+/* las dos salidas de "donde comprar": renglones con filete, la misma gramatica
+   que la cadena de Origen. Titulo | texto | accion; en angosto se apilan. */
+.salidas{list-style:none;margin:clamp(3rem,8vh,6rem) 0 0;padding:0}
+.salida{display:grid;gap:.6rem 2.5rem;align-items:start;
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr) auto;
+  padding:clamp(1.4rem,3vh,2rem) 0;border-top:1px solid rgba(241,239,226,.14)}
+.salida:last-child{border-bottom:1px solid rgba(241,239,226,.14)}
+.salida__titulo{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
   font-size:var(--display-3);line-height:1.05;color:var(--crema)}
-.puerta__texto{margin:1rem 0 1.6rem;color:var(--crema);opacity:.84}
-.puerta .boton{align-self:flex-start;margin-top:auto}
-.proceso{margin:0 0 1.6rem;padding-left:1.1rem;color:var(--crema);opacity:.84}
-.proceso li{margin:.35rem 0}
-.enlace{margin-top:auto;text-decoration:none;font-size:.8125rem;font-weight:700;
+.salida__texto{margin:0;max-width:34rem;color:var(--crema);opacity:.84}
+.salida__accion{margin:0;justify-self:end;align-self:center}
+@media (max-width:900px){
+  .salida{grid-template-columns:1fr;gap:.8rem}
+  .salida__accion{justify-self:start;margin-top:.4rem}
+}
+.enlace{text-decoration:none;font-size:.8125rem;font-weight:700;
   letter-spacing:.14em;text-transform:uppercase;color:var(--oro);
-  border-bottom:1px solid rgba(248,221,0,.4);padding-bottom:.35rem;align-self:flex-start}
+  border-bottom:1px solid rgba(248,221,0,.4);padding-bottom:.35rem;white-space:nowrap}
 .enlace:hover{border-bottom-color:var(--oro)}
 
-.contacto{margin:clamp(3.5rem,8vh,6rem) 0 0}
+/* los cuatro pasos del mayorista, con el numeral de los hitos */
+.tramite{list-style:none;margin:clamp(3rem,8vh,6rem) 0 0;padding:0;
+  display:grid;gap:clamp(1.6rem,3vw,2.6rem);grid-template-columns:repeat(4,1fr)}
+@media (max-width:900px){.tramite{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.tramite{grid-template-columns:1fr;gap:1.4rem}}
+.tramite__paso{padding-top:1rem;border-top:1px solid rgba(241,239,226,.14)}
+.tramite__num{display:block;font-family:Fraunces,Georgia,serif;font-weight:400;
+  font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:.9;letter-spacing:-.03em;color:var(--oro)}
+.tramite__paso p{margin:.9rem 0 0;max-width:16rem;color:var(--crema)}
+.cap__acciones{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 2rem;
+  margin:clamp(2.4rem,5vh,3.6rem) 0 0}
+
+/* ============================== REMATE ==============================
+   El ultimo plano: el sol que volvio a salir y la frase literal del hero, sin
+   texto de negocio encima. Se apoya abajo a la izquierda como el titulo del hero. */
+.remate{position:relative;max-width:var(--ancho);margin:0 auto;min-height:78vh;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:var(--seccion) var(--gotera) clamp(5rem,12vh,9rem)}
+.remate__titulo{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
+  font-size:var(--display-1);line-height:.96;letter-spacing:-.02em;color:var(--crema);
+  max-width:min(44rem,80%)}
+@media (max-width:900px){.remate__titulo{max-width:100%}}
+.remate__frase{margin:clamp(1.2rem,2.6vh,1.8rem) 0 0;font-family:Fraunces,Georgia,serif;
+  font-style:italic;font-size:clamp(1.3rem,2.2vw,1.9rem);line-height:1.25;color:var(--oro)}
+
+/* el contacto vive en el pie, sobre fondo solido: es dato, no capitulo */
+.pie__contacto{max-width:var(--ancho);margin:0 auto;
+  padding:clamp(3.5rem,8vh,6rem) var(--gotera) clamp(2.5rem,6vh,4rem)}
+.pie__contacto + .pie__caja{border-top:1px solid rgba(241,239,226,.10)}
 .contacto__titulo{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
   font-size:var(--display-3);color:var(--crema)}
 .contacto__lista{list-style:none;margin:1.8rem 0 0;padding:0;
@@ -576,8 +605,9 @@ main{position:relative;z-index:3}
 /* ============================== PAGINAS INTERNAS ==============================
    /donde-comprar/, /vende-centenaria/ y /contacto/: los slugs del WordPress, que
    estan indexados. Sin motor ni cortina: el mundo queda quieto en la primera
-   pantalla del hero, con el velo cerrado, y reusan puertas, chips, beneficios y
-   la lista de contacto de la home. */
+   pantalla del hero, con el velo cerrado, y reusan salidas, tramite, chips,
+   beneficios y la lista de contacto de la home. Lo propio de las paginas es el
+   buscador de puntos de venta y los formularios que arman un WhatsApp. */
 .mundo--quieto .mundo__sombra{opacity:.66}
 .pagina{position:relative;z-index:3;max-width:var(--ancho);margin:0 auto;
   padding:clamp(7.5rem,17vh,11.5rem) var(--gotera) var(--seccion)}
@@ -591,11 +621,62 @@ main{position:relative;z-index:3}
 .pagina__bloque{margin:clamp(3.5rem,8vh,6rem) 0 0}
 .pagina__subtitulo{margin:1.2rem 0 0;font-family:Fraunces,Georgia,serif;font-weight:400;
   font-size:var(--display-2);line-height:1;letter-spacing:-.015em;color:var(--crema)}
-.pagina .puertas{margin-top:clamp(2.5rem,6vh,4rem)}
-.pagina .puerta .enlace{margin-top:auto}
 .pagina .beneficios{margin-top:clamp(2rem,5vh,3rem)}
 .pagina .contacto__lista{margin-top:0}
-.pagina .puerta .proceso{margin-bottom:1.6rem}
+.pagina .salidas,.pagina .tramite{margin-top:clamp(2rem,5vh,3rem)}
+.oculto{display:none!important}
+
+/* --- el buscador de puntos de venta (/donde-comprar/, js/buscador.js) --- */
+.buscador{margin:clamp(2.5rem,6vh,4rem) 0 0;max-width:44rem}
+.buscador__cobertura{margin:0 0 1.6rem;font-family:Fraunces,Georgia,serif;font-weight:400;
+  font-size:var(--display-3);line-height:1.1;color:var(--crema)}
+.buscador__cobertura small{display:block;margin-top:.5rem;font-family:Montserrat,system-ui,sans-serif;
+  font-size:var(--etiqueta);font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
+.buscador__resultado{margin:clamp(2rem,5vh,3rem) 0 0}
+.buscador__estado{margin:0 0 .6rem;font-size:var(--etiqueta);font-weight:700;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--oro)}
+.puntos{list-style:none;margin:0;padding:0;display:grid;gap:0 3rem;
+  grid-template-columns:repeat(2,minmax(0,1fr));max-width:60rem}
+@media (max-width:700px){.puntos{grid-template-columns:1fr}}
+.punto{display:flex;flex-direction:column;align-items:flex-start;gap:.25rem;
+  padding:1rem 0;border-top:1px solid rgba(241,239,226,.14)}
+.punto__zona{font-size:var(--etiqueta);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
+.punto__nombre{font-family:Fraunces,Georgia,serif;font-size:1.35rem;line-height:1.1;color:var(--crema)}
+.punto__dato{color:var(--crema);opacity:.8}
+.punto a{text-decoration:none;border-bottom:1px solid rgba(241,239,226,.3)}
+.punto a:hover{color:var(--oro);opacity:1;border-bottom-color:var(--oro)}
+/* el estado vacio es el camino principal: mismo peso que el de exito */
+.vacio{max-width:40rem}
+.vacio__titulo{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
+  font-size:var(--display-2);line-height:1;letter-spacing:-.015em;color:var(--crema)}
+.vacio__texto{margin:1.2rem 0 0;font-size:var(--body-lg);color:var(--crema);opacity:.88}
+
+/* --- campos: comparten buscador y formularios --- */
+.campos{display:grid;gap:0 1.5rem;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:640px){.campos{grid-template-columns:1fr}}
+.campo{display:flex;flex-direction:column;gap:.5rem;margin:0 0 1.2rem}
+.campo--ancho{grid-column:1 / -1}
+.campo>span{font-size:var(--etiqueta);font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
+.campo input,.campo select,.campo textarea{width:100%;margin:0;padding:.85rem 1rem;font:inherit;
+  color:var(--crema);background:rgba(241,239,226,.06);border:1px solid rgba(241,239,226,.28);
+  border-radius:8px;transition:border-color .25s,background .25s}
+.campo input::placeholder,.campo textarea::placeholder{color:rgba(241,239,226,.45)}
+.campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:var(--oro);
+  background:rgba(241,239,226,.09)}
+.campo select{appearance:none;-webkit-appearance:none;padding-right:2.8rem;cursor:pointer;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23F1EFE2' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 1rem center;background-size:.75rem}
+.campo select option{color:var(--tinta);background:var(--papel)}
+.campo textarea{min-height:8rem;resize:vertical}
+
+/* --- formularios: arman un WhatsApp, no mandan a ningun servidor --- */
+.formulario{margin:clamp(2rem,5vh,3rem) 0 0;max-width:44rem}
+.formulario__pie{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 2rem;margin:.4rem 0 0}
+.formulario .boton{font:inherit;cursor:pointer}
+.formulario__ok{margin:1.4rem 0 0;padding:.9rem 1.1rem;border-left:2px solid var(--oro);
+  color:var(--crema);background:rgba(248,221,0,.08)}
+.formulario__ok a{color:var(--oro)}
+.formulario__nota{margin:1.2rem 0 0;max-width:34rem;font-size:.875rem;color:var(--crema);opacity:.62}
 /* la linea de variedades, en lista: nombre, subtitulo y presentaciones */
 .linea{list-style:none;margin:clamp(1.6rem,4vh,2.4rem) 0 0;padding:0;max-width:44rem}
 .linea>li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.3rem 1.5rem;align-items:center;

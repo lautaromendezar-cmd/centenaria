@@ -27,6 +27,42 @@ decisiones que no son obvias.
   6. **Precios y presentaciones cotejados** contra la tienda: coinciden (Original y
      Essencial en ½ y 1 kg, Azul con Palo solo 1 kg). La tienda pide **100 kg** de mínimo
      mayorista; el folleto dice 20. Sigue sin publicarse hasta que el cliente confirme.
+- **21-sep (noche, casa): las secciones de negocio volvieron a ser secciones, como en el
+  plan** (`material/ARQUITECTURA-Y-SEO.md`, puntos 9 y 10). Lautaro lo pidió al ver que el
+  cierre juntaba Dónde comprar, Distribuí y el contacto en tres tarjetas —la única grilla
+  de cajas que quedaba en la home, justo en el remate— y que las páginas internas de la
+  tarde eran variantes de esas mismas tarjetas.
+  - **Home:** `#comprar` «06 · Dónde comprar» (entrada + dos salidas en renglones con
+    filete, la gramática de la cadena de Origen: online / en tu zona → `/donde-comprar/`),
+    `#distribuir` «07 · Distribuí Centenaria. ¡Sumate!» (entrada + los cuatro pasos con el
+    numeral de los hitos + WhatsApp y `/vende-centenaria/`), y `#remate` con «Donde hay
+    mate, hay Centenaria» y la frase del hero, sin texto de negocio: el último plano. El
+    contacto pasó al pie (`.pie__contacto`, fondo sólido, ancla `#contacto`). Las tres
+    viven sobre la escena del amanecer: la cámara de esa escena corre hasta el final del
+    remate (antes terminaba en #comprar y quedaba clavada dos capítulos), **el sol se
+    vela a .30 apenas cierra el velo** —a opacidad 1 la entrada de #comprar, corrida a la
+    derecha, le caía encima con 4.4:1 en escritorio y 1.5:1 en celular— **y termina de
+    salir entero en el remate**. El velo del amanecer subió de .60 a .64: con .60 los
+    pasos cruzaban la franja clara del horizonte a 4.46:1.
+  - **Nav:** «Dónde comprar» apunta a `/donde-comprar/` en cabecera y menú; el menú móvil
+    suma «Vendé Centenaria». En la cabecera de escritorio no entra un séptimo ítem a 761 px.
+  - **`/donde-comprar/`:** buscador de puntos de venta (`js/buscador.js`, datos en
+    `js/puntos.js`), portado del de LaTiNa con su mismo razonamiento: select de las 24
+    provincias (las que tienen puntos primero, con la cantidad), localidad opcional, y el
+    vacío «Todavía no llegamos a {provincia}» como camino principal, con las dos salidas.
+    **`window.PUNTOS` está vacío a propósito** hasta que el cliente mande la lista; se
+    carga ahí (la forma está comentada en el archivo) y listo: `/js/` no tiene cache larga
+    en vercel.json. Sin JS el form recarga con `?provincia=` y las salidas de abajo siguen.
+  - **`/vende-centenaria/` y `/contacto/`:** formularios que arman un WhatsApp con lo
+    completado (`js/formulario.js`; el link de email de al lado lleva el mismo texto; sin
+    JS mandan por `mailto:` con `enctype=text/plain`). Campos del WordPress
+    (`material/CONTENIDO.md`) más «localidad y provincia» en el mayorista. **Sin la casilla
+    de términos y condiciones:** no hay página de términos que aceptar; si el cliente la
+    quiere, primero hay que escribir esa página. Nada se guarda en ningún lado.
+  - `tools/contraste.cjs` mide las secciones nuevas, y las entradas del PLAN aceptan un
+    tercer valor con el offset al borde de arriba: a −40 la primera fila de una
+    sub-sección sin cabeza (`.salidas`, `.tramite`) queda DEBAJO del logo fijo y el peor
+    píxel es el logo (un 1.00:1 falso distinto al del stagger).
 - **✅ Batería completa corrida en la PC de casa el 21-sep a la noche** (robustez 6/6,
   contraste, entrada, cruce-contraste, pasajes, ritual; escritorio y celular). Todo pasa.
   Dos cosas aparecieron y se arreglaron (commit `3de818b`, publicado esa noche):
@@ -351,8 +387,9 @@ unos 400 px, no para pantalla completa.
 
 1. **La lista de puntos de venta.** Tenemos 29 distribuidores relevados del sitio de Latina y
    hay indicios fuertes de que es la misma red, pero son teléfonos de personas: no se publican
-   por deducción. Hoy la sección usa el estado "todavía no llegamos a tu zona" como camino
-   principal, con dos salidas escritas.
+   por deducción. Hoy `/donde-comprar/` tiene el buscador armado con `window.PUNTOS = []`
+   (`js/puntos.js`) y toda búsqueda cae en «todavía no llegamos a tu zona», el camino
+   principal, con dos salidas escritas. Cuando llegue la lista se carga ahí y ya está.
 2. **Cuál de los dos Facebook es el bueno.** Por eso no está linkeado en ningún lado.
 3. **El mínimo mayorista: ¿20 o 100 kg?** La tienda y el folleto se contradicen.
 4. **¿Azul con Palo existe en ½ kg?** La ficha hoy dice sólo 1 kg, que es lo verificable en la

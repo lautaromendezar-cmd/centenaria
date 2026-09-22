@@ -4,9 +4,11 @@ Sitio de **Seleme Centenaria** (yerba mate, desde 1918) — reemplaza el WordPre
 de `yerbamatecentenaria.com.ar`, que hice yo. Vanilla, **sin build**: HTML + CSS + GSAP +
 un motor WebGL propio.
 
-**Estado: home y las tres páginas internas (`/donde-comprar/`, `/vende-centenaria/`,
-`/contacto/`) completas. Falta la batería de verificación de lo hecho el 21-sep y lo que
-debe el cliente (ver [CONTINUAR](CONTINUAR.md)).**
+**Estado: home y las tres páginas internas (`/donde-comprar/` con el buscador de puntos
+de venta, `/vende-centenaria/` y `/contacto/` con formularios que arman un WhatsApp)
+completas y verificadas el 21-sep. La home cierra con tres secciones sobre el amanecer:
+Dónde comprar, Distribuí Centenaria y el remate. Falta lo que debe el cliente (ver
+[CONTINUAR](CONTINUAR.md)).**
 
 ---
 

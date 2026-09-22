@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dónde comprar · Seleme Centenaria</title>
-<meta name="description" content="Comprá Yerba Mate Seleme Centenaria online con envío a todo el país, o preguntá por tu zona. Original, Azul con Palo y Esencial, en 500 g y 1 kg.">
+<meta name="description" content="Dónde comprar Yerba Mate Seleme Centenaria: puntos de venta por provincia y compra online con envío a todo el país.">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <!-- Slug heredado del WordPress, que esta indexado: no cambiarlo. -->
@@ -15,8 +15,8 @@
 <meta property="og:site_name" content="Seleme Centenaria">
 <meta property="og:locale" content="es_AR">
 <meta property="og:url" content="https://yerbamatecentenaria.com.ar/donde-comprar/">
-<meta property="og:title" content="Dónde comprar &middot; Seleme Centenaria">
-<meta property="og:description" content="Online con envío a todo el país, o en tu zona. Original, Azul con Palo y Esencial, en 500 g y 1 kg.">
+<meta property="og:title" content="D&oacute;nde comprar &middot; Seleme Centenaria">
+<meta property="og:description" content="Puntos de venta por provincia y compra online con env&iacute;o a todo el pa&iacute;s.">
 <meta property="og:image" content="https://centenaria.vercel.app/img/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -34,8 +34,6 @@
 
 <a class="saltar" href="#contenido">Saltar al contenido</a>
 
-<!-- El mundo, quieto: la misma primera pantalla del hero, sin motor ni cortina.
-     Las paginas internas no cuentan la pelicula; solo tienen que leerse bien. -->
 <div class="mundo mundo--quieto" aria-hidden="true">
   <div class="mundo__capas">
     <img class="mundo__capa" src="/img/cielo-1600.webp" srcset="/img/cielo-1100.webp 1100w, /img/cielo-1600.webp 1600w, /img/cielo-2200.webp 2200w" sizes="100vw" alt="" fetchpriority="high" decoding="async">
@@ -74,6 +72,7 @@
     <a href="/#variedades">Variedades</a>
     <a href="/#ritual">El ritual</a>
     <a href="/donde-comprar/" aria-current="page">Dónde comprar</a>
+    <a href="/vende-centenaria/">Vendé Centenaria</a>
     <a class="menu__tienda" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Tienda</a>
   </nav>
   <div class="menu__contacto">
@@ -106,32 +105,67 @@
 </script>
 
 <main class="pagina" id="contenido">
-  <p class="volanta">D&oacute;nde comprar</p>
-  <h1 class="pagina__titulo">Donde hay mate,<br>hay Centenaria.</h1>
-  <p class="pagina__bajada">Comprala online con env&iacute;o a todo el pa&iacute;s, o pregunt&aacute; por tu zona. Y si ten&eacute;s un comercio y todav&iacute;a no llegamos, pod&eacute;s ser vos quien la traiga.</p>
+  <p class="volanta">Puntos de venta</p>
+  <h1 class="pagina__titulo">D&oacute;nde comprar</h1>
+  <p class="pagina__bajada">Consegu&iacute; Centenaria en los puntos de venta de tu zona, o comprala online y te llega a todo el pa&iacute;s.</p>
 
-  <div class="puertas">
-    <article class="puerta puerta--principal">
-      <h2 class="puerta__titulo">Comprala online</h2>
-      <p class="puerta__texto">Env&iacute;os a todo el pa&iacute;s con Andreani, Correo Argentino, OCA y V&iacute;a Cargo. Retiro en CABA, C&oacute;rdoba, Rosario y Santa Fe. Entre 3 y 7 d&iacute;as h&aacute;biles desde que se acredita el pago.</p>
-      <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Ir a la tienda</a>
-    </article>
-
-    <!-- ESTADO: "todavia no llegamos a tu zona" hasta que el cliente mande la
-         lista de puntos de venta. Los 29 distribuidores relevados NO se publican
-         por deduccion (ver CONTINUAR.md). -->
-    <article class="puerta">
-      <h2 class="puerta__titulo">Puntos de venta</h2>
-      <p class="puerta__texto">Todav&iacute;a no llegamos a tu zona. Pod&eacute;s comprarla online con env&iacute;o a todo el pa&iacute;s &mdash; o, si ten&eacute;s un comercio, ser vos quien la traiga.</p>
-      <a class="enlace" href="/vende-centenaria/">&iquest;Ten&eacute;s un local? Sumate como punto de venta <span aria-hidden="true">&rarr;</span></a>
-    </article>
-
-    <article class="puerta">
-      <h2 class="puerta__titulo">Preguntanos por tu zona</h2>
-      <p class="puerta__texto">Escribinos y te decimos d&oacute;nde conseguirla cerca tuyo, o c&oacute;mo recibirla en tu casa.</p>
-      <a class="boton boton--linea" href="https://wa.me/5493446239393?text=Hola%2C%20quiero%20saber%20d%C3%B3nde%20comprar%20Yerba%20Mate%20Centenaria%20en%20mi%20zona." target="_blank" rel="noopener">Escribir por WhatsApp</a>
-    </article>
+  <!-- EL BUSCADOR (js/buscador.js, datos en js/puntos.js). Esta disenado al
+       reves de un directorio: sin coordenadas no hay "los mas cercanos", y el
+       estado "todavia no llegamos a tu zona" es el camino principal, con dos
+       salidas escritas. Las provincias las llena el JS (las que tienen puntos
+       primero, con la cantidad). Hasta que el cliente mande la lista, PUNTOS
+       esta vacio y toda busqueda cae en el vacio: es lo honesto. Sin JS el
+       form recarga con ?provincia= y no pasa nada; las salidas de abajo
+       siguen ahi. -->
+  <form class="buscador" id="buscador" action="/donde-comprar/" method="get">
+    <p class="buscador__cobertura oculto" id="cobertura"></p>
+    <div class="campos">
+      <label class="campo">
+        <span>Tu provincia</span>
+        <select id="provincia" name="provincia">
+          <option value="">Eleg&iacute; tu provincia</option>
+        </select>
+      </label>
+      <label class="campo">
+        <span>Localidad (opcional)</span>
+        <input id="localidad" name="localidad" type="search" placeholder="Gualeguaych&uacute;, Paran&aacute;, Rosario&hellip;" autocomplete="off">
+      </label>
+    </div>
+  </form>
+  <div class="buscador__resultado" aria-live="polite">
+    <p class="buscador__estado oculto" id="estado"></p>
+    <ul class="puntos oculto" id="puntos"></ul>
+    <div class="vacio oculto" id="vacio">
+      <h2 class="vacio__titulo" id="vacioTitulo">Todav&iacute;a no llegamos a tu zona.</h2>
+      <p class="vacio__texto">Pod&eacute;s comprarla online con env&iacute;o a todo el pa&iacute;s &mdash; o, si ten&eacute;s un comercio, ser vos quien la traiga.</p>
+      <p class="pagina__acciones">
+        <a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Comprar online</a>
+        <a class="boton boton--linea" href="/vende-centenaria/">Sumarme como punto de venta</a>
+      </p>
+    </div>
   </div>
+
+  <section class="pagina__bloque">
+    <p class="volanta">Online o en tu zona</p>
+    <h2 class="pagina__subtitulo">Comprala online, o tra&eacute;la vos</h2>
+    <ul class="salidas">
+      <li class="salida">
+        <h3 class="salida__titulo">Online, a todo el pa&iacute;s</h3>
+        <p class="salida__texto">Env&iacute;os con Andreani, Correo Argentino, OCA y V&iacute;a Cargo. Retiro en CABA, C&oacute;rdoba, Rosario y Santa Fe. Entre 3 y 7 d&iacute;as h&aacute;biles desde que se acredita el pago.</p>
+        <p class="salida__accion"><a class="boton boton--oro" href="https://centenariayerbamateshop.com.ar/" target="_blank" rel="noopener">Ir a la tienda</a></p>
+      </li>
+      <li class="salida">
+        <h3 class="salida__titulo">&iquest;Ten&eacute;s un comercio?</h3>
+        <p class="salida__texto">Sumate como punto de venta y empez&aacute; a vender Centenaria en tu zona. Precio mayorista, condiciones claras y env&iacute;o a todo el pa&iacute;s.</p>
+        <p class="salida__accion"><a class="enlace" href="/vende-centenaria/">Vend&eacute; Centenaria <span aria-hidden="true">&rarr;</span></a></p>
+      </li>
+      <li class="salida">
+        <h3 class="salida__titulo">Preguntanos por tu zona</h3>
+        <p class="salida__texto">Escribinos y te decimos d&oacute;nde conseguirla cerca tuyo, o c&oacute;mo recibirla en tu casa.</p>
+        <p class="salida__accion"><a class="enlace" href="https://wa.me/5493446239393?text=Hola%2C%20quiero%20saber%20d%C3%B3nde%20comprar%20Yerba%20Mate%20Centenaria%20en%20mi%20zona." target="_blank" rel="noopener">Escribir por WhatsApp <span aria-hidden="true">&rarr;</span></a></p>
+      </li>
+    </ul>
+  </section>
 
   <section class="pagina__bloque">
     <p class="volanta">Nuestra l&iacute;nea</p>
@@ -174,5 +208,7 @@
   </div>
 </footer>
 
+<script src="/js/puntos.js"></script>
+<script src="/js/buscador.js"></script>
 </body>
 </html>

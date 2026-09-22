@@ -16,7 +16,7 @@
      no carga, .reveal ya vale opacity:1 y la pagina se lee entera. */
   /* Los titulos grandes NO van en el paquete de reveals: entran por lineas, con
      la misma mascara que el titulo del hero (ver revelarCapitulos). */
-  var TITULOS = '.manifiesto__titulo, .cap__titulo, .claro__titulo';
+  var TITULOS = '.manifiesto__titulo, .cap__titulo, .claro__titulo, .remate__titulo';
   var reveals = $$('.reveal').filter(function (el) { return !el.matches(TITULOS); });
   var lineas = $$('.hero__titulo .linea > span');
   gsap.set(reveals, { opacity: 0, y: 18 });
@@ -250,7 +250,9 @@
     /* el velo con que se lee cada capitulo: se fija al cerrar su pasaje y no se
        toca hasta el siguiente. Variedades va mas abierto porque los envases se
        paran dentro del yerbal y la escena tiene que leerse. */
-    var VELO = [.58, .62, .52, .64, .58, .60];
+    /* el amanecer va a .64 (21-sep): con .60 el texto de los pasos de
+       distribui caia a 4.46:1 sobre la franja clara del horizonte */
+    var VELO = [.58, .62, .52, .64, .58, .64];
     var pasajes = $$('.pasaje');
     ESCENAS.forEach(function (sec, i) {
       var p = pasajes[i];
@@ -303,11 +305,38 @@
       var desde = pasajes[i] || sec, sig = pasajes[i + 1];
       var cfg = { trigger: desde, start: 'top bottom', scrub: .8 };
       if (sig) { cfg.endTrigger = sig; cfg.end = 'bottom 84%'; }
-      else { cfg.endTrigger = sec; cfg.end = 'bottom bottom'; }
+      /* la ultima escena (el amanecer) dura tres secciones: donde comprar,
+         distribui y el remate. La camara corre hasta el final del remate, no
+         hasta el final de #comprar, o quedaria clavada dos capitulos. */
+      else { cfg.endTrigger = $('#remate') || sec; cfg.end = 'bottom bottom'; }
       gsap.fromTo(cam,
         { z: 1.04, dy: .012 },
         { z: 1.15, dy: -.012, ease: 'none', immediateRender: false, scrollTrigger: cfg });
     });
+
+    /* El sol que salio en el pasaje 6 no se congela ni tapa el texto. Apenas
+       cierra el velo se vela detras de la bruma (opacidad .30: con .38 el texto
+       de los pasos daba 4.43:1 a mitad de #distribuir) mientras se leen donde
+       comprar y distribui: a opacidad 1 era un disco claro bajo el velo y la
+       entrada de #comprar, que va corrida a la derecha, le caia encima con
+       4.4:1 en escritorio y 1.5:1 en el celular. Sigue subiendo despacio, y
+       en el remate termina de salir entero,
+       para el ultimo plano. Tres scrubs sobre solOpacidad/solY en tramos que
+       no se superponen (el pasaje termina en #comprar 'top 84%'). */
+    if ($('#remate')) {
+      gsap.fromTo(e, { solOpacidad: 1 }, {
+        solOpacidad: .30, ease: 'none', immediateRender: false,
+        scrollTrigger: { trigger: '#comprar', start: 'top 80%', end: 'top 30%', scrub: .8 }
+      });
+      gsap.fromTo(e, { solY: .62, solRadio: .09 }, {
+        solY: .70, solRadio: .10, ease: 'none', immediateRender: false,
+        scrollTrigger: { trigger: '#comprar', start: 'top 80%', endTrigger: '#remate', end: 'top 80%', scrub: .8 }
+      });
+      gsap.fromTo(e, { solOpacidad: .30, solY: .70, solRadio: .10 }, {
+        solOpacidad: 1, solY: .78, solRadio: .115, ease: 'none', immediateRender: false,
+        scrollTrigger: { trigger: '#remate', start: 'top 80%', end: 'bottom bottom', scrub: .8 }
+      });
+    }
 
     /* MANIFIESTO — el sello se corre, se achica y se VA: despues del hero no
        vuelve a aparecer. Dejarlo de marca de agua lo convertia en un circulo
@@ -504,7 +533,7 @@
   }
 
   function revelarCapitulos() {
-    $$('.manifiesto, .cap, .claro, .cierre').forEach(function (sec) {
+    $$('.manifiesto, .cap, .claro, .remate').forEach(function (sec) {
       var titulo = $(TITULOS, sec);
       var lineasSec = titulo ? partirTitulo(titulo) : [];
       if (lineasSec.length) gsap.set(lineasSec, { yPercent: 108 });

@@ -33,7 +33,23 @@ const PLAN = [
   ['.fichas', [['.ficha__nombre', 28], ['.ficha__sub', 12], ['.ficha__texto', 16], ['.chips li', 12]]],
   ['#ritual',   [['.cap__titulo', 48], ['.paso__titulo', 28], ['.paso__texto', 16], ['.tip', 16]]],
   ['#porque',   [['.beneficio h3', 24], ['.beneficio p', 16], ['.cita p', 40]]],
-  ['#comprar',  [['.cap__titulo', 48], ['.cierre__remate', 22], ['.puerta__titulo', 28], ['.puerta__texto', 16], ['.contacto__lista a', 18], ['.proceso', 16]]]
+  /* 21-sep: el cierre se partio en donde comprar, distribui y el remate. Las
+     salidas y los pasos quedan abajo del pliegue desde el tope de su seccion,
+     asi que van aparte, como las fichas. El contacto vive en el pie, sobre
+     fondo solido: no hace falta medirlo. */
+  ['#comprar',  [['.cap__titulo', 48], ['.cap__entrada', 17], ['.salida__titulo', 28], ['.salida__texto', 16], ['.enlace', 13]]],
+  /* el tercer valor es el scroll relativo al borde de arriba de la seccion:
+     -40 (el valor por defecto) deja la seccion a 40 px del borde, +250 la
+     deja 250 px por ENCIMA del borde. Las sub-secciones sin cabeza (.salidas,
+     .tramite) van a -150: a -40 su primera fila queda debajo del logo fijo de
+     la cabecera y el peor pixel es el logo (un 1.00:1 falso). */
+  ['.salidas',  [['.salida__titulo', 28], ['.salida__texto', 16], ['.enlace', 13]], -150],
+  ['#distribuir', [['.cap__titulo', 48], ['.cap__entrada', 17], ['.tramite__num', 40], ['.tramite__paso p', 16]]],
+  ['.tramite',  [['.tramite__num', 40], ['.tramite__paso p', 16]], -150],
+  /* y con la seccion corrida hacia arriba, para que los pasos queden a mitad
+     de pantalla, donde cruzan la franja clara del horizonte del amanecer */
+  ['#distribuir', [['.tramite__num', 40], ['.tramite__paso p', 16], ['.enlace', 13]], 250],
+  ['#remate',   [['.remate__titulo', 64], ['.remate__frase', 22]]]
 ];
 
 (async () => {
@@ -54,14 +70,17 @@ const PLAN = [
     await new Promise(r => setTimeout(r, 3000));
     console.log(`\n════ ${vp.n} ${vp.w}x${vp.h}`);
 
-    for (const [seccion, sels] of PLAN) {
+    for (const [seccion, sels, off] of PLAN) {
       const hay = await pg.evaluate(s => !!document.querySelector(s), seccion);
       if (!hay) continue;
-      await pg.evaluate(s => {
+      await pg.evaluate((s, off) => {
         const el = document.querySelector(s);
-        window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 40);
-      }, seccion);
-      await new Promise(r => setTimeout(r, 1300));
+        window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + off);
+      }, seccion, off === undefined ? -40 : off);
+      /* 2 s, no 1,3: el reveal escalonado de una seccion con seis piezas dura
+         ~1,4 s, y medir las cajas antes de que termine da un 1.00:1 (o un 1.5:1
+         contra el boton de abajo) que no existe */
+      await new Promise(r => setTimeout(r, 2000));
 
       /* cajas reales de cada linea, y el color efectivo que el navegador aplica */
       const cajas = await pg.evaluate((s, sels) => {
