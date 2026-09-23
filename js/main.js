@@ -193,7 +193,7 @@
         if (tl.progress() < .74) gsap.set(disco, { opacity: 0 });
       },
       scrollTrigger: {
-        trigger: '.hero', start: 'top top', end: '+=230%',
+        trigger: '.hero', start: 'top top', end: '+=190%',
         pin: true, pinSpacing: true, scrub: .65, anticipatePin: 1
       }
     });

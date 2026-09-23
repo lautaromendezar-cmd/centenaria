@@ -355,8 +355,8 @@ main{position:relative;z-index:3}
    (main.js). Solo existen con el motor andando y con scroll animado
    (html.con-pasajes): sin JS o sin WebGL serian agujeros en blanco. */
 .pasaje{height:0}
-.con-pasajes .pasaje{height:130vh}
-@media (max-width:900px){.con-pasajes .pasaje{height:120vh}}
+.con-pasajes .pasaje{height:95vh}
+@media (max-width:900px){.con-pasajes .pasaje{height:90vh}}
 
 .cap{position:relative;max-width:var(--ancho);margin:0 auto;
   padding:var(--seccion) var(--gotera)}
