@@ -732,3 +732,7 @@ trae también `2dc6ed1`, el ritmo), publicado y cotejado** — 15 archivos 1:1 c
 siete páginas (las tres de variedad incluidas), `css/estilo.css`, `js/main.js`, `js/monte.js`,
 `sitemap.xml` y cuatro imágenes nuevas; los `pack-*-v2.webp` retirados devuelven 404; y el
 «dónde estoy» verificado contra producción, 13/13. El deploy salió con `--scope` a la primera.
+
+**23-sep: `2e783e5` (el submenú de Variedades), publicado y cotejado** — las siete páginas,
+`css/estilo.css` y `js/main.js` 1:1 contra `HEAD`, y el panel abierto con mouse y con Tab
+verificado **contra producción** (`tools/desplegable.cjs`).
