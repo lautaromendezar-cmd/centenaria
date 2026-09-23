@@ -591,3 +591,7 @@ rutas 1:1, `esc-historia-v4-2200.webp` 1:1 (127.302 bytes), y lo que se sacó de
 ⚠️ **`vercel deploy --prod --yes` falló con «Not authorized» y el login estaba bien**
 (`vercel whoami` devolvía `lautaromendezar-5992`). Lo que faltaba era el scope: sale con
 **`--scope lautaro-mendez-s-projects`**. Si vuelve a pasar, no es la sesión: es el scope.
+
+**22-sep: `bf53bc7` (el menú marca dónde estás), publicado y cotejado** — las siete rutas 1:1,
+y la verificación de `aria-current` corrida **contra producción**, no contra el local: las diez
+secciones y las tres páginas internas dan lo esperado.
