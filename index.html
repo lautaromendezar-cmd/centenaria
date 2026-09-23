@@ -151,137 +151,6 @@ document.documentElement.classList.add('js', 'cargando');
     </g>
     </g>
 
-    <!-- EL MATE: la boca vista desde arriba. Es el mismo disco que fue sol y sello,
-         y vuelve en el ritual (main.js, ritualFijo) para que los cinco pasos lo
-         transformen con el scroll: la yerba entra, se inclina y abre el hueco,
-         cae el hilo de agua, entra la bombilla y se ceba. Nada de esto se genera:
-         es SVG, y sin motor queda apagado (opacity 0). -->
-    <g class="disco__mate" id="dMate" opacity="0">
-      <defs>
-        <radialGradient id="mtGourd" cx="36%" cy="30%" r="78%">
-          <stop offset="0" stop-color="#8A5530"/>
-          <stop offset=".5" stop-color="#4E2D16"/>
-          <stop offset="1" stop-color="#1E100A"/>
-        </radialGradient>
-        <radialGradient id="mtCav" cx="50%" cy="50%" r="50%">
-          <stop offset=".76" stop-color="#1A0E07"/>
-          <stop offset="1" stop-color="#050302"/>
-        </radialGradient>
-        <!-- la pared del mate: el borde de la yerba se hunde, por eso se lee a tres cuartos -->
-        <radialGradient id="mtPared" cx="50%" cy="50%" r="50%">
-          <stop offset=".64" stop-color="#000" stop-opacity="0"/>
-          <stop offset=".9" stop-color="#000" stop-opacity=".42"/>
-          <stop offset="1" stop-color="#000" stop-opacity=".78"/>
-        </radialGradient>
-        <!-- el farol de la mesa entra por arriba a la derecha, como en toda la pelicula -->
-        <linearGradient id="mtLuz" x1="1" y1="0" x2=".2" y2="1">
-          <stop offset="0" stop-color="#FFD37A" stop-opacity=".42"/>
-          <stop offset=".55" stop-color="#FFD37A" stop-opacity="0"/>
-        </linearGradient>
-        <linearGradient id="mtMetal" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#F4F2E8"/>
-          <stop offset=".42" stop-color="#8E8E86"/>
-          <stop offset=".6" stop-color="#DCDBD2"/>
-          <stop offset="1" stop-color="#5F5F58"/>
-        </linearGradient>
-        <radialGradient id="mtAguaG" cx="40%" cy="35%" r="70%">
-          <stop offset="0" stop-color="#4A5A2A"/>
-          <stop offset=".6" stop-color="#1F2A14"/>
-          <stop offset="1" stop-color="#0E1409"/>
-        </radialGradient>
-        <!-- yerba: hoja molida en tres verdes y algun palo, tejida como patron -->
-        <!-- dos capas del mismo tejido, giradas y a distinta escala: una sola
-             se lee como reja a este tamano -->
-        <pattern id="mtPat" patternUnits="userSpaceOnUse" width="30" height="30" patternTransform="rotate(17)">
-          <rect width="30" height="30" fill="#3F4B1F"/>
-          <rect x="2" y="4" width="9" height="4" rx="2" fill="#5E6E2E" transform="rotate(-25 6 6)"/>
-          <rect x="16" y="2" width="8" height="3.5" rx="1.7" fill="#2A3514" transform="rotate(40 20 4)"/>
-          <rect x="6" y="15" width="10" height="4" rx="2" fill="#6B7A36" transform="rotate(10 11 17)"/>
-          <rect x="19" y="17" width="7" height="3" rx="1.5" fill="#33401A" transform="rotate(-60 22 18)"/>
-          <rect x="1" y="24" width="11" height="2.4" rx="1.2" fill="#B5A46C" transform="rotate(-15 6 25)"/>
-          <rect x="22" y="26" width="6" height="2" rx="1" fill="#A5955F" transform="rotate(35 25 27)"/>
-          <circle cx="25" cy="10" r="1.6" fill="#788740"/>
-          <circle cx="12" cy="9" r="1.3" fill="#243012"/>
-          <circle cx="15" cy="26" r="1.1" fill="#8A9850"/>
-        </pattern>
-        <pattern id="mtPat2" patternUnits="userSpaceOnUse" width="41" height="41" patternTransform="rotate(-49) scale(1.37)">
-          <rect x="3" y="5" width="9" height="3.6" rx="1.8" fill="#6B7A36" transform="rotate(20 7 7)"/>
-          <rect x="20" y="3" width="7" height="3" rx="1.5" fill="#263113" transform="rotate(-35 23 4)"/>
-          <rect x="9" y="19" width="10" height="3.8" rx="1.9" fill="#283315" transform="rotate(-70 14 21)"/>
-          <rect x="24" y="22" width="8" height="3.2" rx="1.6" fill="#5A692C" transform="rotate(50 28 24)"/>
-          <rect x="4" y="33" width="10" height="2.2" rx="1.1" fill="#C1B078" transform="rotate(25 9 34)"/>
-          <circle cx="33" cy="12" r="1.5" fill="#1F2A10"/>
-          <circle cx="18" cy="36" r="1.3" fill="#7E8C46"/>
-        </pattern>
-        <!-- el hueco tiene pendiente: claro del lado de la luz, hondo del otro -->
-        <radialGradient id="mtHuecoG" cx="28%" cy="26%" r="84%">
-          <stop offset="0" stop-color="#2E1F10"/>
-          <stop offset=".5" stop-color="#130A05"/>
-          <stop offset="1" stop-color="#040201"/>
-        </radialGradient>
-        <clipPath id="mtBoca"><circle cx="200" cy="200" r="150"/></clipPath>
-      </defs>
-
-      <!-- la calabaza y su virola -->
-      <circle cx="200" cy="200" r="184" fill="url(#mtGourd)"/>
-      <circle cx="200" cy="200" r="184" fill="url(#mtLuz)"/>
-      <circle cx="200" cy="200" r="161" fill="none" stroke="#C9A24A" stroke-width="7" opacity=".9"/>
-      <circle cx="200" cy="200" r="164.5" fill="none" stroke="#F5DC8A" stroke-width=".9" opacity=".55"/>
-      <circle cx="200" cy="200" r="157.5" fill="none" stroke="#6E5220" stroke-width="1" opacity=".7"/>
-      <!-- la cavidad, vacia -->
-      <circle cx="200" cy="200" r="150" fill="url(#mtCav)"/>
-
-      <g clip-path="url(#mtBoca)">
-        <!-- 01 · la yerba entra por el centro (scale 0 -> 1) -->
-        <g class="mate__yerba" id="mtYerba">
-          <circle cx="200" cy="200" r="150" fill="url(#mtPat)"/>
-          <circle cx="200" cy="200" r="150" fill="url(#mtPat2)" opacity=".8"/>
-          <circle cx="200" cy="200" r="150" fill="url(#mtLuz)" opacity=".55"/>
-          <circle cx="200" cy="200" r="150" fill="url(#mtPared)"/>
-        </g>
-        <!-- 02 · la masa se inclina y deja el hueco donde va la bombilla -->
-        <g class="mate__hueco" id="mtHueco">
-          <ellipse cx="250" cy="246" rx="78" ry="64" fill="#000" opacity=".38"/>
-          <ellipse cx="250" cy="246" rx="72" ry="58" fill="url(#mtHuecoG)"/>
-          <!-- el filo de la pendiente, solo del lado que le da el farol -->
-          <path d="M 182.3,226.2 A 72,58 0 0 1 274.6,191.5" fill="none" stroke="#8C9A48" stroke-width="4" stroke-linecap="round" opacity=".55"/>
-          <!-- 03 · lo que moja el hilo de agua -->
-          <ellipse class="mate__mojado" id="mtMojado" cx="254" cy="254" rx="0" ry="0" fill="#26321A"/>
-          <!-- 05 · el agua de la cebada -->
-          <ellipse id="mtAgua" cx="250" cy="247" rx="0" ry="0" fill="url(#mtAguaG)"/>
-          <ellipse cx="236" cy="234" rx="14" ry="6" fill="#F1EFE2" opacity=".14" transform="rotate(-30 236 234)"/>
-        </g>
-      </g>
-
-      <!-- 03 · el hilo de agua tibia, desde arriba a la derecha hasta el hueco -->
-      <path id="mtHilo" d="M 386,22 C 336,112 298,178 262,238" fill="none" stroke="#CFE3EC" stroke-width="2.6" stroke-linecap="round" opacity="0"/>
-
-      <!-- 04 · la bombilla: entra desde afuera del cuadro y se apoya en el hueco -->
-      <g class="mate__bombilla" id="mtBombilla" opacity="0">
-        <path d="M 252,246 C 300,292 348,338 404,394" fill="none" stroke="#1A1208" stroke-width="15" stroke-linecap="round" opacity=".45"/>
-        <path d="M 252,246 C 300,292 348,338 404,394" fill="none" stroke="url(#mtMetal)" stroke-width="11" stroke-linecap="round"/>
-        <path d="M 250,243 C 298,289 346,335 402,391" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>
-        <path d="M 384,374 L 412,402" fill="none" stroke="#D8B25A" stroke-width="13" stroke-linecap="round"/>
-        <path d="M 386,372 L 410,396" fill="none" stroke="#FFF1B0" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
-        <!-- el filtro: la cabeza chata que queda en el fondo del hueco -->
-        <ellipse cx="250" cy="246" rx="17" ry="12" fill="url(#mtMetal)" transform="rotate(44 250 246)"/>
-        <ellipse cx="250" cy="246" rx="11" ry="7" fill="none" stroke="#4E4E48" stroke-width="1.2" transform="rotate(44 250 246)"/>
-      </g>
-
-      <!-- 05 · espuma de la cebada y el vapor -->
-      <g class="mate__espuma" id="mtEspuma" opacity="0">
-        <circle cx="232" cy="238" r="3.2" fill="#E9E2C4" opacity=".8"/>
-        <circle cx="241" cy="228" r="2.2" fill="#E9E2C4" opacity=".7"/>
-        <circle cx="226" cy="250" r="2.4" fill="#E9E2C4" opacity=".6"/>
-        <circle cx="262" cy="226" r="1.9" fill="#E9E2C4" opacity=".7"/>
-        <circle cx="236" cy="262" r="1.6" fill="#E9E2C4" opacity=".55"/>
-      </g>
-      <g class="mate__vapor" id="mtVapor" opacity="0">
-        <path d="M 232,222 c -10,-14 9,-22 -1,-40 c -8,-14 6,-20 0,-32"/>
-        <path d="M 256,214 c -9,-12 8,-20 -2,-36 c -7,-12 5,-18 0,-30"/>
-        <path d="M 212,236 c -8,-12 8,-18 -2,-34 c -6,-10 4,-16 0,-28"/>
-      </g>
-    </g>
   </svg>
 </div>
 
@@ -457,7 +326,7 @@ document.documentElement.classList.add('js', 'cargando');
        Son las mismas seis de la cadena de causas que habia (causa -> efecto -> lo
        que sentis), con las mismas palabras aprobadas: cambio la forma, no el
        texto. Los iconos son trazo de una sola linea en oro, se dibujan al entrar
-       (main.js, revelarRazones) y tres tienen un movimiento minimo en CSS. -->
+       (main.js, revelarIconos) y cuatro tienen un movimiento minimo en CSS. -->
   <section class="cap cap--origen" id="origen">
     <div class="origen__arriba">
       <div class="cap__cabeza">
@@ -630,13 +499,67 @@ document.documentElement.classList.add('js', 'cargando');
       <p class="volanta reveal">04 <span aria-hidden="true">&mdash;</span> Por qu&eacute; elegirla</p>
       <h2 class="cap__titulo reveal">M&aacute;s que un sabor,<br>un compa&ntilde;ero diario</h2>
     </div>
+    <!-- Seis beneficios, cada uno con icono de trazo en oro (pedido de Lautaro,
+         23-sep): la misma gramatica de las razones de Origen. Se dibujan al entrar
+         (main.js, revelarIconos) y cada uno tiene un movimiento minimo en CSS
+         (.icono-*, apagado con reduced-motion). Sin GSAP quedan enteros y quietos.
+         No llevan .reveal: los revela su propio disparador, no el de la seccion,
+         que a esta altura ya paso. -->
     <ul class="beneficios">
-      <li class="beneficio reveal"><h3>Energ&iacute;a natural</h3><p>Acompa&ntilde;a tus ma&ntilde;anas y tu concentraci&oacute;n a lo largo del d&iacute;a.</p></li>
-      <li class="beneficio reveal"><h3>Rico en antioxidantes</h3><p>Propiedades naturales de la hoja de yerba mate.</p></li>
-      <li class="beneficio reveal"><h3>Sin T.A.C.C.</h3><p>Libre de gluten, apta para toda la familia.</p></li>
-      <li class="beneficio reveal"><h3>Rinde m&aacute;s</h3><p>Molienda fina y alto contenido de hoja: m&aacute;s cebadas por mate.</p></li>
-      <li class="beneficio reveal"><h3>No produce acidez</h3><p>Suave y equilibrada, para tomar todo el d&iacute;a.</p></li>
-      <li class="beneficio reveal"><h3>Calidad premium</h3><p>Envasada en origen, con m&aacute;s de 100 a&ntilde;os de oficio.</p></li>
+      <li class="beneficio">
+        <svg class="beneficio__icono icono-energia" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path class="trazo rayo" d="M27 5 13 27h10l-2 16 14-22H25l2-16Z"/>
+          <g class="chispas"><path class="trazo" d="M38 8l3-3M41 17h4M10 31l-3 3M7 22H3"/></g>
+        </svg>
+        <h3>Energ&iacute;a natural</h3><p>Acompa&ntilde;a tus ma&ntilde;anas y tu concentraci&oacute;n a lo largo del d&iacute;a.</p>
+      </li>
+      <li class="beneficio">
+        <svg class="beneficio__icono icono-antiox" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path class="trazo" d="M24 5l14 5v11c0 9.5-5.8 16.5-14 21-8.2-4.5-14-11.5-14-21V10l14-5Z"/>
+          <g class="hoja"><path class="trazo" d="M18 31c.6-7.5 5.5-12.5 13-13-.5 7.5-5.5 12.5-13 13Z"/><path class="trazo" d="M18 31l13-13"/></g>
+        </svg>
+        <h3>Rico en antioxidantes</h3><p>Propiedades naturales de la hoja de yerba mate.</p>
+      </li>
+      <li class="beneficio">
+        <svg class="beneficio__icono icono-tacc" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <g class="espiga">
+            <path class="trazo" d="M24 43V14"/>
+            <path class="trazo" d="M24 16c-6 0-9-4-9-9 5 0 9 3 9 9ZM24 16c6 0 9-4 9-9-5 0-9 3-9 9Z"/>
+            <path class="trazo" d="M24 25c-6 0-9-4-9-9 5 0 9 3 9 9ZM24 25c6 0 9-4 9-9-5 0-9 3-9 9Z"/>
+            <path class="trazo" d="M24 34c-6 0-9-4-9-9 5 0 9 3 9 9ZM24 34c6 0 9-4 9-9-5 0-9 3-9 9Z"/>
+          </g>
+          <path class="trazo tacha" d="M8 41 40 9"/>
+        </svg>
+        <h3>Sin T.A.C.C.</h3><p>Libre de gluten, apta para toda la familia.</p>
+      </li>
+      <li class="beneficio">
+        <svg class="beneficio__icono icono-rinde" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <g class="vueltas">
+            <path class="trazo" d="M10.4 19.2a14.4 14.4 0 0 1 23.8-5.4l7.4 7"/><path class="trazo" d="M41.6 11.2v9.6H32"/>
+            <path class="trazo" d="M37.6 28.8a14.4 14.4 0 0 1-23.8 5.4l-7.4-7"/><path class="trazo" d="M6.4 36.8v-9.6H16"/>
+          </g>
+          <path class="trazo" d="M19.5 20.5h9l-1 9h-7z"/><path class="trazo" d="M25.5 20.5l3.5-6"/>
+        </svg>
+        <h3>Rinde m&aacute;s</h3><p>Molienda fina y alto contenido de hoja: m&aacute;s cebadas por mate.</p>
+      </li>
+      <li class="beneficio">
+        <svg class="beneficio__icono icono-suave" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path class="trazo" d="M11 16h26l-2.2 22H13.2z"/>
+          <g class="ola"><path class="trazo" d="M15 27c2.5-2.2 5-2.2 7.5 0s5 2.2 7.5 0 4.3-1.8 6-1"/></g>
+          <path class="trazo" d="M17 33c2-1.6 4-1.6 6 0s4 1.6 6 0"/>
+          <path class="trazo" d="M19 10c0-2.5 2-2.5 2-5M27 10c0-2.5 2-2.5 2-5"/>
+        </svg>
+        <h3>No produce acidez</h3><p>Suave y equilibrada, para tomar todo el d&iacute;a.</p>
+      </li>
+      <li class="beneficio">
+        <svg class="beneficio__icono icono-premium" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <g class="medalla">
+            <circle class="trazo" cx="24" cy="18" r="10"/><circle class="trazo" cx="24" cy="18" r="5"/>
+            <path class="trazo" d="M17.5 26 13 42l8-3.5 3 5 3-5 8 3.5-4.5-16"/>
+          </g>
+        </svg>
+        <h3>Calidad premium</h3><p>Envasada en origen, con m&aacute;s de 100 a&ntilde;os de oficio.</p>
+      </li>
     </ul>
     <blockquote class="cita reveal">
       <p>Del desayuno en la cancha a la playa: donde va un argentino, va Centenaria.</p>
@@ -645,7 +568,14 @@ document.documentElement.classList.add('js', 'cargando');
 
   <div class="pasaje" aria-hidden="true"></div>
 
-  <!-- ================= 05 . EL RITUAL ================= -->
+  <!-- ================= 05 . EL RITUAL =================
+       Cinco pasos como lista editorial, sin escena fijada. Del 21 al 23-sep la
+       seccion se fijaba y el disco volvia como boca del mate, cebandose con el
+       scroll (SVG con patrones, degradados y clip, animado por scrub adentro de
+       un pin). En el iPhone del cliente esa animacion se colgaba y la pestaña
+       llego a morir; ademas el timeline fijado renderizaba sus valores de
+       partida sobre el disco al cargar y el sello del hero aparecia corrido
+       (ver CONTINUAR.md, 23-sep). Se saco de todos lados, decision de Lautaro. -->
   <section class="cap cap--ritual" id="ritual">
     <div class="cap__cabeza">
       <p class="volanta reveal">05 <span aria-hidden="true">&mdash;</span> El ritual</p>

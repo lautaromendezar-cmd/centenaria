@@ -10,6 +10,11 @@
 
   if (!window.gsap) { console.warn('[centenaria] sin GSAP: queda la version legible'); return; }
   gsap.registerPlugin(ScrollTrigger);
+  /* En el celular la barra del navegador aparece y se esconde con el scroll y
+     dispara resize con el MISMO ancho. Refrescar ahi es rehacer todos los
+     triggers y el pin del hero en pleno scroll: en el iPhone la pagina se
+     sentia pesada y llego a colgarse (23-sep). Ver tambien el resize de abajo. */
+  ScrollTrigger.config({ ignoreMobileResize: true });
   window.__cortina = true;   /* le avisa al script del <head> que la cortina la manejo yo */
 
   /* Ocultar lo que el JS va a revelar se hace ACA, no en el CSS: si este archivo
@@ -36,7 +41,6 @@
   var mundo = $('.mundo');
   var disco = $('#disco');
   var sello = $('.sello');
-  var dSello = $('#dSello');
   var aroExt = $('.sello__aro--ext');
   var aroInt = $('.sello__aro--int');
   var selloTexto = $('.sello__texto');
@@ -239,13 +243,16 @@
        sello, y se retira con el manifiesto. Lo que une los capitulos es el
        fondo continuo (e.escena + la sombra), no el disco: arrastrarlo por
        toda la pagina lo convertia en un circulo pegado que sobraba.
-       Vuelve UNA vez, en el ritual, y ya no como sello: como la boca del mate
-       (era parte de la idea original: sol -> sello -> boca del mate).
+       ⚠️ NINGUN OTRO TIMELINE FIJADO PUEDE TOCAR EL DISCO. Del 21 al 23-sep
+       el ritual lo traia de vuelta como boca del mate dentro de un pin, y el
+       refresh de ScrollTrigger renderiza la animacion de un trigger con pin
+       en su fin y en su inicio para medir el pin (aunque los tweens lleven
+       immediateRender:false): sus valores de partida (xPercent 92,
+       yPercent -46, scale .4) quedaban escritos sobre el disco al cargar, el
+       hero solo anima opacidad/escala/giro, y el sello aparecia arriba a la
+       derecha hasta que el tween del manifiesto escribia xPercent 0. Medido
+       con Chrome interceptando style.transform.
        --------------------------------------------------------------------- */
-
-    /* El pin del ritual se crea ACA, antes de los pasajes y las camaras: los
-       triggers que vienen despues miden posiciones que el pin corre. */
-    var conRitual = ritualFijo();
 
     function tramo(donde, a, b) {
       return { trigger: donde, start: a || 'top 82%', end: b || 'top 28%', scrub: .6 };
@@ -306,9 +313,6 @@
       /* la vegetacion del hero pertenece a ESE punto de vista: se retira en el
          primer cambio de mundo, no se arrastra al galpon ni al aereo */
       if (i === 0) tlP.fromTo(e, { frenteOp: 1 }, { frenteOp: 0, duration: .45 }, 0);
-      /* el mate se va con el ritual, en el pasaje al cierre: el disco ya
-         cumplio dos veces y el sol del cierre es del shader, no de este DOM */
-      if (i === 5 && conRitual) tlP.fromTo(disco, { opacity: 1 }, { opacity: 0, duration: .3 }, 0);
       /* EL SOL SALE DE NUEVO. El cierre amanece sobre el monte y cierra el
          circulo contra el hero ("El dia empieza con yerba mate"). Es el mismo
          FS_SOL del hero, dibujado DELANTE de la escena con su halo (la foto no
@@ -446,9 +450,9 @@
 
   function dondeEstoy() {
     var navs = $$('.cabecera__nav a, .menu__nav a');
-    /* ⚠️ `main section[id]`, NO `main > section`: al fijar el ritual, GSAP lo
-       envuelve en un .pin-spacer y #ritual deja de ser hijo directo de main.
-       Con el selector de hijo directo se perdia justo el que es item del menu. */
+    /* `main section[id]`, NO `main > section`: cuando una seccion se fija,
+       GSAP la envuelve en un .pin-spacer y deja de ser hija directa de main
+       (paso con el ritual mientras estuvo fijado, 21 al 23-sep). */
     var secciones = $$('main section[id]');
     if (!navs.length || !secciones.length) return;
 
@@ -479,123 +483,6 @@
         onLeaveBack: function () { if (!i) marcar(null); }
       });
     });
-  }
-
-  /* ---------------------------------------------------------------------
-     EL RITUAL, FIJADO (21-sep). El diagnostico del cliente era que los capitulos
-     eran fotos que cambian; el hero no, porque es un LUGAR: se fija, el texto se
-     va y algo se transforma a la vista. Este es el segundo lugar de la pagina.
-     La seccion se fija como el hero, el disco vuelve como la boca del mate vista
-     desde arriba y los cinco pasos lo transforman con el scroll, uno por vez,
-     sobre la escena de la mesa (la camara de ritual sigue corriendo por debajo).
-     El texto largo de los cinco pasos no entra en una pantalla fija: por eso
-     van apilados y se reemplazan (CSS: html.ritual-fijo).
-     Devuelve true si la escena quedo armada: sin eso, los pasos siguen siendo
-     la lista de siempre y el disco no vuelve. */
-  function ritualFijo() {
-    var sec = $('#ritual'), mate = $('#dMate');
-    if (!sec || !mate || !dSello) return false;
-    var movil = chico.matches;
-    /* en un celular bajo no entran cabeza, mate y paso en una pantalla fija */
-    if (movil && window.innerHeight < 640) return false;
-    document.documentElement.classList.add('ritual-fijo');
-
-    var pasos = $$('.paso', sec), tip = $('.tip', sec);
-    var m = {
-      yerba: $('#mtYerba'), hueco: $('#mtHueco'), mojado: $('#mtMojado'), hilo: $('#mtHilo'),
-      bombilla: $('#mtBombilla'), agua: $('#mtAgua'), espuma: $('#mtEspuma'), vapor: $('#mtVapor')
-    };
-    for (var k in m) if (!m[k]) return false;
-    var largo = m.hilo.getTotalLength();
-
-    /* En el celular el mate va en la banda que queda entre la cabeza y el paso,
-       MEDIDA, no a un porcentaje del viewport: a 41% y escala .62 el aro pisaba
-       «paso a paso» 20 px en un telefono de 667 y 3 px en uno de 844, porque la
-       banda cambia con la altura y la cabeza no (medido el 21-sep con
-       tools/ritual.cjs en cuatro alturas).
-       ⚠ Se mide RECIEN cuando el tween se inicializa (valores por funcion de
-       GSAP: corren en el primer render, en el refresh de ScrollTrigger), no
-       aca: revelarCapitulos() parte el titulo en lineas despues de esta funcion
-       y la cabeza crece 45 px; medida antes, el mate caia sobre el titulo igual.
-       Las distancias al borde superior de la seccion valen fijada o no (pin en
-       'top top'). Va en px y no en %: GSAP convierte el 50% de partida contra
-       el alto del body, no del viewport, y el mate entraria desde muy abajo. */
-    var escMate = 1.08, izq = '73%', arr = '52%', arrDesde = '50%';
-    if (movil) {
-      var banda = function () {
-        var secTop = sec.getBoundingClientRect().top;
-        var fin = $('.cap__cabeza', sec).getBoundingClientRect().bottom - secTop + 4;  /* +4: descendentes */
-        var ini = $('.pasos', sec).getBoundingClientRect().top - secTop;
-        var base = disco.offsetWidth, margen = 14;
-        var diam = Math.max(100, Math.min(ini - fin - 2 * margen, base * .64));
-        return { esc: diam / base, top: Math.round((fin + ini) / 2) + 'px' };
-      };
-      escMate = function () { return banda().esc; };
-      arr = function () { return banda().top; };
-      izq = '50%';
-      arrDesde = Math.round(window.innerHeight / 2) + 'px';
-    }
-
-    /* estado inicial de las piezas: lo pone el JS, como todo lo que el JS anima */
-    gsap.set(m.yerba, { scale: 0, svgOrigin: '200 200' });
-    gsap.set(m.hueco, { scale: 0, svgOrigin: '250 246' });
-    gsap.set(m.hilo, { strokeDasharray: largo, strokeDashoffset: largo, opacity: 0 });
-    gsap.set(m.bombilla, { x: 150, y: 150, opacity: 0 });
-    gsap.set([m.espuma, m.vapor], { opacity: 0 });
-    gsap.set(pasos, { opacity: 0, y: 26 });
-    if (tip) gsap.set(tip, { opacity: 0, y: 14 });
-
-    var tl = gsap.timeline({
-      defaults: { ease: 'none', immediateRender: false },
-      scrollTrigger: {
-        trigger: sec, start: 'top top', end: '+=460%',
-        pin: true, pinSpacing: true, scrub: .65, anticipatePin: 1
-      }
-    });
-
-    /* 0. el disco vuelve, ya como mate. El sello se apaga mientras el disco
-          sigue invisible, asi que nadie ve el cambio: aparece directamente la
-          boca del mate, vacia. Sale de donde lo dejo el manifiesto (achicado y
-          corrido arriba a la derecha) y se acomoda: a la derecha del texto en
-          escritorio, entre la cabeza y el paso en el celular. */
-    tl.fromTo(dSello, { opacity: 1 }, { opacity: 0, duration: .001 }, 0)
-      .fromTo(mate, { opacity: 0 }, { opacity: 1, duration: .001 }, 0)
-      .fromTo(disco,
-        { opacity: 0, scale: .40, xPercent: 92, yPercent: -46, left: '50%', top: arrDesde },
-        { opacity: 1, scale: escMate, xPercent: 0, yPercent: 0, left: izq, top: arr,
-          ease: 'power2.out', duration: .12 }, 0);
-
-    /* Cinco pasos en el tramo [.12, 1], a .176 cada uno. El texto de cada paso
-       entra, se queda, y se va justo antes de que entre el siguiente; el mate
-       cambia mientras el texto esta quieto, para que se lea la causa. */
-    var A0 = .12, K = .176;
-    pasos.forEach(function (p, i) {
-      var a = A0 + i * K;
-      tl.fromTo(p, { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .035, ease: 'power2.out' }, a);
-      if (i < pasos.length - 1) tl.to(p, { opacity: 0, y: -22, duration: .03, ease: 'power2.in' }, a + K - .03);
-    });
-    var a1 = A0, a2 = A0 + K, a3 = A0 + 2 * K, a4 = A0 + 3 * K, a5 = A0 + 4 * K;
-
-    /* 01 · carga: la yerba entra por el centro y cubre la boca; la pared
-             sombreada del borde es lo que dice "tres cuartos", no hasta el ras */
-    tl.fromTo(m.yerba, { scale: 0 }, { scale: 1, duration: .11, ease: 'power2.out' }, a1 + .01);
-    /* 02 · inclina: la masa se corre arriba a la izquierda y abre el hueco */
-    tl.fromTo(m.hueco, { scale: 0 }, { scale: 1, duration: .10, ease: 'power2.inOut' }, a2 + .01)
-      .fromTo(m.yerba, { x: 0, y: 0 }, { x: -9, y: -8, duration: .10, ease: 'power2.inOut' }, a2 + .01);
-    /* 03 · el hilo de agua tibia baja hasta el hueco, moja el fondo y se corta */
-    tl.fromTo(m.hilo, { opacity: 0 }, { opacity: 1, duration: .01 }, a3 + .01)
-      .fromTo(m.hilo, { strokeDashoffset: largo }, { strokeDashoffset: 0, duration: .06 }, a3 + .01)
-      .fromTo(m.mojado, { attr: { rx: 0, ry: 0 } }, { attr: { rx: 44, ry: 34 }, duration: .07, ease: 'power2.out' }, a3 + .05)
-      .fromTo(m.hilo, { opacity: 1 }, { opacity: 0, duration: .03 }, a3 + .12);
-    /* 04 · la bombilla entra desde fuera del cuadro y se apoya en el hueco */
-    tl.fromTo(m.bombilla, { opacity: 0 }, { opacity: 1, duration: .02 }, a4 + .01)
-      .fromTo(m.bombilla, { x: 150, y: 150 }, { x: 0, y: 0, duration: .11, ease: 'power2.out' }, a4 + .01);
-    /* 05 · la cebada: el agua llena el hueco, espuma junto a la bombilla, vapor */
-    tl.fromTo(m.agua, { attr: { rx: 0, ry: 0 } }, { attr: { rx: 66, ry: 52 }, duration: .09, ease: 'power2.out' }, a5 + .01)
-      .fromTo(m.espuma, { opacity: 0 }, { opacity: 1, duration: .04 }, a5 + .06)
-      .fromTo(m.vapor, { opacity: 0 }, { opacity: 1, duration: .06 }, a5 + .08);
-    if (tip) tl.fromTo(tip, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .04, ease: 'power2.out' }, a5 + .07);
-    return true;
   }
 
   function escenaDom() {
@@ -637,24 +524,26 @@
   }
 
   /* Sin GSAP los iconos quedan enteros: el dasharray lo pone SOLO este codigo,
-     y solo con scroll animado (con reduced-motion no se llama, como el resto). */
-  function revelarRazones() {
-    var caja = $('.razones');
-    if (!caja) return;
-    var titulo = $('.razones__titulo', caja);
-    var items = $$('.razon', caja);
-    var trazos = $$('.razon__icono .trazo', caja).filter(function (t) {
-      return typeof t.getTotalLength === 'function' && t.getTotalLength() > 0;
+     y solo con scroll animado (con reduced-motion no se llama, como el resto).
+     Vale para las seis razones de #origen y, desde el 23-sep, para los seis
+     beneficios de #porque: mismo dibujo del trazo, mismo escalonado. */
+  function revelarIconos() {
+    $$('.razones, .beneficios').forEach(function (caja) {
+      var titulo = $('.razones__titulo', caja);
+      var items = $$('.razon, .beneficio', caja);
+      var trazos = $$('.trazo', caja).filter(function (t) {
+        return typeof t.getTotalLength === 'function' && t.getTotalLength() > 0;
+      });
+      trazos.forEach(function (t) {
+        var l = t.getTotalLength();
+        gsap.set(t, { strokeDasharray: l, strokeDashoffset: l });
+      });
+      gsap.set([titulo].concat(items).filter(Boolean), { opacity: 0, y: 16 });
+      var tl = gsap.timeline({ scrollTrigger: { trigger: caja, start: 'top 84%' } });
+      if (titulo) tl.to(titulo, { opacity: 1, y: 0, duration: .6, ease: 'power3.out' }, 0);
+      tl.to(items, { opacity: 1, y: 0, duration: .8, stagger: .1, ease: 'power3.out' }, .08);
+      tl.to(trazos, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut', stagger: .045 }, .2);
     });
-    trazos.forEach(function (t) {
-      var l = t.getTotalLength();
-      gsap.set(t, { strokeDasharray: l, strokeDashoffset: l });
-    });
-    gsap.set([titulo].concat(items).filter(Boolean), { opacity: 0, y: 16 });
-    var tl = gsap.timeline({ scrollTrigger: { trigger: caja, start: 'top 84%' } });
-    if (titulo) tl.to(titulo, { opacity: 1, y: 0, duration: .6, ease: 'power3.out' }, 0);
-    tl.to(items, { opacity: 1, y: 0, duration: .8, stagger: .1, ease: 'power3.out' }, .08);
-    tl.to(trazos, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut', stagger: .045 }, .2);
   }
 
   function revelarCapitulos() {
@@ -663,20 +552,17 @@
       var lineasSec = titulo ? partirTitulo(titulo) : [];
       if (lineasSec.length) gsap.set(lineasSec, { yPercent: 108 });
       var piezas = $$('.reveal', sec).filter(function (el) { return !el.matches(TITULOS); });
-      /* con el ritual fijado, los pasos y el tip los maneja su propio timeline */
-      if (document.documentElement.classList.contains('ritual-fijo') && sec.id === 'ritual')
-        piezas = piezas.filter(function (el) { return !el.closest('.pasos, .tip'); });
       var tlSec = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 72%' } });
       if (lineasSec.length) tlSec.to(lineasSec, { yPercent: 0, duration: .9, stagger: .11, ease: 'power3.out' }, 0);
       tlSec.to(piezas, { opacity: 1, y: 0, duration: .85, stagger: .09, ease: 'power3.out' }, lineasSec.length ? .15 : 0);
     });
 
-    /* LAS SEIS RAZONES de #origen (23-sep): entran escalonadas y el icono de
-       cada una se DIBUJA (el trazo corre con stroke-dashoffset). Van con su
-       propio disparador y no en el paquete de la seccion: #origen mide una
-       pantalla y las razones viven abajo, asi que con el disparador de la
-       seccion se revelarian fuera de la vista. */
-    revelarRazones();
+    /* LAS SEIS RAZONES de #origen y LOS SEIS BENEFICIOS de #porque (23-sep):
+       entran escalonados y el icono de cada uno se DIBUJA (el trazo corre con
+       stroke-dashoffset). Van con su propio disparador y no en el paquete de
+       la seccion: viven abajo de la cabeza, asi que con el disparador de la
+       seccion ('top 72%') se revelarian fuera de la vista. */
+    revelarIconos();
 
     /* La rama en primer plano cruza el capitulo a OTRA velocidad que el fondo:
        esa diferencia es la profundidad. Es la gramatica del hero (mundo atras,
@@ -769,8 +655,15 @@
     if (!iniciado) { arrancarMotor(); retirarCortina(); }
   }, 6500);
 
-  var reajuste;
+  /* Solo se refresca si cambio el ANCHO. En el celular la barra del navegador
+     dispara resize al mostrarse y esconderse (mismo ancho, otro alto), y
+     refrescar ahi rehace todos los triggers y el pin del hero en pleno scroll.
+     ignoreMobileResize (arriba) cubre el listener interno de ScrollTrigger;
+     este es el nuestro. Rotar el telefono si cambia el ancho y si refresca. */
+  var reajuste, anchoPrevio = window.innerWidth;
   window.addEventListener('resize', function () {
+    if (tocable && window.innerWidth === anchoPrevio) return;
+    anchoPrevio = window.innerWidth;
     clearTimeout(reajuste);
     reajuste = setTimeout(function () { ScrollTrigger.refresh(); }, 220);
   }, { passive: true });

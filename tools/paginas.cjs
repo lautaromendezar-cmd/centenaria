@@ -27,6 +27,15 @@ function estado(ruta) {
     await p.setViewport({ width: 1440, height: 900 });
     await p.goto(`http://localhost:${P}${ruta}`, { waitUntil: 'networkidle0' });
     await new Promise(r => setTimeout(r, 800));
+    /* hasta el pie y de vuelta: las imagenes con loading="lazy" (el 1918 del pie)
+       no se piden hasta acercarse, y en una pagina larga (/vende-centenaria/)
+       daban "imagen rota" en falso (23-sep) */
+    await p.evaluate(async () => {
+      const total = document.documentElement.scrollHeight;
+      for (let y = 0; y < total; y += innerHeight * .8) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 80)); }
+      window.scrollTo(0, total); await new Promise(r => setTimeout(r, 400)); window.scrollTo(0, 0);
+    });
+    await p.waitForNetworkIdle({ idleTime: 400, timeout: 8000 }).catch(() => {});
     const info = await p.evaluate(() => {
       const imgs = [...document.images].map(i => ({ src: i.currentSrc || i.src, ok: i.complete && i.naturalWidth > 0, alt: i.getAttribute('alt') }));
       const links = [...document.querySelectorAll('a[href]')].map(a => a.getAttribute('href'));

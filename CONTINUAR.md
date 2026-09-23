@@ -1,7 +1,8 @@
 # CONTINUAR · Centenaria
 
-Estado al **23-sep-2026 (PC de casa, de madrugada: Origen en una pantalla, Variedades con
-página propia, Tienda destacada, y el ritmo del scroll)**; lo de antes es del 22-sep.
+Estado al **23-sep-2026 (PC de casa, de noche: se saca el ritual fijado, el sello que
+aparecía corrido, y el iPhone que se colgaba; iconos en Por qué elegirla)**; lo de la
+madrugada del 23 y lo de antes sigue abajo.
 Para retomar desde otra máquina, leer esto y después el [README](README.md), que explica
 cómo está armado y las decisiones que no son obvias.
 
@@ -10,6 +11,65 @@ cómo está armado y las decisiones que no son obvias.
   App y la cuenta de GitHub está marcada desde el 7-sep. Se publica a mano, desde un clon
   limpio para no subir `_gen/` ni `material/` (ver «Publicar» al final).
 - **Repo:** `lautaromendezar-cmd/centenaria` · **PÚBLICO** · último commit: ver `git log -1`
+- **23-sep (noche, casa): devolución de Lautaro sobre lo publicado, tres cosas, un deploy.**
+  1. **El sello aparecía corrido en escritorio** («el círculo verde aparece primero al
+     costado y después al medio; si subís, anda»). Reproducido con Chrome interceptando
+     `style.transform` de `#disco`: al cargar ya tenía `xPercent 92 / yPercent -46 /
+     scale .4`, los valores de PARTIDA del timeline del ritual fijado. ⚠️ **Un timeline
+     con `pin` se renderiza en su fin y en su inicio en cada `refresh` de ScrollTrigger
+     para medir el pin, aunque los tweens lleven `immediateRender:false`** (ese flag sólo
+     evita el render al crearlos). El hero sólo anima opacidad, escala y giro, así que el
+     disco quedaba arriba a la derecha hasta que el tween del manifiesto (sin pin: no se
+     renderiza en el refresh) escribía `xPercent 0`; por eso al subir andaba. «Antes
+     estaba perfecta» porque el ritual fijado es del 21-sep a la tarde, después de la
+     devolución del cliente. **Regla nueva en main.js: ningún timeline fijado toca el
+     disco salvo el del hero.** En el celular era el mismo bug («el sello queda a un
+     costado a veces»: el resize de la barra del navegador dispara el refresh).
+  2. **El iPhone 14 (Chrome) se colgaba y la pestaña llegó a morir** («No se puede abrir
+     esta página» es la pantalla de Chrome iOS cuando el proceso de la pestaña muere,
+     casi siempre por memoria o GPU). No se puede reproducir acá (no hay iOS), así que
+     lo que sigue es diagnóstico por lectura, no medido: (a) **el ritual fijado**: SVG con
+     patrones, degradados y clip animado por scrub adentro de un pin, y encima el
+     `filter: drop-shadow` de 70 px del `.sello` (el mismo SVG) rehecho en cada cuadro a
+     DPR 3; (b) **el `resize` de la barra del navegador** disparaba `ScrollTrigger.refresh()`
+     (el listener nuestro) en pleno scroll, rehaciendo todos los triggers y el pin del hero;
+     (c) el canvas de `.mundo` (`inset:0`) cambiaba de alto con esa barra y el motor
+     realocaba el buffer. **Hecho:** el ritual fijado se fue de todos lados (decisión de
+     Lautaro: «eliminar la animación de cebar y simplificar la sección»), y el ritual es
+     la lista editorial de cinco pasos + tip que ya estaba aprobada antes del 21-sep;
+     `ScrollTrigger.config({ignoreMobileResize:true})` y el resize nuestro sólo refresca si
+     cambió el ANCHO; `.mundo` con `height:100lvh` (con `100vh` de respaldo) en vez de
+     `inset:0`; el resplandor del sello pasó de `filter:drop-shadow` a un `box-shadow`
+     sobre `.disco::before` (círculo del mismo diámetro, se rasteriza una vez, se ve
+     igual); el grano no salta en pantallas táctiles (`hover:none`). ⚠️ **Falta que
+     Lautaro lo pruebe en el iPhone real**: si sigue pesado, lo siguiente a bajar es el
+     DPR del canvas en táctil (1.6 → 1.25 en `medir()` de monte.js) y después las
+     texturas de escena (en un celular entra ~20% del ancho de la textura).
+  3. **Por qué elegirla con iconos y animación por ítem**, pedido de Lautaro: los seis
+     beneficios llevan un icono de trazo en oro (rayo con chispas, escudo con hoja,
+     espiga tachada, flechas de vuelta con un mate, mate con olas y vapor, medalla) con la
+     misma gramática de las razones de Origen: se dibujan al entrar (`revelarIconos()` en
+     main.js, que ahora atiende `.razones` y `.beneficios`) y cada uno tiene un movimiento
+     mínimo continuo en CSS (`.icono-*`), apagado con reduced-motion. Los `<li>` ya no
+     llevan `.reveal`: los revela su propio disparador. Sin GSAP quedan enteros y quietos.
+  - **Lo que se fue:** `ritualFijo()`, `#dMate` y sus defs en el SVG, `html.ritual-fijo`,
+    `.mate__vapor`, `tools/ritual.cjs` y sus hojas QC. El id `dSello` queda en el SVG sin
+    que nadie lo use. La página perdió 3571 px de scroll (el pin era 460% de alto).
+  - **Herramientas:** `tools/donde-estoy.cjs` (nuevo) corre el «dónde estoy» en los tres
+    escenarios; ⚠️ va con pasos lentos y espera larga porque con WebGL por software el
+    ticker de GSAP corre a pocos cuadros y con 30 ms por paso marcaba siempre la sección
+    anterior (los `start` de los triggers estaban exactos: era el verificador).
+    `tools/paginas.cjs` scrollea hasta el pie antes de medir: el `1918.webp` del pie va con
+    `loading="lazy"` y en `/vende-centenaria/` (larga) daba «imagen rota» en falso, también
+    en el árbol anterior.
+  - **Verificado:** robustez 6/6; toda la home en AA en escritorio y celular; cabecera AA
+    (peor 7,42:1); 12/12 cruces sin texto; pasajes en los dos tamaños; «dónde estoy» 30/30;
+    las seis páginas internas bien; el sello centrado desde la carga en escritorio y en
+    390×844, primer y segundo pase (script de scratchpad, interceptando el transform); el
+    scroll muerto bajó de 4080 a 3840 px absolutos (22,2% del documento porque el
+    documento se achicó; la racha de 720 px entre Variedades y Por qué ya existía); LCP
+    1368–1448 ms contra 1212–1280 del árbol anterior alternado, mismo elemento
+    (`.cortina__anio`), dentro del ruido de la herramienta y del umbral de 1700.
 - **23-sep (madrugada, casa): tres pedidos de Lautaro sobre lo publicado, en un solo deploy.**
   1. **Origen entra en UNA pantalla** (`.cap--origen`, `.origen__arriba`, `.razones`): título y
      entrada lado a lado, y la cadena de causas (tabla de tres columnas, 18 celdas) pasó a
@@ -77,9 +137,10 @@ cómo está armado y las decisiones que no son obvias.
     es de hoy.
 - **Estado: el sitio está terminado de mi lado.** El 21-sep en la oficina se cerraron los
   seis pasos que faltaban, un commit por paso:
-  1. **Ritual como escena fijada** (`ritualFijo` en main.js, `#dMate` en el SVG del disco,
+  1. ~~**Ritual como escena fijada** (`ritualFijo` en main.js, `#dMate` en el SVG del disco,
      `html.ritual-fijo` en CSS): la sección se fija como el hero, el disco vuelve como la
-     boca del mate y los cinco pasos lo transforman con el scroll, de a uno.
+     boca del mate y los cinco pasos lo transforman con el scroll, de a uno.~~ **Sacado el
+     23-sep** (se colgaba en iPhone y corría el sello del hero; ver arriba).
   2. **Cierre:** el sol del hero sale de nuevo sobre el monte en el pasaje al cierre y la
      página cierra con la frase literal «El día empieza con yerba mate» (`.cierre__remate`).
   3. **Historia:** el 1918 cuenta hasta hoy con el scroll (`contarHistoria`) y la foto de la
@@ -612,14 +673,9 @@ unos 400 px, no para pantalla completa.
    22-sep** después de cambiar el fondo de Historia (contraste ×2, robustez 6/6, cruces,
    pasajes escritorio y celular, LCP 880 ms). **Sigue: mostrárselo al cliente** y mandarle
    el mensaje de la sección «Mensaje para el cliente».
-6. **El cartel de la fábrica en celular (22-sep).** Se adivina pero no se lee: el motor
-   recorta la textura por alto y deja ~20% del ancho, y ahí el cartel cae al borde y bajo
-   lo más espeso del velo. Dos salidas, las dos con costo: recortar la foto ~12% por
-   izquierda (pierde la torre de agua y el plano ancho) o darle al cover-fit del shader un
-   centro horizontal por capa. **Decisión de encuadre pendiente de Lautaro.**
-7. **Commitear `tools/contraste.cjs` aparte.** Era el único archivo que quedó en CRLF en el
-   repo y el cambio del 22-sep lo pasó a LF: su diff sale con ~280 líneas para un cambio de
-   1. Mismo criterio que `947b3eb`.
+6. ~~El cartel de la fábrica en celular (22-sep).~~ HECHO el 22-sep a la tarde: centro
+   horizontal por capa en el cover-fit del shader (`{historia:.65}`).
+7. ~~Commitear `tools/contraste.cjs` aparte.~~ HECHO en `03ec25c`.
 8. **La foto sepia original sigue haciendo falta igual.** El pedido 7 del mensaje al cliente
    no se cae porque hayamos ensanchado ésta: con el archivo original sin filtro y sin marco
    se rehace la escena mucho mejor (hoy partimos de 617×805 comprimidos).
@@ -628,6 +684,9 @@ unos 400 px, no para pantalla completa.
    (el sitio no publica precios); si el cliente quiere, se agrega `offers` al Product JSON-LD
    cuando confirme la lista. Y pedirle **fotos de los envases en alta** sigue en pie: hoy la
    referencia del modelo es el recorte de 298 px.
+10. **Probar en el iPhone 14 real** (Lautaro) que ya no se cuelga ni se traba. Acá no hay
+    iOS: las medidas del 23-sep a la noche son por diagnóstico. Si sigue pesado, bajar el
+    DPR del canvas en táctil (`medir()` en monte.js, 1.6 → 1.25) y después las texturas.
 
 ### Decisión de hosting
 
@@ -649,6 +708,8 @@ este motivo y es gratis para este caso.
   "Essencial" — conviene avisarle.
 - **El velo va neutro** (`--fondo #0A0B0B`), no en verde marca.
 - **No se publican** ni los distribuidores, ni los precios mayoristas, ni el Facebook.
+- **El ritual no se fija ni se anima con scrub** (Lautaro, 23-sep): en iPhone se colgaba.
+  Es una lista de cinco pasos. Y **ningún timeline con pin toca el disco** salvo el del hero.
 
 ---
 
@@ -664,15 +725,22 @@ node tools/entrada.cjs 4740     # cortina + LCP medido
 node tools/rodar.cjs 4740       # hoja de contactos (agregá 390 844 para móvil)
 node tools/cruce-contraste.cjs 4740   # contraste A MITAD de cada cruce (tiene que decir «sin texto en pantalla»)
 node tools/pasajes.cjs 4740     # hoja de contactos de los seis pasajes (agregá 390 844 para móvil)
-node tools/ritual.cjs 4740      # hoja de contactos del ritual fijado (agregá 390 844 para móvil)
+node tools/donde-estoy.cjs 4740        # el menu marca donde estas: 10 secciones x 3 escenarios (escritorio, reduced-motion, celular)
 MSYS_NO_PATHCONV=1 node tools/contraste.cjs 4740 /variedades/original/   # y azul-con-palo, esencial (23-sep)
 MSYS_NO_PATHCONV=1 node tools/paginas.cjs 4740 /variedades/original/ /variedades/azul-con-palo/ /variedades/esencial/ /contacto/ /donde-comprar/ /vende-centenaria/
-node tools/hueco.cjs 4740 1440 900    # scroll muerto: rachas sin texto y % del documento (23-sep: 19,3%)
+node tools/hueco.cjs 4740 1440 900    # scroll muerto: rachas sin texto y % del documento (23-sep noche: 3840 px, 22,2% de un documento mas corto)
 node tools/menu-alto.cjs 4740          # el menú de pantalla completa entra en 320×568 (12 ítems desde el 23-sep)
 node tools/desplegable.cjs http://localhost:4740/ tools/_qc-desplegable   # el submenú de Variedades abre con mouse y con Tab
 ```
 
-Al cerrar el 23-sep: 6/6 escenarios, la home y las tres páginas de variedad en AA, la
+Al cerrar el 23-sep a la noche: 6/6 escenarios, la home en AA en escritorio y celular, la
+cabecera 7,42:1 en su peor sección, 12/12 cruces sin texto, pasajes bien en los dos
+tamaños, «dónde estoy» 30/30, las seis páginas internas bien, LCP 1368–1448 ms por
+software (el árbol anterior alternado dio 1212–1280: ruido). No se volvieron a correr
+`cabecera.cjs`, `menu-alto.cjs`, `desplegable.cjs` ni el contraste de las páginas de
+variedad: la nav, el menú y esas páginas no se tocaron.
+
+Al cerrar el 23-sep de madrugada: 6/6 escenarios, la home y las tres páginas de variedad en AA, la
 cabecera 7,42:1 en su peor sección, 12/12 cruces sin texto, LCP 872 ms por software, los
 9 ítems del menú entran en 320×568, y el «dónde estoy» bien en escritorio, celular y con
 reduced-motion.

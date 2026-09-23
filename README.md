@@ -4,11 +4,12 @@ Sitio de **Seleme Centenaria** (yerba mate, desde 1918) — reemplaza el WordPre
 de `yerbamatecentenaria.com.ar`, que hice yo. Vanilla, **sin build**: HTML + CSS + GSAP +
 un motor WebGL propio.
 
-**Estado: home y las tres páginas internas (`/donde-comprar/` con el buscador de puntos
-de venta, `/vende-centenaria/` y `/contacto/` con formularios que arman un WhatsApp)
-completas y verificadas el 21-sep. La home cierra con tres secciones sobre el amanecer:
-Dónde comprar, Distribuí Centenaria y el remate. Falta lo que debe el cliente (ver
-[CONTINUAR](CONTINUAR.md)).**
+**Estado: home, las tres páginas internas (`/donde-comprar/` con el buscador de puntos
+de venta, `/vende-centenaria/` y `/contacto/` con formularios que arman un WhatsApp) y
+las tres páginas de variedad completas y verificadas. La home cierra con tres secciones
+sobre el amanecer: Dónde comprar, Distribuí Centenaria y el remate. El 23-sep se sacó el
+ritual fijado (se colgaba en iPhone) y el ritual es una lista. Falta lo que debe el
+cliente (ver [CONTINUAR](CONTINUAR.md)).**
 
 ---
 
@@ -42,6 +43,8 @@ estático y sale a buscar un build que no existe.
 **Scripts viejos.** `verificar.cjs`, `mirar.cjs`, `movil.cjs` y `zoom.cjs` son de la home v1
 descartada y apuntan a selectores que ya no existen; **`verificar.cjs` además está roto**
 (llama `alListen(srv)` con `srv` sin definir). Los reemplazan los cuatro de arriba.
+`ritual.cjs` se borró el 23-sep junto con el ritual fijado. La lista completa de
+verificación está en «Verificar» del CONTINUAR.
 `paquetes.cjs`, `imagenes.cjs` y `nervadura.cjs` sí siguen sirviendo: generaron los tres
 envases, las fotos reales del cliente y el patrón de nervadura.
 
@@ -52,7 +55,9 @@ se enfría —pierde el halo, se le endurece el borde, aparece el filo dorado—
 el **sello «est · 1918» que está impreso en los tres paquetes**. Ahí termina su viaje: con el
 manifiesto se retira y no vuelve. (Hubo una versión donde seguía mutando por los capítulos
 —luna, boca del mate, botón— y se descartó: fuera del hero quedaba como un círculo pegado
-que sobraba.)
+que sobraba. Y del 21 al 23-sep volvió una vez como boca del mate en un ritual fijado,
+cebándose con el scroll: en el iPhone del cliente se colgaba, y encima corría el sello
+del hero, ver abajo. Se sacó.)
 
 No es un adorno: el sello real ya trae el año, la frase del titular y «cien años abasteciendo
 a América Latina». El sol y el sello tienen la misma forma, así que la transición no es un
@@ -103,6 +108,14 @@ sola toma y no una pila de bloques.
   inicial a cada tween cuando lo crea, así que el de un capítulo posterior —todavía en
   progreso 0— devolvía `.mundo__sombra` a cero y dejaba el mundo brillante abajo del texto.
   Dio un fallo de contraste real (2,22:1). Todo tramo va con `fromTo` + `immediateRender:false`.
+- **Un timeline con `pin` se renderiza en su inicio en cada `refresh`, aunque sus tweens
+  lleven `immediateRender:false`.** ScrollTrigger, para medir el pin, renderiza la
+  animación en su fin y después en 0 (`O.render(O.duration()); O.render(0)` en el
+  minificado). El ritual fijado tenía un `fromTo` del disco con `xPercent:92, yPercent:-46,
+  scale:.4` de partida: quedaban escritos sobre `#disco` al cargar, el hero sólo anima
+  opacidad, escala y giro, y el sello aparecía arriba a la derecha hasta que el tween del
+  manifiesto escribía `xPercent:0`. Regla: **ningún timeline fijado toca el disco salvo el
+  del hero.** Se midió interceptando `style.transform` de `#disco` con Chrome.
 
 ## Lo que falta
 
