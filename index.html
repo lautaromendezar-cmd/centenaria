@@ -408,13 +408,6 @@ document.documentElement.classList.add('js', 'cargando');
     <p class="historia__anio" aria-hidden="true"><span id="historiaAnio">1918</span></p>
     <ol class="hitos">
       <li class="hito reveal">
-        <!-- Copia de archivo (tools/fabrica.cjs). OJO: el cliente la mando como
-             "la fabrica en 1918" y NO lo es: es la fabrica de hoy con filtro sepia.
-             El pie lo dice; presentarla como de 1918 seria un error que cualquiera nota. -->
-        <figure class="archivo">
-          <img src="img/fabrica-hoy-480.webp" srcset="img/fabrica-hoy-480.webp 480w, img/fabrica-hoy-800.webp 800w" sizes="(max-width:820px) 80vw, 19rem" width="480" height="632" alt="Frente de la ervateira Seleme, en el sur de Brasil: el galp&oacute;n con el cartel Ervateira Seleme, desde 1918, entre araucarias." loading="lazy" decoding="async">
-          <figcaption>La ervateira Seleme, hoy. Donde empez&oacute; todo.</figcaption>
-        </figure>
         <p class="hito__dato">1918</p>
         <p class="hito__texto">Comienza la historia. La familia Seleme funda el oficio de elegir y elaborar la mejor yerba, hoja por hoja.</p>
       </li>
@@ -427,6 +420,12 @@ document.documentElement.classList.add('js', 'cargando');
         <p class="hito__texto">Una l&iacute;nea completa que combina tradici&oacute;n, sabor y una identidad de marca inconfundible.</p>
       </li>
     </ol>
+    <!-- El pie de la foto del fondo. La copia de archivo se saco el 22-sep (el fondo
+         de este capitulo PASO A SER esa misma foto y estaba dos veces), pero el dato
+         honesto no se va con ella: el cliente la mando como "la fabrica en 1918" y NO
+         lo es, es la fabrica de HOY. Presentarla como de 1918 seria un error que
+         cualquiera nota. -->
+    <p class="cap__credito reveal">La ervateira Seleme, hoy, en el sur de Brasil. Donde empez&oacute; todo.</p>
   </section>
 
   <div class="pasaje" aria-hidden="true"></div>

@@ -80,8 +80,13 @@
     escenasPedidas = true;
     /* el segundo argumento es el anclaje del PRIMER PLANO de cada escena
        (x: 0 izq / 1 der, y: 0 abajo / 1 arriba). Ver tools/frentes.cjs. */
+    /* historia NO lleva frente desde el 22-sep: su fondo dejo de ser una escena
+       generada y paso a ser la foto real de la ervateira, que ya trae su propio
+       primer plano (el porton, la garita, los arboles pelados). La rama colgando
+       caia sobre el galpon y el sol, y eran dos primeros planos peleando: el mismo
+       motivo por el que .rama--historia se habia sacado el 20-sep. */
     monte.cargarEscenas(['historia', 'origen', 'variedades', 'porque', 'ritual', 'cierre'], {
-      historia: [1, 1], origen: [1, 0], variedades: [0, .5],
+      origen: [1, 0], variedades: [0, .5],
       porque: [1, 0], ritual: [0, 1], cierre: [1, 0]
     });
   }

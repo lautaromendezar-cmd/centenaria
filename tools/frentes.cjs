@@ -34,8 +34,13 @@ const G = '_gen/frentes/';
 /* ancla: x 0 izq / 1 der, y 0 abajo / 1 arriba, .5 centro (igual que main.js).
    tam: fraccion del lado del cuadrado que ocupa el elemento (el lado mayor del
    recorte). desenfoque: sigma sobre el lado 1600, 0 = nitido. */
+/* historia SALIO el 22-sep: su fondo dejo de ser una escena generada y paso a ser la
+   foto real de la ervateira (ver material/PROMPTS-ESCENAS.md), que ya trae su propio
+   primer plano —el porton, la garita, los arboles pelados—. La rama colgando caia
+   sobre el galpon y el sol y eran dos primeros planos peleando. El prompt y el PNG
+   siguen en _gen/frentes/historia.* por si vuelve; si vuelve, hay que reponerla
+   tambien en cargarEscenas (js/main.js). */
 const FRENTES = {
-  historia:   { ancla: [1, 1],  tam: .66, desenfoque: 1.4 },  /* rama de araucaria colgando */
   origen:     { ancla: [1, 0],  tam: .74, desenfoque: 0.8 },  /* copa de araucaria desde arriba */
   variedades: { ancla: [0, .5], tam: .60, desenfoque: 1.0 },  /* rama de yerba desde la izquierda */
   porque:     { ancla: [1, 0],  tam: .72, desenfoque: 0.6 },  /* hojas con rocio, ya vienen desenfocadas */

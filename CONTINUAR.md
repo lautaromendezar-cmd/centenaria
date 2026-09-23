@@ -1,9 +1,9 @@
 # CONTINUAR · Centenaria
 
-Estado al **21-sep-2026 (noche, desde la PC de casa, después de partir el cierre en
-secciones)**. Para retomar desde otra máquina,
-leer esto y después el [README](README.md), que explica cómo está armado y las
-decisiones que no son obvias.
+Estado al **22-sep-2026 (PC de casa, después de poner la fábrica real de fondo en Historia)**;
+lo de antes es del 21-sep a la noche, cuando se partió el cierre en secciones.
+Para retomar desde otra máquina, leer esto y después el [README](README.md), que explica
+cómo está armado y las decisiones que no son obvias.
 
 - **Online:** https://centenaria.vercel.app/ (Vercel, preset *Other*, sin build).
   ⚠️ **El push a `main` YA NO redespliega** (21-sep): la integración de Vercel es una GitHub
@@ -107,6 +107,48 @@ decisiones que no son obvias.
   en escritorio. **Al comparar interlineados hay que mirar ese paso real, no el
   `line-height` declarado**: el `font-size` cambia entre el hero y los capítulos, así que
   los `line-height` no son comparables entre sí.
+- **22-sep: el fondo de Historia es la FÁBRICA REAL, y la sección adelgazó.** Pedido del
+  cliente: que el capítulo de la historia no fuera una cabaña inventada sino su ervateira.
+  - **Cómo entró la foto.** Llega en 617×805, sepia, con marco de app: inservible como
+    fondo de una escena de 2200×933 que además tiene una cámara adentro. Se resolvió
+    **ensanchándola, no reescalándola** (`seedream_v5_pro`, 21:9, 2k → 3120×1328, recortada
+    a 3120×1323). Receta completa y prompt en `material/PROMPTS-ESCENAS.md` (01 · historia).
+    ⚠️ **`upscale_image` sobre esta foto NO VA**: reescribe el cartel, que es la marca real
+    del cliente sobre su edificio real. El cartel se protege **nombrándolo literal en el
+    prompt** y se verifica recortándolo a resolución nativa y mirándolo.
+    ⚠️ `nano_banana_2` no acepta 21:9 y el servidor lo degrada a `nano_banana_flash` **sin
+    avisar** (1584×672, corto para la textura de 2200). Para usar Nano Banana Pro hay que
+    pedirle 16:9 (2752×1536) y recortar acá.
+  - **Va colorizada, no sepia.** En sepia chocaba con la película y, peor, la hacía *parecer*
+    de 1918. En color de última luz se lee como lo que es. El pie honesto sobrevive en
+    `.cap__credito`.
+  - **Las escenas subieron a `v4`** (`tools/escenas.cjs` + `cargarEscenas` en `js/monte.js`),
+    que es la regla de `/img/` immutable sin hash. Los `-v3-` se borraron.
+  - **Historia se quedó sin primer plano**: la foto ya trae el suyo (portón, garita, árboles
+    pelados) y la rama caía sobre el galpón y el sol. Sacada de `cargarEscenas` y de
+    `FRENTES` en `tools/frentes.cjs`; `frente-historia-v1-*.webp` borrados.
+  - **La sección era alta por la polaroid, no por el texto.** Medido: `.hitos` eran 643 px de
+    los cuales **456 eran la copia de archivo**, y estiraba la fila entera dejando aire muerto
+    bajo las otras dos columnas. Sacada (además estaba la misma foto dos veces, como fondo y
+    como polaroid), **`#historia` pasó de 1287→892 px en escritorio (1.43→0.99 viewports) y de
+    1676→1278 en celular (1.99→1.51)**. `.hitos` pasó a `align-items:start`: iba a `end`
+    porque la foto hacía alta la primera columna, y sin ella `end` desalineaba los tres datos.
+    `tools/fabrica.cjs` quedó sin uso (tiene el aviso en la cabecera).
+  - **Verificado**: contraste dos corridas, toda la home AA (`#historia`: título 6.27:1,
+    entrada 8.89:1, el `.cap__credito` nuevo 17.14:1); robustez 6/6; cruces sin texto;
+    pasajes escritorio y celular; LCP 880 ms. `.cap__credito` se agregó al PLAN de
+    `tools/contraste.cjs`.
+  - ⚠️ **Pendiente de decisión (Lautaro): el cartel en celular.** En vertical el motor muestra
+    sólo ~20% del ancho de la textura (recorta por alto) y el cover-fit del shader clava el
+    centro en `.5`, así que el cartel queda al borde del cuadro y bajo la parte más espesa del
+    velo: se adivina, no se lee. En escritorio se ve entero y bien. Las salidas son recortar
+    la foto ~12% por izquierda (acerca el cartel al centro, pero se come la torre de agua y
+    las araucarias de la izquierda que dan el plano ancho) o darle al cover-fit un centro
+    horizontal por capa. **No se tocó: es una decisión de encuadre.**
+  - ⚠️ `tools/contraste.cjs` estaba guardado en **CRLF** en el repo (la normalización del
+    21-sep no lo alcanzó; era el único). El `sed` de este cambio lo pasó a LF, así que su
+    diff sale con ~280 líneas para un cambio de 1. Conviene commitearlo **aparte**, como se
+    hizo en `947b3eb`.
 - Las herramientas de `tools/` resuelven `node_modules` y Chrome por máquina
   vía `tools/_entorno.cjs` (casa: `latina/node_modules`; notebook y oficina:
   `Desktop\Claude`). En la notebook y en la oficina NO correr `contraste.cjs`/`entrada.cjs`
@@ -422,9 +464,21 @@ unos 400 px, no para pantalla completa.
    `max-age`, o se versionan los nombres (las escenas y frentes ya van con `-v3-`/`-v1-`).
    **Decisión pendiente de Lautaro.**
 4. ~~Rechequear precios contra la tienda~~ HECHO 21-sep: coinciden; el sitio no publica precios.
-5. ~~La batería completa en la PC de casa~~ HECHA el 21-sep a la noche (ver arriba).
-   **Sigue: mostrárselo al cliente** y mandarle el mensaje de la sección «Mensaje para el
-   cliente».
+5. ~~La batería completa en la PC de casa~~ HECHA el 21-sep a la noche, y **rehecha el
+   22-sep** después de cambiar el fondo de Historia (contraste ×2, robustez 6/6, cruces,
+   pasajes escritorio y celular, LCP 880 ms). **Sigue: mostrárselo al cliente** y mandarle
+   el mensaje de la sección «Mensaje para el cliente».
+6. **El cartel de la fábrica en celular (22-sep).** Se adivina pero no se lee: el motor
+   recorta la textura por alto y deja ~20% del ancho, y ahí el cartel cae al borde y bajo
+   lo más espeso del velo. Dos salidas, las dos con costo: recortar la foto ~12% por
+   izquierda (pierde la torre de agua y el plano ancho) o darle al cover-fit del shader un
+   centro horizontal por capa. **Decisión de encuadre pendiente de Lautaro.**
+7. **Commitear `tools/contraste.cjs` aparte.** Era el único archivo que quedó en CRLF en el
+   repo y el cambio del 22-sep lo pasó a LF: su diff sale con ~280 líneas para un cambio de
+   1. Mismo criterio que `947b3eb`.
+8. **La foto sepia original sigue haciendo falta igual.** El pedido 7 del mensaje al cliente
+   no se cae porque hayamos ensanchado ésta: con el archivo original sin filtro y sin marco
+   se rehace la escena mucho mejor (hoy partimos de 617×805 comprimidos).
 
 ### Decisión de hosting
 

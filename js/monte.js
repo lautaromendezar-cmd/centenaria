@@ -492,7 +492,7 @@
         }
         /* la version va en el NOMBRE: /img/ se sirve immutable un anio y los
            archivos no llevan hash (ver tools/escenas.cjs) */
-        pedir('img/esc-' + n + '-v3-' + w + '.webp', 0, [.5, .5]);
+        pedir('img/esc-' + n + '-v4-' + w + '.webp', 0, [.5, .5]);
         var ancla = frentes && frentes[n];
         /* version propia (tools/frentes.cjs): se sube cada vez que se rehace uno */
         if (ancla) pedir('img/frente-' + n + '-v1-' + l + '.webp', 1, ancla);

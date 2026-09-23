@@ -1,4 +1,12 @@
-/* La foto de la fabrica que mando el cliente (21-sep), como copia de archivo
+/* ⚠️ SIN USO DESDE EL 22-sep-2026. Esta herramienta emitia la copia de archivo (la
+   polaroid apoyada en el hito 1918). Se saco: el cliente pidio que ESA MISMA foto
+   fuera el FONDO del capitulo, y quedaba dos veces en pantalla —ademas de estirar la
+   fila de hitos 456 px, que era casi todo lo que hacia alta la seccion—. Hoy la foto
+   entra por material/PROMPTS-ESCENAS.md (01 · historia) y el pie honesto quedo en el
+   HTML como .cap__credito. Se deja el script por si vuelve a hacer falta un recorte
+   de esta foto; no lo corras esperando que aparezca algo en la home.
+
+   La foto de la fabrica que mando el cliente (21-sep), como copia de archivo
    para el hito 1918 de Historia. NO es de 1918: es la fabrica de hoy con un
    filtro sepia y el marco de una app de celular. Se recorta el marco y se
    emite en dos anchos; el pie honesto va en el HTML.

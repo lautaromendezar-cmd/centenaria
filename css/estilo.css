@@ -359,24 +359,23 @@ main{position:relative;z-index:3}
 }
 
 /* --- hitos: 1918 / +100 / Hoy --- */
-/* alineados ABAJO: la copia de archivo sube sobre el 1918 y los tres datos
-   quedan en la misma linea */
+/* alineados ARRIBA desde el 22-sep. Iban a `end` porque la copia de archivo hacia
+   alta la primera columna y asi los tres datos caian en la misma linea; sacada la
+   foto, `end` los desalinea —los tres textos wrappean distinto— y `start` es lo que
+   ahora deja 1918 / +100 / Hoy a la misma altura. */
 .hitos{list-style:none;margin:clamp(3rem,8vh,6rem) 0 0;padding:0;
-  display:grid;gap:clamp(2rem,5vw,4rem);grid-template-columns:repeat(3,1fr);align-items:end}
+  display:grid;gap:clamp(2rem,5vw,4rem);grid-template-columns:repeat(3,1fr);align-items:start}
 @media (max-width:820px){.hitos{grid-template-columns:1fr;gap:2.5rem}}
 .hito__dato{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
   font-size:clamp(3rem,7vw,5.5rem);line-height:.86;letter-spacing:-.03em;color:var(--oro)}
 .hito__texto{margin:1rem 0 0;max-width:24rem;color:var(--crema)}
 
-/* --- la copia de archivo: la foto real de la fabrica (tools/fabrica.cjs) en el
-   hito 1918, como una impresion apoyada sobre la mesa. El pie dice la verdad:
-   es la fabrica de HOY con filtro sepia, no una foto de 1918. --- */
-.archivo{margin:0 0 1.6rem;max-width:19rem;padding:.5rem .5rem 1rem;
-  background:#EDE6D3;color:var(--tinta);transform:rotate(-1.6deg);
-  box-shadow:0 18px 40px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.35)}
-.archivo img{width:100%;height:auto;display:block;filter:contrast(1.04) sepia(.15)}
-.archivo figcaption{margin:.7rem .1rem 0;font-size:.75rem;line-height:1.4;
-  letter-spacing:.04em;color:var(--tinta-suave)}
+/* --- el pie de la foto del fondo. Reemplaza a .archivo (la polaroid apoyada en
+   el hito 1918), que se saco el 22-sep cuando el fondo del capitulo paso a ser
+   esa misma foto: estaba dos veces y estiraba la fila de hitos 456 px. El dato
+   honesto se queda: la ervateira es la de HOY, no una foto de 1918. --- */
+.cap__credito{margin:clamp(2rem,5vh,3rem) 0 0;font-size:.75rem;line-height:1.4;
+  letter-spacing:.04em;color:var(--crema);opacity:.62;max-width:26rem}
 
 /* --- la cadena de causas: causa -> efecto -> lo que sentis --- */
 .cadena{margin:clamp(3rem,8vh,6rem) 0 0}

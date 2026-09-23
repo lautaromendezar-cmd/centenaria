@@ -24,7 +24,7 @@ const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 /* seccion -> que texto mirar. El color es el declarado en la hoja; el tamano decide
    el umbral AA (3:1 desde 24px, 4,5:1 abajo de eso). */
 const PLAN = [
-  ['#historia', [['.cap__titulo', 48], ['.cap__entrada', 17], ['.hito__dato', 60], ['.hito__texto', 16], ['.volanta', 12]]],
+  ['#historia', [['.cap__titulo', 48], ['.cap__entrada', 17], ['.hito__dato', 60], ['.hito__texto', 16], ['.volanta', 12], ['.cap__credito', 12]]],
   ['#origen',   [['.cap__titulo', 48], ['.cap__entrada', 17], ['.cadena__causa', 16], ['.cadena__efecto', 16], ['.cadena__sentis', 17]]],
   ['#variedades', [['.claro__titulo', 48], ['.claro__bajada', 17], ['.ficha__nombre', 28], ['.ficha__texto', 16], ['.escala__quien', 21], ['.escala__nota', 14]]],
   /* Las fichas quedan ABAJO DEL PLIEGUE cuando se mira #variedades desde arriba,
