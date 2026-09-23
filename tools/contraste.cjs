@@ -8,12 +8,14 @@
    no ocupa y regala contraste.
 
       node tools/servir.cjs 4740
-      node tools/contraste.cjs 4740                                                  */
+      node tools/contraste.cjs 4740                        (la home)
+      node tools/contraste.cjs 4740 /variedades/original/  (una pagina de variedad) */
 const { req, CHROME } = require('./_entorno.cjs');
 const puppeteer = req('puppeteer-core');
 const sharp = req('sharp');
 
 const P = Number(process.argv[2] || 4740);
+const RUTA = process.argv[3] || '/';
 
 const lum = (r, g, b) => {
   const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
@@ -25,12 +27,12 @@ const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
    el umbral AA (3:1 desde 24px, 4,5:1 abajo de eso). */
 const PLAN = [
   ['#historia', [['.cap__titulo', 48], ['.cap__entrada', 17], ['.hito__dato', 60], ['.hito__texto', 16], ['.volanta', 12], ['.cap__credito', 12]]],
-  ['#origen',   [['.cap__titulo', 48], ['.cap__entrada', 17], ['.cadena__causa', 16], ['.cadena__efecto', 16], ['.cadena__sentis', 17]]],
-  ['#variedades', [['.claro__titulo', 48], ['.claro__bajada', 17], ['.ficha__nombre', 28], ['.ficha__texto', 16], ['.escala__quien', 21], ['.escala__nota', 14]]],
+  ['#origen',   [['.cap__titulo', 48], ['.cap__entrada', 17], ['.razon__titulo', 18], ['.razon__texto', 15]]],
+  ['#variedades', [['.claro__titulo', 48], ['.claro__bajada', 17], ['.tarjeta__nombre', 28], ['.tarjeta__sub', 12], ['.escala__quien', 21], ['.escala__nota', 14]]],
   /* Las fichas quedan ABAJO DEL PLIEGUE cuando se mira #variedades desde arriba,
      asi que en escritorio no se median. Desde que los envases dejaron la tarjeta
      blanca ese texto es crema sobre el mundo y hay que mirarlo: va aparte. */
-  ['.fichas', [['.ficha__nombre', 28], ['.ficha__sub', 12], ['.ficha__texto', 16], ['.chips li', 12]]],
+  ['.tarjetas', [['.tarjeta__nombre', 28], ['.tarjeta__sub', 12]]],
   ['#ritual',   [['.cap__titulo', 48], ['.paso__titulo', 28], ['.paso__texto', 16], ['.tip', 16]]],
   ['#porque',   [['.beneficio h3', 24], ['.beneficio p', 16], ['.cita p', 40]]],
   /* 21-sep: el cierre se partio en donde comprar, distribui y el remate. Las
@@ -51,6 +53,16 @@ const PLAN = [
   ['#distribuir', [['.tramite__num', 40], ['.tramite__paso p', 16], ['.enlace', 13]], 250],
   ['#remate',   [['.remate__titulo', 64], ['.remate__frase', 22]]]
 ];
+/* /variedades/<slug>/ (23-sep): el texto va sobre la escena generada con el velo
+   lateral; abajo, las otras dos tarjetas sobre fondo solido. */
+const PLAN_VARIEDAD = [
+  ['.variedad__hero', [['.volanta', 12], ['.pagina__titulo', 64], ['.variedad__sub', 12], ['.pagina__bajada', 17],
+                       ['.chips li', 12], ['.variedad__perfil', 15]], 0],
+  /* .boton NO se mide: el metodo esconde el elemento entero y mide lo que hay
+     detras, y un boton lleva su propio fondo (oro/tinta, 12:1, ver .boton--oro) */
+  ['.variedad__resto', [['.pagina__subtitulo', 48], ['.tarjeta__nombre', 28], ['.tarjeta__sub', 12], ['.enlace', 13]], -90]
+];
+const PLAN_ACTIVO = RUTA.indexOf('/variedades/') === 0 ? PLAN_VARIEDAD : PLAN;
 
 (async () => {
   const b = await puppeteer.launch({
@@ -66,11 +78,11 @@ const PLAN = [
     /* la maquina puede tener las animaciones apagadas (Windows: "Mostrar animaciones"),
        y Chrome lo traduce a prefers-reduced-motion: el sitio tomaria el camino quieto */
     await pg.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'no-preference' }]);
-    await pg.goto(`http://localhost:${P}/`, { waitUntil: 'networkidle0' });
+    await pg.goto(`http://localhost:${P}${RUTA}`, { waitUntil: 'networkidle0' });
     await new Promise(r => setTimeout(r, 3000));
     console.log(`\n════ ${vp.n} ${vp.w}x${vp.h}`);
 
-    for (const [seccion, sels, off] of PLAN) {
+    for (const [seccion, sels, off] of PLAN_ACTIVO) {
       const hay = await pg.evaluate(s => !!document.querySelector(s), seccion);
       if (!hay) continue;
       await pg.evaluate((s, off) => {
@@ -135,6 +147,6 @@ const PLAN = [
   }
 
   await b.close();
-  console.log(fallos ? `\n${fallos} par(es) por debajo de AA` : '\ntoda la home pasa AA sobre el fondo real');
+  console.log(fallos ? `\n${fallos} par(es) por debajo de AA` : `\n${RUTA} pasa AA sobre el fondo real`);
   process.exit(fallos ? 1 : 0);
 })();

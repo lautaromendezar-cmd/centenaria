@@ -19,8 +19,8 @@ const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 /* mismos objetivos que contraste.cjs, pero sin acotar a una seccion: a mitad del
    cruce hay texto de DOS capitulos en pantalla a la vez. */
 const SELS = [['.cap__titulo',48],['.cap__entrada',17],['.hito__dato',60],['.hito__texto',16],
-  ['.volanta',12],['.cadena__causa',16],['.cadena__efecto',16],['.cadena__sentis',17],
-  ['.claro__titulo',48],['.claro__bajada',17],['.ficha__nombre',28],['.ficha__texto',16],
+  ['.volanta',12],['.razon__titulo',18],['.razon__texto',15],
+  ['.claro__titulo',48],['.claro__bajada',17],['.tarjeta__nombre',28],['.tarjeta__sub',12],
   ['.escala__quien',21],['.escala__nota',14],['.paso__titulo',28],['.paso__texto',16],
   ['.tip',16],['.beneficio h3',24],['.beneficio p',16],['.cita p',40],
   ['.cierre__remate',22],['.puerta__titulo',28],['.puerta__texto',16],['.contacto__lista a',18],['.proceso',16]];

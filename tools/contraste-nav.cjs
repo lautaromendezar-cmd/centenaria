@@ -55,6 +55,7 @@ const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
         out.push({
           t: a.textContent.trim(), activo: !!a.getAttribute('aria-current'),
           color: getComputedStyle(a).color,
+          fondo: getComputedStyle(a).backgroundColor,
           x: Math.floor(c.left), y: Math.floor(c.top),
           w: Math.ceil(c.width), h: Math.ceil(c.height)
         });
@@ -73,6 +74,12 @@ const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
       const m = c.color.match(/\d+/g).map(Number);
       const lt = lum(m[0], m[1], m[2]);
       let peor = 99;
+      /* Tienda (23-sep) es una pildora con fondo PROPIO: se mide contra su fondo
+         y no contra lo que hay detras (con el texto en tinta eso daba 1.00:1 falso) */
+      const mf = (c.fondo || '').match(/\d+(\.\d+)?/g);
+      if (mf && (mf.length < 4 || Number(mf[3]) > 0)) {
+        peor = ratio(lt, lum(Number(mf[0]), Number(mf[1]), Number(mf[2])));
+      } else
       for (let y = c.y; y < Math.min(c.y + c.h, info.height); y++) {
         for (let x = c.x; x < Math.min(c.x + c.w, info.width); x++) {
           const i = (y * info.width + x) * info.channels;

@@ -636,6 +636,27 @@
     });
   }
 
+  /* Sin GSAP los iconos quedan enteros: el dasharray lo pone SOLO este codigo,
+     y solo con scroll animado (con reduced-motion no se llama, como el resto). */
+  function revelarRazones() {
+    var caja = $('.razones');
+    if (!caja) return;
+    var titulo = $('.razones__titulo', caja);
+    var items = $$('.razon', caja);
+    var trazos = $$('.razon__icono .trazo', caja).filter(function (t) {
+      return typeof t.getTotalLength === 'function' && t.getTotalLength() > 0;
+    });
+    trazos.forEach(function (t) {
+      var l = t.getTotalLength();
+      gsap.set(t, { strokeDasharray: l, strokeDashoffset: l });
+    });
+    gsap.set([titulo].concat(items).filter(Boolean), { opacity: 0, y: 16 });
+    var tl = gsap.timeline({ scrollTrigger: { trigger: caja, start: 'top 84%' } });
+    if (titulo) tl.to(titulo, { opacity: 1, y: 0, duration: .6, ease: 'power3.out' }, 0);
+    tl.to(items, { opacity: 1, y: 0, duration: .8, stagger: .1, ease: 'power3.out' }, .08);
+    tl.to(trazos, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut', stagger: .045 }, .2);
+  }
+
   function revelarCapitulos() {
     $$('.manifiesto, .cap, .claro, .remate').forEach(function (sec) {
       var titulo = $(TITULOS, sec);
@@ -650,28 +671,12 @@
       tlSec.to(piezas, { opacity: 1, y: 0, duration: .85, stagger: .09, ease: 'power3.out' }, lineasSec.length ? .15 : 0);
     });
 
-    /* LOS TRES ENVASES. Ya no estan sobre tarjetas blancas: se paran dentro del
-       mundo, asi que tienen que comportarse como objetos del mundo y no como
-       imagenes de un catalogo.
-       - Entran escalonados (opacity + scale, NO yPercent: el yPercent se lo lleva
-         el parallax de abajo y dos tweens sobre la misma propiedad se pisan).
-       - Y cada uno viaja a distinta velocidad: el del medio un poco mas, asi que
-         al scrollear la fila se abre en profundidad en vez de moverse pegada. */
-    var envases = $$('.ficha__foto');
-    if (envases.length) {
-      /* set + to, como los .reveal: el estado inicial lo pone el JS, nunca el CSS.
-         Asi, si el JS no corre, los envases quedan VISIBLES en vez de invisibles. */
-      gsap.set(envases, { opacity: 0, scale: .94 });
-      gsap.to(envases, { opacity: 1, scale: 1, duration: .9, stagger: .12, ease: 'power3.out',
-        scrollTrigger: { trigger: '#variedades', start: 'top 68%' } });
-      envases.forEach(function (p, i) {
-        var vel = [11, 17, 13][i] || 13;
-        gsap.fromTo(p, { yPercent: vel }, {
-          yPercent: -vel, ease: 'none', immediateRender: false,
-          scrollTrigger: { trigger: '#variedades', start: 'top bottom', end: 'bottom top', scrub: .8 }
-        });
-      });
-    }
+    /* LAS SEIS RAZONES de #origen (23-sep): entran escalonadas y el icono de
+       cada una se DIBUJA (el trazo corre con stroke-dashoffset). Van con su
+       propio disparador y no en el paquete de la seccion: #origen mide una
+       pantalla y las razones viven abajo, asi que con el disparador de la
+       seccion se revelarian fuera de la vista. */
+    revelarRazones();
 
     /* La rama en primer plano cruza el capitulo a OTRA velocidad que el fondo:
        esa diferencia es la profundidad. Es la gramatica del hero (mundo atras,

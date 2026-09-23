@@ -48,13 +48,16 @@ const VARIANTES = {
       const prev = nav.style.display;
       if (getComputedStyle(nav).display === 'none') nav.style.display = 'flex';
       const items = [...nav.querySelectorAll('a')];
-      const tops = items.map(a => Math.round(a.getBoundingClientRect().top));
+      /* "una sola fila" se mira por el CENTRO vertical, no por el top: desde el
+         23-sep Tienda es una pildora mas alta que los otros items y con
+         align-items:center su top queda unos px mas arriba sin haberse partido */
+      const centros = items.map(a => { const r = a.getBoundingClientRect(); return r.top + r.height / 2; });
       const altos = items.map(a => Math.round(a.getBoundingClientRect().height));
       const base = Math.min(...altos);
       const marca = document.querySelector('.cabecera__marca').getBoundingClientRect();
       const nr = nav.getBoundingClientRect();
-      const bien = new Set(tops).size === 1
-        && !altos.some(h => h > base * 1.4)
+      const bien = Math.max(...centros) - Math.min(...centros) <= 3
+        && !altos.some(h => h > base * 1.6)
         && nr.left >= marca.right - 1;
       nav.style.display = prev;
       nav.innerHTML = original;

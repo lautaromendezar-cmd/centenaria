@@ -1,7 +1,7 @@
 # CONTINUAR · Centenaria
 
-Estado al **22-sep-2026 (PC de casa, después de poner la fábrica real de fondo en Historia)**;
-lo de antes es del 21-sep a la noche, cuando se partió el cierre en secciones.
+Estado al **23-sep-2026 (PC de casa, de madrugada: Origen en una pantalla, Variedades con
+página propia, Tienda destacada, y el ritmo del scroll)**; lo de antes es del 22-sep.
 Para retomar desde otra máquina, leer esto y después el [README](README.md), que explica
 cómo está armado y las decisiones que no son obvias.
 
@@ -10,6 +10,60 @@ cómo está armado y las decisiones que no son obvias.
   App y la cuenta de GitHub está marcada desde el 7-sep. Se publica a mano, desde un clon
   limpio para no subir `_gen/` ni `material/` (ver «Publicar» al final).
 - **Repo:** `lautaromendezar-cmd/centenaria` · **PÚBLICO** · último commit: ver `git log -1`
+- **23-sep (madrugada, casa): tres pedidos de Lautaro sobre lo publicado, en un solo deploy.**
+  1. **Origen entra en UNA pantalla** (`.cap--origen`, `.origen__arriba`, `.razones`): título y
+     entrada lado a lado, y la cadena de causas (tabla de tres columnas, 18 celdas) pasó a
+     **seis razones con icono + una línea**, con las mismas palabras aprobadas. Los iconos son
+     SVG inline de trazo en oro; se **dibujan** al entrar (`revelarRazones()` en main.js,
+     stroke-dashoffset, con disparador propio porque con el de la sección se revelarían fuera
+     de la vista) y cuatro tienen movimiento continuo en CSS (la hoja se mece, los rayos
+     respiran, el sol recorre su arco con `offset-path`, el anillo del sello gira), apagado con
+     reduced-motion. Sin GSAP quedan enteros. Medido: entra en 1440×900 y en 1366×768.
+  2. **Variedades son tres TARJETAS con escena propia, y cada variedad tiene página:**
+     `/variedades/original/`, `/variedades/azul-con-palo/`, `/variedades/esencial/`. La foto
+     real recortada con alfa (298 px, se veía pegada) se retiró. **Cada escena la generó
+     `gpt_image_2_5` con el recorte real como referencia** (16:9, 2k, quality high, 2,75
+     créditos c/u; por el MCP de Higgsfield: `media_upload` + PUT + `media_confirm` +
+     `generate_image_batch`). El texto grande del envase salió fiel —marca, variedad, sello y
+     cuadro legal—; lo que el modelo inventa son las líneas diminutas alrededor del sello, que
+     en la foto real de 298 px tampoco se leen. Se revisó a resolución nativa antes de
+     exportar. `tools/variedades.cjs` saca de cada escena la tarjeta cuadrada
+     (`img/var-<n>-v1-*`), el fondo 16:9 (`var-<n>-fondo-v1-*`), el 4:5 para celular
+     (`var-<n>-alto-v1-*`) y el OG (`og-var-<n>.jpg`). **Si se regenera una escena, sube la
+     versión del nombre** (`/img/` es immutable). Las tres páginas salen de
+     `tools/variedades-paginas.py` (una plantilla: **no se editan a mano**, se toca el script y
+     se vuelve a correr). En escritorio la escena es fondo fijo de la primera pantalla con velo
+     lateral; en celular la misma `<picture>` pasa al flujo como figura 4:5. Están en
+     `sitemap.xml` y llevan Product JSON-LD (sin precio). Los PNG crudos quedan en
+     `_gen/variedades/` (no viajan).
+     ⚠️ Trampa que costó una vuelta: la `<picture>` fija es hija posicionada del hero y se
+     pintaba ENCIMA de los bloques de texto no posicionados (el título y los botones
+     desaparecían; la bajada se veía sólo porque su `opacity:.88` la posicionaba de rebote).
+     `.variedad__texto{position:relative;z-index:1}` lo arregla.
+  3. **Tienda destacada**: píldora de oro con tinta en la cabecera y en el menú de pantalla
+     completa. Ensanchó la nav: los 7 ítems entran desde **1014** (antes 972), así que el corte
+     subió de 990 a **1040** (un iPad apaisado, 1024, pasa al menú de pantalla completa).
+     Medido con `tools/cabecera.cjs`, que ahora compara centros verticales y no tops: la
+     píldora es más alta y con el criterio viejo daba «>1600» en falso. El menú sigue entrando
+     en 320×568 con los 9 ítems.
+  - **Ritmo (commit `2dc6ed1`, antes de los tres pedidos):** Lautaro sintió que «había que
+    scrollear mucho entre sección y sección» después del arreglo del 22. Medido contra el
+    árbol previo: **no era una regresión**, el scroll muerto era el mismo. Lo que sobraba
+    estaba desde antes: el hero pineado a 230% y los pasajes de 130vh. Quedó **hero 190%**
+    (lo eligió él entre 160/190/230) y **pasajes 95vh, 90vh en celular**. A 1440×900 el
+    scroll sin texto bajó del 25,4% al 17,9% del documento (19,3% con Origen a pantalla
+    completa; el hueco grande que queda es hero→manifiesto, 1,47 pantallas, que es el pin).
+    Se mide con `tools/hueco.cjs` (rachas) y `tools/hueco-mapa.cjs` (de qué a qué).
+  - **Herramientas:** `tools/contraste.cjs` acepta una ruta (`4740 /variedades/original/`)
+    y ya no mide `.boton` (el método esconde el elemento entero y mide lo que hay detrás, y
+    un botón trae su propio fondo); `tools/contraste-nav.cjs` mide Tienda contra su propio
+    fondo por la misma razón (daba 1.00:1 falso); `tools/paginas.cjs` recorre las páginas
+    internas (errores de consola, imágenes rotas, alts, enlaces internos → 200).
+    ⚠️ En Git Bash un argumento que empieza con `/` se convierte en ruta de Windows y Chrome
+    recibe una URL inválida: esas dos van con **`MSYS_NO_PATHCONV=1`** adelante.
+    `tools/verificar.cjs` está **desactualizado** (busca un `anim-ok` que main.js ya no marca
+    y se queja de los `alt=""` decorativos): no está en la lista de Verificar y lo que dice no
+    es de hoy.
 - **Estado: el sitio está terminado de mi lado.** El 21-sep en la oficina se cerraron los
   seis pasos que faltaban, un commit por paso:
   1. **Ritual como escena fijada** (`ritualFijo` en main.js, `#dMate` en el SVG del disco,
@@ -558,6 +612,11 @@ unos 400 px, no para pantalla completa.
 8. **La foto sepia original sigue haciendo falta igual.** El pedido 7 del mensaje al cliente
    no se cae porque hayamos ensanchado ésta: con el archivo original sin filtro y sin marco
    se rehace la escena mucho mejor (hoy partimos de 617×805 comprimidos).
+9. **Mostrarle al cliente lo del 23-sep** (Origen con iconos, las tarjetas y las tres páginas
+   de variedad, Tienda destacada). Las páginas de variedad van **sin precio** a propósito
+   (el sitio no publica precios); si el cliente quiere, se agrega `offers` al Product JSON-LD
+   cuando confirme la lista. Y pedirle **fotos de los envases en alta** sigue en pie: hoy la
+   referencia del modelo es el recorte de 298 px.
 
 ### Decisión de hosting
 
@@ -595,7 +654,15 @@ node tools/rodar.cjs 4740       # hoja de contactos (agregá 390 844 para móvil
 node tools/cruce-contraste.cjs 4740   # contraste A MITAD de cada cruce (tiene que decir «sin texto en pantalla»)
 node tools/pasajes.cjs 4740     # hoja de contactos de los seis pasajes (agregá 390 844 para móvil)
 node tools/ritual.cjs 4740      # hoja de contactos del ritual fijado (agregá 390 844 para móvil)
+MSYS_NO_PATHCONV=1 node tools/contraste.cjs 4740 /variedades/original/   # y azul-con-palo, esencial (23-sep)
+MSYS_NO_PATHCONV=1 node tools/paginas.cjs 4740 /variedades/original/ /variedades/azul-con-palo/ /variedades/esencial/ /contacto/ /donde-comprar/ /vende-centenaria/
+node tools/hueco.cjs 4740 1440 900    # scroll muerto: rachas sin texto y % del documento (23-sep: 19,3%)
 ```
+
+Al cerrar el 23-sep: 6/6 escenarios, la home y las tres páginas de variedad en AA, la
+cabecera 7,42:1 en su peor sección, 12/12 cruces sin texto, LCP 872 ms por software, los
+9 ítems del menú entran en 320×568, y el «dónde estoy» bien en escritorio, celular y con
+reduced-motion.
 
 Al cerrar el 21-sep: 6/6 escenarios, toda la home en AA, sin texto a mitad de los cruces, LCP 2,4–2,8 s por software (máquina cargada; el árbol anterior daba 2,4–4,2 ese día).
 

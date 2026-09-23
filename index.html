@@ -433,51 +433,88 @@ document.documentElement.classList.add('js', 'cargando');
 
   <div class="pasaje" aria-hidden="true"></div>
 
-  <!-- ================= 02 . ORIGEN ================= -->
-  <section class="cap" id="origen">
-    <div class="cap__cabeza">
-      <p class="volanta reveal">02 <span aria-hidden="true">&mdash;</span> Del yerbal a tu mate</p>
-      <h2 class="cap__titulo reveal">Donde nacen las hojas<br>m&aacute;s ricas del planeta</h2>
-    </div>
-    <div class="cap__cuerpo">
-      <p class="cap__entrada reveal">Elaborada con hojas nativas seleccionadas, procedentes de reservas naturales del sur de Brasil, y envasada en origen. Un padr&oacute;n uruguayo de molienda fina y alto contenido de hoja, que da un mate suave, naturalmente dulce y sin acidez.</p>
+  <!-- ================= 02 . ORIGEN =================
+       Entra en UNA pantalla en escritorio (pedido del cliente, 23-sep): titulo y
+       entrada lado a lado arriba, y abajo las seis razones como icono + una linea.
+       Son las mismas seis de la cadena de causas que habia (causa -> efecto -> lo
+       que sentis), con las mismas palabras aprobadas: cambio la forma, no el
+       texto. Los iconos son trazo de una sola linea en oro, se dibujan al entrar
+       (main.js, revelarRazones) y tres tienen un movimiento minimo en CSS. -->
+  <section class="cap cap--origen" id="origen">
+    <div class="origen__arriba">
+      <div class="cap__cabeza">
+        <p class="volanta reveal">02 <span aria-hidden="true">&mdash;</span> Del yerbal a tu mate</p>
+        <h2 class="cap__titulo reveal">Donde nacen las hojas<br>m&aacute;s ricas del planeta</h2>
+      </div>
+      <div class="cap__cuerpo">
+        <p class="cap__entrada reveal">Elaborada con hojas nativas seleccionadas, procedentes de reservas naturales del sur de Brasil, y envasada en origen. Un padr&oacute;n uruguayo de molienda fina y alto contenido de hoja, que da un mate suave, naturalmente dulce y sin acidez.</p>
+      </div>
     </div>
 
-    <!-- La cadena de causas. Es el pedido explicito del cliente: "por que es distinta"
-         no se contesta con "calidad premium" -eso lo dice todo el mundo-, se contesta
-         mostrando que cada cosa que se siente viene de una decision concreta. -->
-    <div class="cadena reveal">
-      <p class="cadena__titulo">Por qu&eacute; es distinta</p>
-      <ul class="cadena__lista">
-        <li>
-          <span class="cadena__causa">Hoja nativa de reserva natural</span>
-          <span class="cadena__efecto">perfil naturalmente dulce</span>
-          <span class="cadena__sentis">No necesita az&uacute;car.</span>
+    <div class="razones">
+      <p class="razones__titulo">Por qu&eacute; es distinta</p>
+      <ul class="razones__lista">
+        <li class="razon">
+          <svg class="razon__icono icono-hoja" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g class="hoja">
+              <path class="trazo" d="M10 38C12 22 22 12 38 10c-2 16-12 26-28 28Z"/>
+              <path class="trazo" d="M10 38 38 10"/>
+              <path class="trazo" d="M19 29c2-1 4-2 7-2M25 23c2-1 4-2 7-2M31 17c1 0 3-1 4-1"/>
+            </g>
+          </svg>
+          <h3 class="razon__titulo">Hoja nativa de reserva natural</h3>
+          <p class="razon__texto">Perfil naturalmente dulce: no necesita az&uacute;car.</p>
         </li>
-        <li>
-          <span class="cadena__causa">Microclima selv&aacute;tico, menos sol directo</span>
-          <span class="cadena__efecto">menos amargor</span>
-          <span class="cadena__sentis">Mate suave.</span>
+        <li class="razon">
+          <svg class="razon__icono icono-sol" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g class="rayos"><path class="trazo" d="M24 6v4M11.3 11.3l2.8 2.8M36.7 11.3l-2.8 2.8M6 24h4M38 24h4"/></g>
+            <path class="trazo" d="M14 27a10 10 0 0 1 20 0"/>
+            <path class="trazo" d="M4 30c4-4 8-4 12 0s8 4 12 0 8-4 12 0"/>
+            <path class="trazo" d="M8 38c4-4 8-4 12 0s8 4 12 0 6-3 10-1"/>
+          </svg>
+          <h3 class="razon__titulo">Microclima selv&aacute;tico, menos sol directo</h3>
+          <p class="razon__texto">Menos amargor. Mate suave.</p>
         </li>
-        <li>
-          <span class="cadena__causa">Padr&oacute;n uruguayo, molienda fina</span>
-          <span class="cadena__efecto">mucha hoja, poco polvo</span>
-          <span class="cadena__sentis">No se tapa y rinde m&aacute;s.</span>
+        <li class="razon">
+          <svg class="razon__icono icono-bombilla" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path class="trazo" d="M36 7 17 26M41 12 22 31M36 7a3.5 3.5 0 0 1 5 5"/>
+            <circle class="trazo" cx="15" cy="33" r="7"/>
+            <path class="trazo" d="M12.5 31.5h.01M17.5 31.5h.01M15 35h.01M12 35.5h.01M18 35.5h.01"/>
+          </svg>
+          <h3 class="razon__titulo">Padr&oacute;n uruguayo, molienda fina</h3>
+          <p class="razon__texto">Mucha hoja, poco polvo: no se tapa y rinde m&aacute;s.</p>
         </li>
-        <li>
-          <span class="cadena__causa">Sin acidez</span>
-          <span class="cadena__efecto">se puede tomar todo el d&iacute;a</span>
-          <span class="cadena__sentis">Mate largo y parejo.</span>
+        <li class="razon">
+          <svg class="razon__icono icono-dia" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path class="trazo" d="M6 36h36"/>
+            <path class="trazo" d="M10 36a14 14 0 0 1 28 0"/>
+            <g class="sol">
+              <circle class="trazo" cx="0" cy="0" r="4"/>
+              <path class="trazo" d="M0-8v2M-5.7-5.7l1.4 1.4M5.7-5.7l-1.4 1.4"/>
+            </g>
+          </svg>
+          <h3 class="razon__titulo">Sin acidez</h3>
+          <p class="razon__texto">Se puede tomar todo el d&iacute;a. Mate largo y parejo.</p>
         </li>
-        <li>
-          <span class="cadena__causa">Envasada en origen</span>
-          <span class="cadena__efecto">no se rompe la cadena</span>
-          <span class="cadena__sentis">Consistencia paquete a paquete.</span>
+        <li class="razon">
+          <svg class="razon__icono icono-envase" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path class="trazo" d="M14 13h20v29H14zM14 13l3-5h14l3 5M14 19h20"/>
+            <g class="sello">
+              <circle class="trazo" cx="24" cy="30" r="6"/>
+              <path class="trazo" d="M21.5 32.5c.5-3 2-4.5 5-5-.5 3-2 4.5-5 5Z"/>
+            </g>
+          </svg>
+          <h3 class="razon__titulo">Envasada en origen</h3>
+          <p class="razon__texto">No se rompe la cadena: consistencia paquete a paquete.</p>
         </li>
-        <li>
-          <span class="cadena__causa">Desde 1918</span>
-          <span class="cadena__efecto">oficio, no receta nueva</span>
-          <span class="cadena__sentis">La de siempre.</span>
+        <li class="razon">
+          <svg class="razon__icono icono-sello" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle class="anillo" cx="24" cy="24" r="19" stroke-dasharray="2 3"/>
+            <circle class="trazo" cx="24" cy="24" r="14"/>
+            <text x="24" y="27.5" text-anchor="middle" font-family="Fraunces,Georgia,serif" font-size="9.5" letter-spacing=".04em" fill="currentColor" stroke="none">1918</text>
+          </svg>
+          <h3 class="razon__titulo">Desde 1918</h3>
+          <p class="razon__texto">Oficio, no receta nueva. La de siempre.</p>
         </li>
       </ul>
     </div>
@@ -494,39 +531,47 @@ document.documentElement.classList.add('js', 'cargando');
       </div>
       <p class="claro__bajada reveal">Tres variedades pensadas para cada gusto y cada momento, con el sabor caracter&iacute;stico de Centenaria y presentaciones de 500 g y 1 kg.</p>
 
-      <ul class="fichas">
-        <li class="ficha reveal">
-          <div class="ficha__peana">
-            <img class="ficha__foto" src="img/pack-original-v2.webp" width="298" height="499" alt="Paquete amarillo de Yerba Mate Seleme Centenaria Original de 1 kg" loading="lazy" decoding="async">
-          </div>
-          <div class="ficha__cuerpo">
-            <h3 class="ficha__nombre">Original</h3>
-            <p class="ficha__sub">Padr&oacute;n uruguayo <span aria-hidden="true">&middot;</span> la cl&aacute;sica</p>
-            <p class="ficha__texto">La de siempre. Padr&oacute;n uruguayo de molienda fina y alto contenido de hoja: sabor suave, naturalmente dulce y sin acidez. Ideal para un mate largo y equilibrado, de la primera a la &uacute;ltima cebada.</p>
-            <ul class="chips"><li>500 g</li><li>1 kg</li><li>Sin T.A.C.C.</li></ul>
-          </div>
+      <!-- TRES TARJETAS, cada una con su escena generada (tools/variedades.cjs) y
+           cada una es un enlace a /variedades/<slug>/, donde vive el detalle. La
+           foto real recortada con alfa se retiro el 23-sep: el recorte se veia
+           pegado sobre la escena. El envase de la escena lo genera el modelo con
+           la foto real como referencia, y se revisa el texto antes de exportar. -->
+      <ul class="tarjetas">
+        <li class="tarjeta reveal">
+          <a class="tarjeta__enlace" href="/variedades/original/">
+            <img class="tarjeta__foto" src="img/var-original-v1-900.webp" srcset="img/var-original-v1-600.webp 600w, img/var-original-v1-900.webp 900w, img/var-original-v1-1300.webp 1300w" sizes="(max-width:900px) 92vw, 440px" width="900" height="900" alt="Paquete de Yerba Mate Seleme Centenaria Original en el yerbal, al atardecer" loading="lazy" decoding="async">
+            <div class="tarjeta__pie">
+              <div class="tarjeta__texto">
+                <h3 class="tarjeta__nombre">Original</h3>
+                <span class="tarjeta__sub">Padr&oacute;n uruguayo <span aria-hidden="true">&middot;</span> la cl&aacute;sica</span>
+              </div>
+              <span class="tarjeta__flecha" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            </div>
+          </a>
         </li>
-        <li class="ficha reveal">
-          <div class="ficha__peana">
-            <img class="ficha__foto" src="img/pack-azul-v2.webp" width="294" height="494" alt="Paquete azul de Yerba Mate Seleme Centenaria Azul con Palo de 1 kg" loading="lazy" decoding="async">
-          </div>
-          <div class="ficha__cuerpo">
-            <h3 class="ficha__nombre">Azul <span aria-hidden="true">&middot;</span> Con Palo</h3>
-            <p class="ficha__sub">Mistura de dos padrones</p>
-            <p class="ficha__texto">Mistura entre el padr&oacute;n uruguayo y el argentino, con un sutil agregado de palos que suaviza el cuerpo manteniendo el sabor caracter&iacute;stico de Centenaria.</p>
-            <ul class="chips"><li>1 kg</li><li>Sin T.A.C.C.</li></ul>
-          </div>
+        <li class="tarjeta reveal">
+          <a class="tarjeta__enlace" href="/variedades/azul-con-palo/">
+            <img class="tarjeta__foto" src="img/var-azul-v1-900.webp" srcset="img/var-azul-v1-600.webp 600w, img/var-azul-v1-900.webp 900w, img/var-azul-v1-1300.webp 1300w" sizes="(max-width:900px) 92vw, 440px" width="900" height="900" alt="Paquete de Yerba Mate Seleme Centenaria Azul con Palo en el yerbal, a la hora azul" loading="lazy" decoding="async">
+            <div class="tarjeta__pie">
+              <div class="tarjeta__texto">
+                <h3 class="tarjeta__nombre">Azul <span aria-hidden="true">&middot;</span> Con Palo</h3>
+                <span class="tarjeta__sub">Mistura de dos padrones</span>
+              </div>
+              <span class="tarjeta__flecha" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            </div>
+          </a>
         </li>
-        <li class="ficha reveal">
-          <div class="ficha__peana">
-            <img class="ficha__foto" src="img/pack-esencial-v2.webp" width="290" height="496" alt="Paquete blanco de Yerba Mate Seleme Centenaria Esencial de 1 kg" loading="lazy" decoding="async">
-          </div>
-          <div class="ficha__cuerpo">
-            <h3 class="ficha__nombre">Esencial</h3>
-            <p class="ficha__sub">Blend con car&aacute;cter</p>
-            <p class="ficha__texto">Un blend irresistible y con car&aacute;cter, con las propiedades que brinda la fibra de la hoja de yerba mate nativa. Lo esencial est&aacute; en tu mate.</p>
-            <ul class="chips"><li>500 g</li><li>1 kg</li><li>Sin T.A.C.C.</li></ul>
-          </div>
+        <li class="tarjeta reveal">
+          <a class="tarjeta__enlace" href="/variedades/esencial/">
+            <img class="tarjeta__foto" src="img/var-esencial-v1-900.webp" srcset="img/var-esencial-v1-600.webp 600w, img/var-esencial-v1-900.webp 900w, img/var-esencial-v1-1300.webp 1300w" sizes="(max-width:900px) 92vw, 440px" width="900" height="900" alt="Paquete de Yerba Mate Seleme Centenaria Esencial en el yerbal, a la ma&ntilde;ana" loading="lazy" decoding="async">
+            <div class="tarjeta__pie">
+              <div class="tarjeta__texto">
+                <h3 class="tarjeta__nombre">Esencial</h3>
+                <span class="tarjeta__sub">Blend con car&aacute;cter</span>
+              </div>
+              <span class="tarjeta__flecha" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+            </div>
+          </a>
         </li>
       </ul>
 

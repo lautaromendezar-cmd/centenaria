@@ -200,11 +200,18 @@ a{color:inherit}
    aria-current="page" desde el 21-sep, pero no habia nada que lo mostrara. En la
    home lo pone main.js (dondeEstoy) como aria-current="true" mientras se scrollea,
    y aca se pintan los dos igual.
-   ⚠️ El subrayado NO es decoracion: .cabecera__tienda tambien es oro y no esta
-   activa nunca, asi que sin el filete el color solo no alcanzaria para decir
-   "estas aca" —ni para quien no distingue el oro del crema—. */
+   ⚠️ El subrayado NO es decoracion: es lo que dice "estas aca" tambien para
+   quien no distingue el oro del crema. */
 .cabecera__nav a[aria-current]{color:var(--oro);border-bottom-color:var(--oro)}
-.cabecera__tienda{color:var(--oro)}
+/* TIENDA, DESTACADA (pedido del cliente, 23-sep): es la unica salida comercial de
+   la barra y no puede leerse como un link mas: pildora de oro con tinta. Nunca
+   lleva aria-current (es externa), asi que el filete del activo no compite con
+   ella. ⚠️ La pildora ENSANCHA la nav: el corte de abajo se remidio despues de
+   ponerla (tools/cabecera.cjs), no se hereda del de ayer. */
+.cabecera__nav .cabecera__tienda{color:var(--tinta);background:var(--oro);
+  padding:.55rem 1.05rem;border-radius:var(--radio-chip);border-bottom:0;
+  transition:background .25s,transform .25s}
+.cabecera__nav .cabecera__tienda:hover{color:var(--tinta);background:#FFEA3D;transform:translateY(-1px)}
 /* En movil el menu de pantalla completa reemplaza a la nav entera: en la
    cabecera quedan solo la marca y la hamburguesa. Tienda vive dentro del menu. */
 /* ⚠️ 990, no 760 (22-sep), y el numero NO se elige a ojo: sale de medirlo.
@@ -213,12 +220,15 @@ a{color:inherit}
    dos y la cabecera se veia rota. Era un bug que ya estaba. Con Contacto son 7 y
    entran recien desde 972, asi que el corte va en 990 y abajo manda el menu de
    pantalla completa, que los tiene todos y con lugar de sobra.
+   ⚠️ 23-sep: con Tienda como pildora los 7 entran recien desde 1014, asi que el
+   corte sube a 1040 (un iPad apaisado, 1024, pasa al menu de pantalla completa;
+   la alternativa era una pildora mas apretada, y no vale la pena).
    Si alguna vez hace falta bajar este corte, lo que lo mueve son las ETIQUETAS,
    no el CSS: medido, «Comprar» en vez de «Dónde comprar» lo baja a 889, y sumando
    «Ritual» en vez de «El ritual» entra hasta en 700. No se acortaron porque
    «Dónde comprar» es el nombre de la pagina y la etiqueta aprobada.
    Se remide con tools/cabecera.cjs ANTES de tocar cualquier item de la nav. */
-@media (max-width:989px){.cabecera__nav{display:none}}
+@media (max-width:1039px){.cabecera__nav{display:none}}
 
 /* --- hamburguesa (solo movil) --- */
 .cabecera__menu{display:none;flex-direction:column;justify-content:center;align-items:center;
@@ -227,7 +237,7 @@ a{color:inherit}
 .cabecera__menu span{display:block;width:24px;height:2px;border-radius:2px;
   background:var(--crema);transition:background .25s}
 .cabecera__menu:hover span{background:var(--oro)}
-@media (max-width:989px){.cabecera__menu{display:flex}}
+@media (max-width:1039px){.cabecera__menu{display:flex}}
 
 /* ============================== MENU MOVIL ==============================
    Pantalla completa y con fondo propio (no un velo): mientras se elige a donde
@@ -244,7 +254,7 @@ a{color:inherit}
   padding:clamp(.9rem,2vh,1.5rem) var(--gotera) max(2rem,env(safe-area-inset-bottom));
   opacity:0;visibility:hidden;transition:opacity .3s ease,visibility 0s .3s}
 html.menu-abierto .menu{opacity:1;visibility:visible;transition:opacity .3s ease}
-@media (min-width:990px){.menu{display:none}}
+@media (min-width:1040px){.menu{display:none}}
 .menu__cerrar{position:absolute;top:clamp(.9rem,2vh,1.5rem);right:calc(var(--gotera) - 10px);
   width:44px;height:44px;padding:0;background:none;border:0;cursor:pointer}
 .menu__cerrar::before,.menu__cerrar::after{content:'';position:absolute;left:50%;top:50%;
@@ -269,7 +279,14 @@ html.menu-abierto .menu{opacity:1;visibility:visible;transition:opacity .3s ease
    .menu__tienda, que tambien es oro. */
 .menu__nav a[aria-current]{color:var(--oro);text-decoration:underline;
   text-decoration-thickness:1px;text-underline-offset:.18em}
-.menu__nav .menu__tienda{color:var(--oro)}
+/* Tienda tambien va como pildora en el menu (misma razon que en la cabecera).
+   Es mas baja que un item en Fraunces, asi que no le suma alto al menu: sigue
+   entrando en 320x568 (se remide con el script de alturas). */
+.menu__nav .menu__tienda{align-self:center;padding:.62rem 1.5rem;
+  font-family:Montserrat,system-ui,sans-serif;font-size:var(--etiqueta);font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;line-height:1;color:var(--tinta);
+  background:var(--oro);border-radius:var(--radio-chip)}
+.menu__nav .menu__tienda:hover,.menu__nav .menu__tienda:active{color:var(--tinta);background:#FFEA3D}
 html.menu-abierto .menu__nav a{opacity:1;transform:none}
 html.menu-abierto .menu__nav a:nth-child(2){transition-delay:.04s}
 html.menu-abierto .menu__nav a:nth-child(3){transition-delay:.08s}
@@ -413,28 +430,67 @@ main{position:relative;z-index:3}
 .cap__credito{margin:clamp(2rem,5vh,3rem) 0 0;font-size:.75rem;line-height:1.4;
   letter-spacing:.04em;color:var(--crema);opacity:.62;max-width:26rem}
 
-/* --- la cadena de causas: causa -> efecto -> lo que sentis --- */
-.cadena{margin:clamp(3rem,8vh,6rem) 0 0}
-.cadena__titulo{margin:0 0 1.6rem;font-size:var(--etiqueta);font-weight:700;
-  letter-spacing:.28em;text-transform:uppercase;color:var(--oro)}
-.cadena__lista{list-style:none;margin:0;padding:0}
-.cadena__lista li{display:grid;gap:.35rem 2rem;align-items:baseline;
-  grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr);
-  padding:1.15rem 0;border-top:1px solid rgba(241,239,226,.14)}
-.cadena__lista li:last-child{border-bottom:1px solid rgba(241,239,226,.14)}
-.cadena__causa{font-weight:600;color:var(--crema)}
-.cadena__efecto{color:var(--crema);opacity:.72}
-.cadena__sentis{font-family:Fraunces,Georgia,serif;font-size:1.0625rem;color:var(--oro)}
-@media (max-width:820px){
-  .cadena__lista li{grid-template-columns:1fr;gap:.25rem}
-  .cadena__efecto::before{content:"\2192 \00a0"}
+/* --- ORIGEN EN UNA PANTALLA (23-sep) ---
+   El capitulo mide el alto de la ventana en escritorio: arriba el titulo y la
+   entrada lado a lado (en vez de apilados), abajo las seis razones en 3x2.
+   El titulo baja un escalon respecto de los otros capitulos y la cabeza se
+   ensancha para que entre en dos lineas, no en cuatro. */
+.cap--origen{min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;
+  justify-content:center;padding-top:clamp(5.5rem,13vh,8rem);padding-bottom:clamp(3rem,7vh,5rem)}
+.origen__arriba{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:1.5rem clamp(2rem,5vw,5rem);align-items:end}
+.cap--origen .cap__cabeza{max-width:none}
+.cap--origen .cap__titulo{font-size:clamp(2rem,4.2vw,3.9rem)}
+.cap--origen .cap__cuerpo{margin:0 0 .35rem;max-width:34rem;justify-self:end}
+@media (max-width:900px){
+  .cap--origen{min-height:0}
+  .origen__arriba{grid-template-columns:1fr}
+  .cap--origen .cap__cuerpo{justify-self:start}
 }
 
+/* --- las seis razones: icono + titulo + una linea.
+   Antes era la "cadena de causas", una tabla de tres columnas (causa, efecto,
+   lo que sentis) con 18 celdas de texto. Mismo contenido, mismas palabras,
+   la mitad de la lectura. */
+.razones{margin:clamp(2.2rem,5vh,3.5rem) 0 0}
+.razones__titulo{margin:0 0 clamp(1rem,2.4vh,1.6rem);font-size:var(--etiqueta);font-weight:700;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--oro)}
+.razones__lista{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.4rem,3.2vh,2.4rem) clamp(1.5rem,3vw,3rem)}
+.razon{display:flex;flex-direction:column;align-items:flex-start;gap:.55rem}
+.razon__icono{display:block;width:44px;height:44px;color:var(--oro);overflow:visible}
+.razon__titulo{margin:.2rem 0 0;font-family:Fraunces,Georgia,serif;font-weight:400;
+  font-size:clamp(1.1rem,1.4vw,1.35rem);line-height:1.15;color:var(--crema)}
+.razon__texto{margin:0;font-size:.9375rem;line-height:1.45;color:var(--crema);opacity:.78}
+@media (max-width:900px){.razones__lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.razones__lista{grid-template-columns:1fr;gap:1.4rem}}
+/* Movimiento minimo y continuo en tres iconos: la hoja se mece, los rayos
+   respiran, el sol recorre el dia por su arco (offset-path; sin soporte queda
+   en lo alto del arco). El sello gira su anillo punteado como un matasellos.
+   Todo se apaga con prefers-reduced-motion. */
+.icono-dia .sol{transform:translate(24px,22px)}
+@media (prefers-reduced-motion:no-preference){
+  .icono-hoja .hoja{transform-origin:10px 38px;animation:iconoHoja 5s ease-in-out infinite alternate}
+  .icono-sol .rayos{animation:iconoRayos 3.2s ease-in-out infinite alternate}
+  .icono-sello .anillo{transform-origin:24px 24px;animation:iconoSello 70s linear infinite}
+  .icono-envase .sello{transform-origin:24px 30px;animation:iconoEnvase 4.5s ease-in-out infinite}
+  @supports (offset-path:path('M0 0h1')){
+    .icono-dia .sol{transform:none;offset-path:path('M10 36a14 14 0 0 1 28 0');offset-rotate:0deg;
+      offset-distance:50%;animation:iconoDia 16s ease-in-out infinite alternate}
+  }
+}
+@keyframes iconoHoja{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+@keyframes iconoRayos{from{opacity:.45}to{opacity:1}}
+@keyframes iconoSello{to{transform:rotate(360deg)}}
+@keyframes iconoEnvase{0%,72%,100%{transform:scale(1)}84%{transform:scale(1.12)}}
+@keyframes iconoDia{from{offset-distance:12%}to{offset-distance:88%}}
+
 /* ============================== VARIEDADES ==============================
-   Antes era "el claro": un velo de papel claro sobre el yerbal, con degradados de
-   entrada y salida. Cortaba la pelicula al medio y desentonaba con el resto — ahora
-   sigue la misma noche que los demas capitulos y la luz la ponen los envases desde
-   sus tarjetas blancas, que siguen siendo opacas. */
+   Antes era "el claro": un velo de papel claro sobre el yerbal. Despues, los tres
+   envases recortados con alfa parados sobre la escena WebGL (2-sep). Desde el
+   23-sep son tres TARJETAS con marco redondeado, cada una con su propia escena
+   generada con el envase adentro (tools/variedades.cjs), y cada tarjeta es un
+   enlace a la pagina de esa variedad. El capitulo sigue sobre la misma noche. */
 .claro{position:relative;color:var(--crema);padding:calc(var(--seccion) + 3rem) 0}
 .claro__caja{max-width:var(--ancho);margin:0 auto;padding:0 var(--gotera)}
 .claro__titulo{margin:1.4rem 0 0;font-family:Fraunces,Georgia,serif;font-weight:400;
@@ -443,37 +499,38 @@ main{position:relative;z-index:3}
   font-size:var(--body-lg);color:var(--crema);opacity:.85}
 .claro__accion{margin:clamp(3rem,7vh,5rem) 0 0}
 
-/* --- fichas de variedad --- */
-.fichas{list-style:none;margin:clamp(3rem,7vh,5rem) 0 0;padding:0;
-  display:grid;gap:clamp(1.2rem,2.4vw,2rem);grid-template-columns:repeat(3,1fr)}
-@media (max-width:900px){.fichas{grid-template-columns:1fr;max-width:32rem;margin-inline:auto}}
-/* SIN TARJETA BLANCA. Los tres envases se paran DENTRO del mundo, sobre la
-   escena del yerbal, en vez de flotar en tres rectangulos blancos que cortaban
-   la pelicula al medio. Lo que los apoya no es una caja: es su sombra de
-   contacto. Y siguen siendo la FOTO REAL recortada con alfa — el envase no se
-   genera nunca, la IA le reescribe el microtexto de la etiqueta. */
-.ficha{display:flex;flex-direction:column}
-
-/* La peana da el piso comun: los tres envases apoyan en la MISMA linea aunque
-   midan distinto, y la elipse de abajo es lo que los pega al suelo. */
-.ficha__peana{position:relative;display:flex;align-items:flex-end;justify-content:center;
-  height:clamp(250px,28vw,360px);margin-bottom:clamp(1.4rem,3vh,2.2rem)}
-.ficha__peana::after{content:'';position:absolute;left:50%;bottom:-2px;
-  width:72%;height:26px;transform:translateX(-50%);border-radius:50%;
-  background:radial-gradient(ellipse at center,rgba(0,0,0,.62),rgba(0,0,0,0) 70%);
-  filter:blur(3px);pointer-events:none}
-/* El contraluz de la escena viene de arriba a la derecha: el filo calido sigue
-   la silueta del alfa (drop-shadow respeta el recorte, box-shadow no). */
-.ficha__foto{max-width:100%;height:100%;width:auto;object-fit:contain;
-  filter:drop-shadow(-3px -5px 10px rgba(255,196,92,.30))
-         drop-shadow(6px 14px 22px rgba(0,0,0,.55))}
-
-.ficha__cuerpo{display:flex;flex-direction:column;flex:1}
-.ficha__nombre{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
-  font-size:var(--display-3);line-height:1.05;color:var(--crema)}
-.ficha__sub{margin:.4rem 0 0;font-size:var(--etiqueta);font-weight:700;
+/* --- tarjetas de variedad: imagen a sangre, nombre abajo a la izquierda, flecha
+   abajo a la derecha. Toda la tarjeta es el enlace. El degradado del pie es lo
+   que sostiene el nombre sobre la escena (se mide con tools/contraste.cjs). --- */
+.tarjetas{list-style:none;margin:clamp(2.5rem,6vh,4rem) 0 0;padding:0;
+  display:grid;gap:clamp(1rem,2vw,1.6rem);grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){.tarjetas{grid-template-columns:1fr;max-width:30rem;margin-inline:auto}}
+.tarjeta__enlace{position:relative;display:block;aspect-ratio:1;border-radius:20px;overflow:hidden;
+  background:#141414;color:var(--crema);text-decoration:none;isolation:isolate;
+  outline-offset:4px}
+.tarjeta__foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.tarjeta__enlace:hover .tarjeta__foto,.tarjeta__enlace:focus-visible .tarjeta__foto{transform:scale(1.045)}
+/* El pie arranca 4rem por encima del texto y el degradado es denso hasta un
+   tercio: el nombre cae justo donde termina el envase (amarillo, blanco) y con
+   un velo tibio daba 2,5:1. Medido: con este, AA sobre los tres. */
+.tarjeta__pie{position:absolute;inset:auto 0 0;display:flex;align-items:flex-end;
+  justify-content:space-between;gap:1rem;padding:4rem clamp(1.1rem,2.4vw,1.6rem) clamp(1.1rem,2.4vw,1.6rem);
+  background:linear-gradient(to top,rgba(10,11,11,.95) 0,rgba(10,11,11,.86) 34%,rgba(10,11,11,.5) 66%,rgba(10,11,11,0) 100%)}
+.tarjeta__texto{display:block;min-width:0}
+.tarjeta__nombre{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
+  font-size:clamp(1.6rem,2.4vw,2.2rem);line-height:1.02;color:var(--crema)}
+.tarjeta__sub{display:block;margin:.45rem 0 0;font-size:var(--etiqueta);font-weight:700;
   letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
-.ficha__texto{margin:1rem 0 1.5rem;color:var(--crema);opacity:.84}
+.tarjeta__flecha{flex:none;display:grid;place-items:center;width:42px;height:42px;
+  border:1px solid rgba(241,239,226,.4);border-radius:50%;color:var(--crema);
+  transition:background .3s,border-color .3s,color .3s,transform .3s}
+.tarjeta__flecha svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+.tarjeta__enlace:hover .tarjeta__flecha,.tarjeta__enlace:focus-visible .tarjeta__flecha{
+  background:var(--oro);border-color:var(--oro);color:var(--tinta);transform:translate(2px,-2px)}
+@media (prefers-reduced-motion:reduce){.tarjeta__foto,.tarjeta__flecha{transition:none}}
+
 .chips{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem;margin:auto 0 0;padding:0}
 .chips li{border:1px solid rgba(241,239,226,.28);border-radius:var(--radio-chip);
   padding:.35rem .85rem;font-size:.75rem;font-weight:600;letter-spacing:.08em;
@@ -663,6 +720,48 @@ main{position:relative;z-index:3}
 .pagina .contacto__lista{margin-top:0}
 .pagina .salidas,.pagina .tramite{margin-top:clamp(2rem,5vh,3rem)}
 .oculto{display:none!important}
+
+/* --- /variedades/<slug>/: la variedad en su propia escena (23-sep) ---
+   La escena generada (tools/variedades.cjs) es el fondo FIJO de la primera
+   pantalla, con el envase a la derecha y el texto a la izquierda sobre un velo
+   lateral. En celular la misma <picture> deja de ser fija y pasa a ser una
+   figura 4:5 en el flujo, debajo del titulo: el envase no queda detras del texto
+   ni recortado. Lo que sigue (las otras dos, el pie) va sobre fondo solido: la
+   escena existe una sola pantalla, como el mundo en las otras paginas. */
+.variedad__escena{position:fixed;inset:0;z-index:0;display:block;overflow:hidden;background:var(--fondo)}
+.variedad__escena img{display:block;width:100%;height:100%;object-fit:cover;object-position:64% 50%}
+.variedad__escena::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(to right,rgba(10,11,11,.94) 0,rgba(10,11,11,.8) 28%,rgba(10,11,11,.3) 50%,rgba(10,11,11,0) 66%),
+    linear-gradient(to top,rgba(10,11,11,.9) 0,rgba(10,11,11,.35) 22%,rgba(10,11,11,0) 45%)}
+.variedad__hero{position:relative;z-index:3;min-height:100svh;box-sizing:border-box;
+  display:flex;flex-direction:column;justify-content:center;max-width:var(--ancho);margin:0 auto;
+  padding:clamp(7rem,16vh,10rem) var(--gotera) clamp(3rem,8vh,5rem)}
+/* position+z-index: la <picture> fija es un hijo posicionado del hero y sin esto
+   se pinta ENCIMA de los bloques de texto no posicionados (el titulo y los
+   botones desaparecian; la bajada se veia solo porque su opacity<1 la
+   posicionaba de rebote). */
+.variedad__texto{position:relative;z-index:1;max-width:34rem}
+.variedad__sub{margin:1rem 0 0;font-size:var(--etiqueta);font-weight:700;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--oro)}
+.variedad__texto .pagina__bajada{margin-top:clamp(1.2rem,2.6vh,1.8rem)}
+.variedad__texto .chips{margin-top:clamp(1.2rem,2.6vh,1.8rem)}
+.variedad__perfil{margin:clamp(1.2rem,2.6vh,1.8rem) 0 0;font-size:.9375rem;color:var(--crema);opacity:.88}
+.variedad__perfil b{font-weight:700;font-size:var(--etiqueta);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--oro);margin-right:.6rem}
+.variedad__resto{position:relative;z-index:3;background:var(--fondo)}
+.variedad__caja{max-width:var(--ancho);margin:0 auto;padding:clamp(3.5rem,8vh,6rem) var(--gotera)}
+.variedad__resto .tarjetas{grid-template-columns:repeat(2,minmax(0,1fr));max-width:56rem;
+  margin-top:clamp(1.6rem,4vh,2.6rem)}
+.variedad__volver{margin:clamp(1.6rem,4vh,2.4rem) 0 0}
+@media (max-width:900px){
+  .variedad__escena{position:relative;inset:auto;z-index:auto;aspect-ratio:4/5;max-height:70svh;
+    border-radius:16px;margin:clamp(1.6rem,4vh,2.4rem) 0 0}
+  .variedad__escena img{object-position:50% 50%}
+  .variedad__escena::after{background:linear-gradient(to top,rgba(10,11,11,.5),rgba(10,11,11,0) 40%)}
+  .variedad__hero{min-height:0;padding-top:clamp(6rem,14vh,8rem)}
+  .variedad__resto .tarjetas{grid-template-columns:1fr;max-width:30rem;margin-inline:auto}
+}
 
 /* --- el buscador de puntos de venta (/donde-comprar/, js/buscador.js) --- */
 .buscador{margin:clamp(2.5rem,6vh,4rem) 0 0;max-width:44rem}
