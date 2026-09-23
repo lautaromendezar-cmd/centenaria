@@ -25,10 +25,24 @@
     'void main(){' +
     ' float ca=uRes.x/uRes.y;' +
     ' vec2 uv;' +
+    /* FONDO CON COVER-FIT (uFit=0). k.x es la fraccion del ANCHO de la textura que
+       entra en pantalla: 1 en un viewport mas panoramico que la foto, ~.20 en un
+       celular vertical contra una textura 2.36:1. Ahi el recorte se come casi todo
+       y siempre se quedaba con el centro exacto, que no tiene por que ser lo que
+       importa: en la escena de historia el cartel de la fabrica vive al 65% del
+       ancho y en celular quedaba al borde del cuadro.
+       Por eso el encuadre SE CORRE HACIA uAncla.x a medida que el recorte aprieta:
+       con mas de la mitad del ancho a la vista no se corre nada (escritorio queda
+       igual que siempre), con un cuarto o menos se corre del todo, y entre medio va
+       lineal. El clamp evita pedirle a la textura pixeles que no tiene.
+       uAncla ya venia por capa —lo usa el primer plano anclado— y vale (.5,.5) en
+       todo lo demas, asi que ahi mix() devuelve .5 y nada cambia. */
     ' if(uFit<.5){' +
     '  vec2 k=(ca>uAsp)?vec2(1.,uAsp/ca):vec2(ca/uAsp,1.);' +
-    '  uv=(v-.5)*k+.5;' +
-    '  uv=(uv-vec2(.5,.44))/uEsc+vec2(.5,.44)+uOff;' +
+    '  float t=clamp((k.x-.25)/.25,0.,1.);' +
+    '  float cx=clamp(mix(uAncla.x,.5,t),k.x*.5,1.-k.x*.5);' +
+    '  uv=(v-.5)*k+vec2(cx,.5);' +
+    '  uv=(uv-vec2(cx,.44))/uEsc+vec2(cx,.44)+uOff;' +
     ' } else {' +
     /* PRIMER PLANO ANCLADO (uFit=1). Una rama pegada a una esquina no puede ir
        con cover-fit: en vertical el 21:9 se recorta a su centro y la esquina
@@ -461,11 +475,11 @@
       if (!bombeando) { bombeando = true; requestAnimationFrame(bombear); }
     }
 
-    /* `frentes` es opcional: { historia: [1, 1], ... } con el anclaje del primer
+    /* `frentes` es opcional: { origen: [1, 0], ... } con el anclaje del primer
        plano de cada escena (x: 0 izq, 1 der; y: 0 abajo, 1 arriba; .5 centro).
        El fondo y el frente se piden por separado y cada uno se dibuja en cuanto
        llega: si el frente falla o tarda, la escena sigue siendo la foto entera. */
-    function cargarEscenas(nombres, frentes) {
+    function cargarEscenas(nombres, frentes, centros) {
       var dpr = window.devicePixelRatio || 1;
       var ancho = window.innerWidth * dpr;
       var w = ancho <= 1100 ? 1100 : (ancho <= 1600 ? 1600 : 2200);
@@ -492,7 +506,12 @@
         }
         /* la version va en el NOMBRE: /img/ se sirve immutable un anio y los
            archivos no llevan hash (ver tools/escenas.cjs) */
-        pedir('img/esc-' + n + '-v4-' + w + '.webp', 0, [.5, .5]);
+        /* `centros` es opcional: { historia: .65 } con el punto del ANCHO de la
+           foto que el encuadre tiene que cuidar cuando la pantalla es angosta y el
+           cover-fit se come los costados (ver el shader FS_CAPA). Sin entrada va
+           .5, que es el centro de siempre. */
+        var cx = (centros && typeof centros[n] === 'number') ? centros[n] : .5;
+        pedir('img/esc-' + n + '-v4-' + w + '.webp', 0, [cx, .5]);
         var ancla = frentes && frentes[n];
         /* version propia (tools/frentes.cjs): se sube cada vez que se rehace uno */
         if (ancla) pedir('img/frente-' + n + '-v1-' + l + '.webp', 1, ancla);

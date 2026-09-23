@@ -207,7 +207,18 @@ a{color:inherit}
 .cabecera__tienda{color:var(--oro)}
 /* En movil el menu de pantalla completa reemplaza a la nav entera: en la
    cabecera quedan solo la marca y la hamburguesa. Tienda vive dentro del menu. */
-@media (max-width:760px){.cabecera__nav{display:none}}
+/* ⚠️ 990, no 760 (22-sep), y el numero NO se elige a ojo: sale de medirlo.
+   La nav aparecia a 761 px pero ni siquiera los 6 items de entonces entraban en un
+   renglon hasta 860: entre 761 y 860 «EL RITUAL» y «DÓNDE COMPRAR» se partian en
+   dos y la cabecera se veia rota. Era un bug que ya estaba. Con Contacto son 7 y
+   entran recien desde 972, asi que el corte va en 990 y abajo manda el menu de
+   pantalla completa, que los tiene todos y con lugar de sobra.
+   Si alguna vez hace falta bajar este corte, lo que lo mueve son las ETIQUETAS,
+   no el CSS: medido, «Comprar» en vez de «Dónde comprar» lo baja a 889, y sumando
+   «Ritual» en vez de «El ritual» entra hasta en 700. No se acortaron porque
+   «Dónde comprar» es el nombre de la pagina y la etiqueta aprobada.
+   Se remide con tools/cabecera.cjs ANTES de tocar cualquier item de la nav. */
+@media (max-width:989px){.cabecera__nav{display:none}}
 
 /* --- hamburguesa (solo movil) --- */
 .cabecera__menu{display:none;flex-direction:column;justify-content:center;align-items:center;
@@ -216,18 +227,24 @@ a{color:inherit}
 .cabecera__menu span{display:block;width:24px;height:2px;border-radius:2px;
   background:var(--crema);transition:background .25s}
 .cabecera__menu:hover span{background:var(--oro)}
-@media (max-width:760px){.cabecera__menu{display:flex}}
+@media (max-width:989px){.cabecera__menu{display:flex}}
 
 /* ============================== MENU MOVIL ==============================
    Pantalla completa y con fondo propio (no un velo): mientras se elige a donde
    ir, el mundo no tiene que competir con la lectura. Links centrados en
    Fraunces, la X donde estaba la hamburguesa, y los contactos reales abajo. */
+/* ⚠️ overflow-y:auto es la red de seguridad, no un detalle: el menu crecio a 9
+   items el 22-sep (entraron «Por qué elegirla» y «Contacto») y a 320x568 —un SE
+   viejo— se desbordaba 86 px, o sea que Tienda quedaba fuera de alcance. Con los
+   minimos de abajo entra sin scrollear hasta 568 de alto; si algun dia se suma
+   otro item, esto evita que quede inalcanzable en vez de romperse en silencio.
+   Se mide con el script de alturas (ver CONTINUAR, «Verificar»). */
 .menu{position:fixed;inset:0;z-index:6;display:flex;flex-direction:column;align-items:center;
-  text-align:center;background:var(--fondo);
+  text-align:center;background:var(--fondo);overflow-y:auto;overscroll-behavior:contain;
   padding:clamp(.9rem,2vh,1.5rem) var(--gotera) max(2rem,env(safe-area-inset-bottom));
   opacity:0;visibility:hidden;transition:opacity .3s ease,visibility 0s .3s}
 html.menu-abierto .menu{opacity:1;visibility:visible;transition:opacity .3s ease}
-@media (min-width:761px){.menu{display:none}}
+@media (min-width:990px){.menu{display:none}}
 .menu__cerrar{position:absolute;top:clamp(.9rem,2vh,1.5rem);right:calc(var(--gotera) - 10px);
   width:44px;height:44px;padding:0;background:none;border:0;cursor:pointer}
 .menu__cerrar::before,.menu__cerrar::after{content:'';position:absolute;left:50%;top:50%;
@@ -237,10 +254,13 @@ html.menu-abierto .menu{opacity:1;visibility:visible;transition:opacity .3s ease
 .menu__cerrar:hover::before,.menu__cerrar:hover::after{background:var(--oro)}
 .menu__marca{margin:.7rem 0 0;font-size:var(--etiqueta);font-weight:700;letter-spacing:.28em;
   text-transform:uppercase;color:var(--oro)}
+/* los minimos bajaron con los 9 items (antes 1.7rem y .9rem): con los viejos, a
+   568 px de alto se iba 86 px por abajo. Siguen arriba del area de toque de 44 px. */
 .menu__nav{flex:1;display:flex;flex-direction:column;justify-content:center;
-  gap:clamp(.9rem,2.6vh,1.5rem)}
+  gap:clamp(.62rem,2.2vh,1.5rem)}
 .menu__nav a{text-decoration:none;font-family:Fraunces,Georgia,serif;font-weight:400;
-  font-size:clamp(1.7rem,6.5vh,2.4rem);line-height:1.05;color:var(--crema);
+  font-size:clamp(1.42rem,4.8vh,2.4rem);line-height:1.05;color:var(--crema);
+  white-space:nowrap;
   opacity:0;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease,color .25s}
 .menu__nav a:hover,.menu__nav a:active{color:var(--oro)}
 /* mismo criterio que en la cabecera, pero el filete va por text-decoration: los
@@ -257,6 +277,8 @@ html.menu-abierto .menu__nav a:nth-child(4){transition-delay:.12s}
 html.menu-abierto .menu__nav a:nth-child(5){transition-delay:.16s}
 html.menu-abierto .menu__nav a:nth-child(6){transition-delay:.2s}
 html.menu-abierto .menu__nav a:nth-child(7){transition-delay:.24s}
+html.menu-abierto .menu__nav a:nth-child(8){transition-delay:.28s}
+html.menu-abierto .menu__nav a:nth-child(9){transition-delay:.32s}
 .menu__contacto{position:relative;display:flex;flex-direction:column;gap:.55rem;
   padding-top:1.4rem}
 .menu__contacto::before{content:'';position:absolute;top:0;left:50%;width:3rem;height:1px;
@@ -584,12 +606,9 @@ main{position:relative;z-index:3}
 .remate__frase{margin:clamp(1.2rem,2.6vh,1.8rem) 0 0;font-family:Fraunces,Georgia,serif;
   font-style:italic;font-size:clamp(1.3rem,2.2vw,1.9rem);line-height:1.25;color:var(--oro)}
 
-/* el contacto vive en el pie, sobre fondo solido: es dato, no capitulo */
-.pie__contacto{max-width:var(--ancho);margin:0 auto;
-  padding:clamp(3.5rem,8vh,6rem) var(--gotera) clamp(2.5rem,6vh,4rem)}
-.pie__contacto + .pie__caja{border-top:1px solid rgba(241,239,226,.10)}
-.contacto__titulo{margin:0;font-family:Fraunces,Georgia,serif;font-weight:400;
-  font-size:var(--display-3);color:var(--crema)}
+/* .pie__contacto y .contacto__titulo se fueron el 22-sep con el bloque de contacto
+   de la home: ese dato ahora vive solo en /contacto/. .contacto__lista SE QUEDA
+   —la usa esa pagina, con dos filas mas— y por eso no se borra de aca. */
 .contacto__lista{list-style:none;margin:1.8rem 0 0;padding:0;
   display:grid;gap:1.1rem 3rem;grid-template-columns:repeat(2,minmax(0,1fr));max-width:60rem}
 @media (max-width:700px){.contacto__lista{grid-template-columns:1fr}}

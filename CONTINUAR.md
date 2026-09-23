@@ -46,7 +46,10 @@ cómo está armado y las decisiones que no son obvias.
     salir entero en el remate**. El velo del amanecer subió de .60 a .64: con .60 los
     pasos cruzaban la franja clara del horizonte a 4.46:1.
   - **Nav:** «Dónde comprar» apunta a `/donde-comprar/` en cabecera y menú; el menú móvil
-    suma «Vendé Centenaria». En la cabecera de escritorio no entra un séptimo ítem a 761 px.
+    suma «Vendé Centenaria». ~~En la cabecera de escritorio no entra un séptimo ítem a
+    761 px.~~ **Esa frase era de oído y estaba mal** (ver el 22-sep): los 6 de entonces ni
+    siquiera entraban a 761, y el séptimo —Contacto— entró el 22-sep moviendo el corte a 990.
+    El número sale de `tools/cabecera.cjs`, no de mirar.
   - **`/donde-comprar/`:** buscador de puntos de venta (`js/buscador.js`, datos en
     `js/puntos.js`), portado del de LaTiNa con su mismo razonamiento: select de las 24
     provincias (las que tienen puntos primero, con la cantidad), localidad opcional, y el
@@ -182,6 +185,49 @@ cómo está armado y las decisiones que no son obvias.
     en AA. **El menú era un punto ciego de la batería** (no está en el PLAN de
     `contraste.cjs`): se agregó `tools/contraste-nav.cjs`, que lo mide sección por sección.
     Peor píxel de la cabecera: **6.70:1** en el ítem activo sobre `#origen` (exige 4.5:1).
+- **22-sep (más tarde): el cartel en celular, el contacto como página, y un bug de
+  cabecera que estaba desde antes.**
+  - **El cartel de la fábrica ya se lee en celular.** No se recortó la foto —eso costaba la
+    torre de agua y el plano ancho de escritorio—: se le dio al **cover-fit del shader un
+    centro horizontal por capa** (`FS_CAPA` en `monte.js`, tercer argumento `centros` de
+    `cargarEscenas`, `{ historia: .65 }` en `main.js`). El encuadre se corre hacia ese punto
+    **a medida que el recorte aprieta**: con más de medio ancho a la vista no se corre nada
+    —escritorio queda idéntico, `mix()` devuelve .5 exacto— y con un cuarto o menos se corre
+    del todo. Reusa `uAncla`, que ya venía por capa, así que las otras cinco escenas y el
+    hero no cambian ni un píxel.
+  - **El bloque de contacto salió de la home** (pedido de Lautaro). Vivía en el pie *y* en
+    `/contacto/`, y la página ya lo tenía más completo (suma tienda online y distribución):
+    un solo lugar donde mirarlo y uno solo donde actualizarlo. El pie de la home queda con la
+    caja de marca y los tres enlaces. `id="contacto"` se deja en el `<footer>` aunque no lo
+    linkee nadie, por si anda dando vueltas alguna pieza vieja con `/#contacto`.
+    `.pie__contacto` y `.contacto__titulo` se borraron del CSS; **`.contacto__lista` NO**, que
+    la usa la página.
+  - ⚠️ **La cabecera venía rota desde antes y nadie lo vio.** La nav aparecía a 761 px pero
+    sus 6 ítems no entraban en un renglón hasta 860: entre 761 y 860, «EL RITUAL» y «DÓNDE
+    COMPRAR» se partían en dos líneas. Con «Contacto» son 7 y entran recién desde **972**, así
+    que el corte pasó a **990** y abajo manda el menú de pantalla completa.
+  - ⚠️ **Calcular «espacio libre» a mano da números lindos y FALSOS.** Mi primera medición dijo
+    que 7 ítems entraban desde 827 y era mentira: al inyectar ítems, el flex le encoge el logo
+    a la marca y el hueco parece más grande. La verdad era 972. **Se mide sobre el DOM real**,
+    mirando si todos los ítems comparten `offsetTop`: eso es `tools/cabecera.cjs`, que además
+    compara variantes de etiquetas. **Correrlo ANTES de tocar cualquier ítem de la nav.**
+  - **Lo que bajaría ese corte son las ETIQUETAS, no el CSS** (medido): «Comprar» en vez de
+    «Dónde comprar» lo baja a 889, y sumando «Ritual» en vez de «El ritual» entra hasta en
+    700. **No se acortaron**: «Dónde comprar» es el nombre de la página y la etiqueta
+    aprobada. Queda como palanca si algún día molesta el corte en 990.
+  - **El menú de pantalla completa pasó a 9 ítems** (entraron «Por qué elegirla» y
+    «Contacto»). ⚠️ Con los tamaños viejos se desbordaba 86 px a 320×568 y «Vendé Centenaria»
+    se partía: el cuerpo bajó de `6.5vh` a `4.8vh` y el gap de `2.6vh` a `2.2vh` (los topes en
+    rem no se tocaron, así que en pantallas altas se ve igual). Se le puso
+    **`overflow-y:auto` como red**, y de paso eso destapó que el desborde ya existía: sin
+    scroll, `scrollHeight` no lo reporta y el test daba OK en falso.
+  - **`#porque` y `/contacto/` ya encienden**, pero `#porque` **solo en el menú**: en la
+    cabecera no entra un octavo ítem (haría falta 951+). `.pie__nav a[aria-current]` ya estaba
+    estilado desde el 21-sep — lo único que faltaba era la cabecera y el menú.
+  - **Verificado**: «dónde estoy» 13/13 en escritorio, escritorio con `reduced-motion` y
+    celular; menú sin desborde en seis pantallas de 320×568 a 768×1024; cabecera en un renglón
+    de 990 a 1440; robustez 6/6; home en AA; cabecera en AA (peor 7.42:1); cruces sin texto;
+    LCP dentro del umbral.
 - Las herramientas de `tools/` resuelven `node_modules` y Chrome por máquina
   vía `tools/_entorno.cjs` (casa: `latina/node_modules`; notebook y oficina:
   `Desktop\Claude`). En la notebook y en la oficina NO correr `contraste.cjs`/`entrada.cjs`
@@ -543,6 +589,7 @@ node tools/servir.cjs 4740
 node tools/robustez.cjs 4740    # 6 escenarios de FALLA — el que más importa
 node tools/contraste.cjs 4740   # peor píxel detrás de cada línea, toda la home
 node tools/contraste-nav.cjs 4740     # la CABECERA, sección por sección: NO está en el PLAN de contraste.cjs
+node tools/cabecera.cjs 4740          # desde qué ancho entra la nav en un renglón (ANTES de tocar un ítem)
 node tools/entrada.cjs 4740     # cortina + LCP medido
 node tools/rodar.cjs 4740       # hoja de contactos (agregá 390 844 para móvil)
 node tools/cruce-contraste.cjs 4740   # contraste A MITAD de cada cruce (tiene que decir «sin texto en pantalla»)

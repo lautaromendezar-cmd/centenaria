@@ -85,9 +85,17 @@
        primer plano (el porton, la garita, los arboles pelados). La rama colgando
        caia sobre el galpon y el sol, y eran dos primeros planos peleando: el mismo
        motivo por el que .rama--historia se habia sacado el 20-sep. */
+    /* El tercer argumento es el punto del ANCHO de cada foto que el encuadre tiene
+       que cuidar cuando la pantalla es angosta (ver FS_CAPA en monte.js). Historia
+       lo necesita: el cartel de la ervateira vive cerca del 65% del ancho y en
+       celular —donde entra como un 20% de la textura— quedaba al borde del cuadro,
+       que es justo lo que el cliente quiere que se vea. En escritorio no cambia
+       nada: con mas de medio ancho a la vista el corrimiento es cero. */
     monte.cargarEscenas(['historia', 'origen', 'variedades', 'porque', 'ritual', 'cierre'], {
       origen: [1, 0], variedades: [0, .5],
       porque: [1, 0], ritual: [0, 1], cierre: [1, 0]
+    }, {
+      historia: .65
     });
   }
 
@@ -427,6 +435,10 @@
     historia:   '#historia',
     origen:     '#origen',
     variedades: '#variedades',
+    /* #porque solo existe en el menu de pantalla completa: en la cabecera no entra
+       (7 items entran desde 827 px, 8 recien desde 951 — tools/cabecera.cjs). Asi
+       que en escritorio esta seccion sigue sin encender nada. */
+    porque:     '#porque',
     ritual:     '#ritual',
     comprar:    '/donde-comprar/',
     distribuir: '/vende-centenaria/'
