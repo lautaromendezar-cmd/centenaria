@@ -149,6 +149,39 @@ cómo está armado y las decisiones que no son obvias.
     21-sep no lo alcanzó; era el único). El `sed` de este cambio lo pasó a LF, así que su
     diff sale con ~280 líneas para un cambio de 1. Conviene commitearlo **aparte**, como se
     hizo en `947b3eb`.
+- **22-sep: el menú marca dónde estás.** Pedido de Lautaro. Media pieza ya estaba hecha y no
+  se veía: las tres páginas internas traen `aria-current="page"` **escrito en el HTML desde el
+  21-sep**, pero no había ni una regla de CSS que lo mostrara. Ahora:
+  - **CSS** para `[aria-current]` en las dos navs. ⚠️ **El filete no es adorno**:
+    `.cabecera__tienda` también es oro y no está activa nunca, así que sin subrayado el color
+    solo no alcanzaría para decir «estás acá» —ni para quien no distingue el oro del crema—.
+    En la cabecera va por `border-bottom` (el mismo que usa el hover); en el menú móvil por
+    `text-decoration`, porque ahí los enlaces son cajas a todo el ancho y un borde cruzaría
+    la pantalla.
+  - **La home** la marca `dondeEstoy()` en `main.js`, con `aria-current="true"`.
+    ⚠️ El mapa es **explícito, no por href**: «Dónde comprar» y «Vendé Centenaria» nombran
+    secciones de la home (`#comprar`, `#distribuir`) pero linkean a la página que las
+    profundiza. Encendidas, aunque al clickearlas te saquen de la home; apagadas, el menú
+    quedaba muerto en todo el tercio final.
+    ⚠️ **Las secciones sin ítem (`#hero`, `#manifiesto`, `#porque`, `#remate`) no encienden
+    nada**, a propósito: antes el hueco que el ítem equivocado. `#porque` es el único capítulo
+    entero sin ítem, y no lo tiene porque en la cabecera no entra un séptimo a 761 px.
+  - ⚠️ **`main section[id]`, NO `main > section`**: al fijar el ritual, GSAP lo envuelve en un
+    `.pin-spacer` y `#ritual` deja de ser hijo directo de `main`. Con el selector de hijo
+    directo se perdía justo el que es ítem del menú.
+  - ⚠️ **La línea de activación está en `top 35%`, y el 55% que probé primero estaba mal.**
+    Con `reduced-motion` los pasajes quedan en alto 0, las secciones se pegan, y el tope de
+    `#distribuir` cruzaba el 55% cuando todavía estabas mirando `#comprar`. A 35% pasa en los
+    tres escenarios. **Si algún día se cambia el alto de los pasajes o de las secciones, hay
+    que volver a correr esto en los tres.**
+  - **El «dónde estoy» SÍ corre con `reduced-motion`**: es orientación, no movimiento, y sus
+    ScrollTrigger no animan nada. Había que llamarlo aparte porque esa rama de `escena()`
+    hace `return` antes del final.
+  - **Verificado** en escritorio, escritorio con `reduced-motion` y celular: las diez
+    secciones y las tres páginas internas dan lo esperado. Robustez 6/6 y contraste de la home
+    en AA. **El menú era un punto ciego de la batería** (no está en el PLAN de
+    `contraste.cjs`): se agregó `tools/contraste-nav.cjs`, que lo mide sección por sección.
+    Peor píxel de la cabecera: **6.70:1** en el ítem activo sobre `#origen` (exige 4.5:1).
 - Las herramientas de `tools/` resuelven `node_modules` y Chrome por máquina
   vía `tools/_entorno.cjs` (casa: `latina/node_modules`; notebook y oficina:
   `Desktop\Claude`). En la notebook y en la oficina NO correr `contraste.cjs`/`entrada.cjs`
@@ -509,6 +542,7 @@ este motivo y es gratis para este caso.
 node tools/servir.cjs 4740
 node tools/robustez.cjs 4740    # 6 escenarios de FALLA — el que más importa
 node tools/contraste.cjs 4740   # peor píxel detrás de cada línea, toda la home
+node tools/contraste-nav.cjs 4740     # la CABECERA, sección por sección: NO está en el PLAN de contraste.cjs
 node tools/entrada.cjs 4740     # cortina + LCP medido
 node tools/rodar.cjs 4740       # hoja de contactos (agregá 390 844 para móvil)
 node tools/cruce-contraste.cjs 4740   # contraste A MITAD de cada cruce (tiene que decir «sin texto en pantalla»)

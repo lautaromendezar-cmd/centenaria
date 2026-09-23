@@ -153,6 +153,10 @@
       gsap.set(reveals, { opacity: 1, y: 0 });
       gsap.set(lineas, { yPercent: 0 });
       entrada.progress(1).pause();
+      /* El "donde estoy" SI va con reduced-motion: es orientacion, no movimiento.
+         Sus ScrollTrigger no animan nada, solo disparan callbacks que ponen un
+         atributo. Quien pidio menos movimiento no pidio perderse en el menu. */
+      dondeEstoy();
       return;
     }
 
@@ -379,6 +383,7 @@
 
     contarHistoria();
     revelarCapitulos();
+    dondeEstoy();
   }
 
   /* HISTORIA: el 1918 de la cortina vuelve y cuenta hasta hoy mientras se lee
@@ -398,6 +403,69 @@
       v: HASTA, ease: 'none', immediateRender: false, snap: { v: 1 },
       scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 10%', scrub: .5 },
       onUpdate: function () { el.textContent = String(Math.round(n.v)); }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     DONDE ESTOY (22-sep). El menu marca la seccion que se esta mirando. La
+     semantica ya existia del otro lado: las tres paginas internas traen
+     aria-current="page" escrito en el HTML desde el 21-sep —lo que faltaba era
+     el CSS que lo mostrara—. Aca se hace lo mismo para las secciones de la home,
+     con aria-current="true", y el CSS pinta los dos igual.
+
+     El mapa es EXPLICITO, no por href, y la razon es esta: dos items del menu
+     NOMBRAN una seccion de la home pero LINKEAN a la pagina que la profundiza.
+     Estando en «06 · Donde comprar», el item que dice «Donde comprar» tiene que
+     estar encendido aunque al clickearlo te lleve a /donde-comprar/: apagado
+     dejaba todo el tercio final de la home con el menu muerto.
+
+     ⚠️ Las secciones que NO estan en el mapa (#hero, #manifiesto, #porque,
+     #remate) no encienden nada. Es a proposito: preferimos el hueco antes que
+     encender el item equivocado. #porque es el unico capitulo entero sin item,
+     y no lo tiene porque en la cabecera no entra un septimo a 761 px (21-sep). */
+  var DONDE = {
+    historia:   '#historia',
+    origen:     '#origen',
+    variedades: '#variedades',
+    ritual:     '#ritual',
+    comprar:    '/donde-comprar/',
+    distribuir: '/vende-centenaria/'
+  };
+
+  function dondeEstoy() {
+    var navs = $$('.cabecera__nav a, .menu__nav a');
+    /* ⚠️ `main section[id]`, NO `main > section`: al fijar el ritual, GSAP lo
+       envuelve en un .pin-spacer y #ritual deja de ser hijo directo de main.
+       Con el selector de hijo directo se perdia justo el que es item del menu. */
+    var secciones = $$('main section[id]');
+    if (!navs.length || !secciones.length) return;
+
+    function marcar(destino) {
+      navs.forEach(function (a) {
+        /* aria-current="page" lo escribio el HTML de una pagina interna: es un
+           hecho, no un estado de scroll. El spy no lo toca. */
+        if (a.getAttribute('aria-current') === 'page') return;
+        if (destino && a.getAttribute('href') === destino) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }
+
+    /* Cada seccion manda desde que su tope cruza el 55% del viewport hasta que
+       lo cruza la siguiente. Asi el estado NO parpadea en los pasajes, que son
+       130vh sin ninguna seccion en pantalla: el ultimo que mando sigue mandando
+       hasta que el proximo toma el relevo. */
+    secciones.forEach(function (s, i) {
+      var sig = secciones[i + 1];
+      ScrollTrigger.create({
+        trigger: s,
+        start: 'top 35%',
+        endTrigger: sig || s,
+        end: sig ? 'top 35%' : 'bottom bottom',
+        onEnter:     function () { marcar(DONDE[s.id]); },
+        onEnterBack: function () { marcar(DONDE[s.id]); },
+        /* arriba de la primera seccion no hay donde estar: se apaga todo */
+        onLeaveBack: function () { if (!i) marcar(null); }
+      });
     });
   }
 
@@ -534,6 +602,7 @@
     });
     contarHistoria();
     revelarCapitulos();
+    dondeEstoy();
   }
 
   /* Separa el titulo por <br> y envuelve cada linea en la mascara del hero: un

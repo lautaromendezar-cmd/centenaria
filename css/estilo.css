@@ -196,6 +196,14 @@ a{color:inherit}
   letter-spacing:.18em;text-transform:uppercase;color:var(--crema);padding:.4rem 0;
   border-bottom:1px solid transparent;transition:border-color .25s,color .25s}
 .cabecera__nav a:hover{border-bottom-color:var(--oro);color:var(--oro)}
+/* --- DONDE ESTOY. La semantica ya existia: las paginas internas traen
+   aria-current="page" desde el 21-sep, pero no habia nada que lo mostrara. En la
+   home lo pone main.js (dondeEstoy) como aria-current="true" mientras se scrollea,
+   y aca se pintan los dos igual.
+   ⚠️ El subrayado NO es decoracion: .cabecera__tienda tambien es oro y no esta
+   activa nunca, asi que sin el filete el color solo no alcanzaria para decir
+   "estas aca" —ni para quien no distingue el oro del crema—. */
+.cabecera__nav a[aria-current]{color:var(--oro);border-bottom-color:var(--oro)}
 .cabecera__tienda{color:var(--oro)}
 /* En movil el menu de pantalla completa reemplaza a la nav entera: en la
    cabecera quedan solo la marca y la hamburguesa. Tienda vive dentro del menu. */
@@ -235,6 +243,12 @@ html.menu-abierto .menu{opacity:1;visibility:visible;transition:opacity .3s ease
   font-size:clamp(1.7rem,6.5vh,2.4rem);line-height:1.05;color:var(--crema);
   opacity:0;transform:translateY(12px);transition:opacity .35s ease,transform .35s ease,color .25s}
 .menu__nav a:hover,.menu__nav a:active{color:var(--oro)}
+/* mismo criterio que en la cabecera, pero el filete va por text-decoration: los
+   enlaces del menu son cajas a todo el ancho de la columna y un border-bottom
+   cruzaria la pantalla entera. Aca el subrayado ademas separa el activo del
+   .menu__tienda, que tambien es oro. */
+.menu__nav a[aria-current]{color:var(--oro);text-decoration:underline;
+  text-decoration-thickness:1px;text-underline-offset:.18em}
 .menu__nav .menu__tienda{color:var(--oro)}
 html.menu-abierto .menu__nav a{opacity:1;transform:none}
 html.menu-abierto .menu__nav a:nth-child(2){transition-delay:.04s}
