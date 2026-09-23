@@ -713,3 +713,9 @@ el «dónde estoy» verificado contra producción: 13/13.
 **22-sep: `bf53bc7` (el menú marca dónde estás), publicado y cotejado** — las siete rutas 1:1,
 y la verificación de `aria-current` corrida **contra producción**, no contra el local: las diez
 secciones y las tres páginas internas dan lo esperado.
+
+**23-sep: `dc9bbe2` (Origen en una pantalla, Variedades con página propia, Tienda destacada;
+trae también `2dc6ed1`, el ritmo), publicado y cotejado** — 15 archivos 1:1 contra `HEAD`: las
+siete páginas (las tres de variedad incluidas), `css/estilo.css`, `js/main.js`, `js/monte.js`,
+`sitemap.xml` y cuatro imágenes nuevas; los `pack-*-v2.webp` retirados devuelven 404; y el
+«dónde estoy» verificado contra producción, 13/13. El deploy salió con `--scope` a la primera.
