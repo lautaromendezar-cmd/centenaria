@@ -639,6 +639,10 @@ rutas 1:1, `esc-historia-v4-2200.webp` 1:1 (127.302 bytes), y lo que se sacó de
 (`vercel whoami` devolvía `lautaromendezar-5992`). Lo que faltaba era el scope: sale con
 **`--scope lautaro-mendez-s-projects`**. Si vuelve a pasar, no es la sesión: es el scope.
 
+**22-sep: `b20f315` (el cartel en celular, contacto como página, la cabecera arreglada),
+publicado y cotejado** — las siete rutas 1:1, el bloque de contacto ya no está en la home, y
+el «dónde estoy» verificado contra producción: 13/13.
+
 **22-sep: `bf53bc7` (el menú marca dónde estás), publicado y cotejado** — las siete rutas 1:1,
 y la verificación de `aria-current` corrida **contra producción**, no contra el local: las diez
 secciones y las tres páginas internas dan lo esperado.
