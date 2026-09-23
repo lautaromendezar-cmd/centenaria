@@ -550,3 +550,10 @@ salió con 1429 líneas cambiadas para un cambio de 15. Se normalizó todo en el
 Deploys del 21-sep, todos cotejados: `3de818b` (ritual en celular), `10e6385` (Dónde comprar
 y Distribuí como secciones), `09bf264` («yerba mate» en dorado) y `a59fea3` (el interlineado
 de los títulos), este último ya sin el `-c` y 1:1 en las seis rutas miradas.
+
+**22-sep: `3702bf0` (la fábrica real de fondo en Historia), publicado y cotejado** — las siete
+rutas 1:1, `esc-historia-v4-2200.webp` 1:1 (127.302 bytes), y lo que se sacó devuelve 404
+(`esc-historia-v3-*`, `fabrica-hoy-*`, `frente-historia-v1-*`).
+⚠️ **`vercel deploy --prod --yes` falló con «Not authorized» y el login estaba bien**
+(`vercel whoami` devolvía `lautaromendezar-5992`). Lo que faltaba era el scope: sale con
+**`--scope lautaro-mendez-s-projects`**. Si vuelve a pasar, no es la sesión: es el scope.
