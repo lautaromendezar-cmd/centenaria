@@ -49,6 +49,7 @@ const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
     const cajas = await p.evaluate(() => {
       const out = [];
       document.querySelectorAll('.cabecera__nav a').forEach(a => {
+        if (a.closest('.cabecera__sub')) return;   /* el panel de Variedades esta cerrado */
         const r = document.createRange(); r.selectNodeContents(a);
         const c = r.getBoundingClientRect();
         if (!c.width || !c.height) return;

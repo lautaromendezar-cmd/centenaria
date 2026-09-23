@@ -47,7 +47,13 @@ const VARIANTES = {
       });
       const prev = nav.style.display;
       if (getComputedStyle(nav).display === 'none') nav.style.display = 'flex';
-      const items = [...nav.querySelectorAll('a')];
+      /* debajo del corte tambien aparece la hamburguesa y le come lugar a la nav:
+         escondida, o el minimo medido es el corte mismo y no el ancho real (23-sep,
+         daba 1040 en vez de 1014 por esto) */
+      const ham = document.querySelector('.cabecera__menu');
+      const prevHam = ham ? ham.style.display : '';
+      if (ham && getComputedStyle(ham).display !== 'none') ham.style.display = 'none';
+      const items = [...nav.querySelectorAll('a')].filter(a => !a.closest('.cabecera__sub'));  /* el panel desplegable no cuenta */
       /* "una sola fila" se mira por el CENTRO vertical, no por el top: desde el
          23-sep Tienda es una pildora mas alta que los otros items y con
          align-items:center su top queda unos px mas arriba sin haberse partido */
@@ -60,6 +66,7 @@ const VARIANTES = {
         && !altos.some(h => h > base * 1.6)
         && nr.left >= marca.right - 1;
       nav.style.display = prev;
+      if (ham) ham.style.display = prevHam;
       nav.innerHTML = original;
       return bien;
     }, ops, original);

@@ -53,7 +53,20 @@
   <nav class="cabecera__nav" aria-label="Principal">
     <a href="/#historia">Historia</a>
     <a href="/#origen">Origen</a>
-    <a href="/#variedades">Variedades</a>
+    <!-- Variedades lleva a la seccion de la home y ademas despliega las tres
+         variedades (23-sep): :hover y :focus-within, sin JS. El padding-top de
+         .cabecera__sub es el puente para que el mouse no "caiga" entre el item y
+         el panel. -->
+    <div class="cabecera__grupo">
+      <a href="/#variedades">Variedades</a>
+      <div class="cabecera__sub">
+        <div class="cabecera__panel">
+          <a href="/variedades/original/"><b>Original</b><span>Padr&oacute;n uruguayo &middot; la cl&aacute;sica</span></a>
+          <a href="/variedades/azul-con-palo/"><b>Azul &middot; Con Palo</b><span>Mistura de dos padrones</span></a>
+          <a href="/variedades/esencial/"><b>Esencial</b><span>Blend con car&aacute;cter</span></a>
+        </div>
+      </div>
+    </div>
     <a href="/#ritual">El ritual</a>
     <a href="/donde-comprar/" aria-current="page">Dónde comprar</a>
     <a href="/contacto/">Contacto</a>
@@ -71,6 +84,11 @@
     <a href="/#historia">Historia</a>
     <a href="/#origen">Origen</a>
     <a href="/#variedades">Variedades</a>
+    <div class="menu__sub">
+      <a href="/variedades/original/">Original</a>
+      <a href="/variedades/azul-con-palo/">Azul &middot; Con Palo</a>
+      <a href="/variedades/esencial/">Esencial</a>
+    </div>
     <a href="/#porque">Por qué elegirla</a>
     <a href="/#ritual">El ritual</a>
     <a href="/donde-comprar/" aria-current="page">Dónde comprar</a>

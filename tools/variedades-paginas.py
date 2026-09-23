@@ -90,7 +90,17 @@ PLANTILLA = u'''<!doctype html>
   <nav class="cabecera__nav" aria-label="Principal">
     <a href="/#historia">Historia</a>
     <a href="/#origen">Origen</a>
-    <a href="/#variedades" aria-current="true">Variedades</a>
+    <!-- Variedades lleva a la seccion de la home y ademas despliega las tres
+         variedades (23-sep): :hover y :focus-within, sin JS. El padding-top de
+         .cabecera__sub es el puente para que el mouse no "caiga" entre el item y
+         el panel. -->
+    <div class="cabecera__grupo">
+      <a href="/#variedades" aria-current="true">Variedades</a>
+      <div class="cabecera__sub">
+        <div class="cabecera__panel">
+%(sub_cab)s        </div>
+      </div>
+    </div>
     <a href="/#ritual">El ritual</a>
     <a href="/donde-comprar/">D&oacute;nde comprar</a>
     <a href="/contacto/">Contacto</a>
@@ -108,6 +118,8 @@ PLANTILLA = u'''<!doctype html>
     <a href="/#historia">Historia</a>
     <a href="/#origen">Origen</a>
     <a href="/#variedades" aria-current="true">Variedades</a>
+    <div class="menu__sub">
+%(sub_menu)s    </div>
     <a href="/#porque">Por qu&eacute; elegirla</a>
     <a href="/#ritual">El ritual</a>
     <a href="/donde-comprar/">D&oacute;nde comprar</a>
@@ -202,6 +214,11 @@ for v in V:
     d = dict(v)
     d['chips'] = u''.join(u'<li>%s</li>' % c for c in v['chips'])
     d['otras'] = u''.join(tarjeta(o) for o in V if o['slug'] != v['slug'])
+    # el submenu de Variedades, con la variedad de esta pagina marcada
+    d['sub_cab'] = u''.join(u'          <a href="/variedades/%s/"%s><b>%s</b><span>%s</span></a>\n'
+                            % (o['slug'], u' aria-current="page"' if o['slug'] == v['slug'] else u'', o['nombre'], o['sub']) for o in V)
+    d['sub_menu'] = u''.join(u'      <a href="/variedades/%s/"%s>%s</a>\n'
+                             % (o['slug'], u' aria-current="page"' if o['slug'] == v['slug'] else u'', o['nombre']) for o in V)
     carpeta = R + 'variedades/' + v['slug']
     if not os.path.isdir(carpeta): os.makedirs(carpeta)
     io.open(carpeta + '/index.html', 'w', encoding='utf-8', newline='').write(PLANTILLA % d)

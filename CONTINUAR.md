@@ -46,6 +46,17 @@ cómo está armado y las decisiones que no son obvias.
      Medido con `tools/cabecera.cjs`, que ahora compara centros verticales y no tops: la
      píldora es más alta y con el criterio viejo daba «>1600» en falso. El menú sigue entrando
      en 320×568 con los 9 ítems.
+  4. **Submenú de Variedades** (pedido de Lautaro, un rato después): en la cabecera,
+     «Variedades» despliega un panel con las tres (nombre en Fraunces + su volanta) con
+     `:hover` y `:focus-within`, sin JS: Tab llega a Variedades y el Tab siguiente entra al
+     panel. En el menú de pantalla completa van como un renglón chico debajo del ítem. En las
+     páginas de variedad la actual lleva `aria-current="page"` (lo pone la plantilla). Para
+     que el menú siguiera entrando en 320×568 con 12 ítems, el gap bajó de 2.2vh a 2vh y los
+     ítems de 4.8vh a 4.4vh. Herramientas: `tools/cabecera.cjs` ignora los enlaces del panel y
+     **esconde la hamburguesa mientras mide** (si no, el mínimo medido es el corte mismo: daba
+     1040 en vez de 1014), `tools/contraste-nav.cjs` ignora el panel cerrado,
+     `tools/menu-alto.cjs` (antes en scratchpad) mira el desborde del menú por grupos de
+     tamaño, y `tools/desplegable.cjs` abre el panel con mouse y con teclado.
   - **Ritmo (commit `2dc6ed1`, antes de los tres pedidos):** Lautaro sintió que «había que
     scrollear mucho entre sección y sección» después del arreglo del 22. Medido contra el
     árbol previo: **no era una regresión**, el scroll muerto era el mismo. Lo que sobraba
@@ -657,6 +668,8 @@ node tools/ritual.cjs 4740      # hoja de contactos del ritual fijado (agregá 3
 MSYS_NO_PATHCONV=1 node tools/contraste.cjs 4740 /variedades/original/   # y azul-con-palo, esencial (23-sep)
 MSYS_NO_PATHCONV=1 node tools/paginas.cjs 4740 /variedades/original/ /variedades/azul-con-palo/ /variedades/esencial/ /contacto/ /donde-comprar/ /vende-centenaria/
 node tools/hueco.cjs 4740 1440 900    # scroll muerto: rachas sin texto y % del documento (23-sep: 19,3%)
+node tools/menu-alto.cjs 4740          # el menú de pantalla completa entra en 320×568 (12 ítems desde el 23-sep)
+node tools/desplegable.cjs http://localhost:4740/ tools/_qc-desplegable   # el submenú de Variedades abre con mouse y con Tab
 ```
 
 Al cerrar el 23-sep: 6/6 escenarios, la home y las tres páginas de variedad en AA, la
