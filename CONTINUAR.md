@@ -804,3 +804,11 @@ siete páginas (las tres de variedad incluidas), `css/estilo.css`, `js/main.js`,
 **23-sep: `2e783e5` (el submenú de Variedades), publicado y cotejado** — las siete páginas,
 `css/estilo.css` y `js/main.js` 1:1 contra `HEAD`, y el panel abierto con mouse y con Tab
 verificado **contra producción** (`tools/desplegable.cjs`).
+
+**23-sep (noche): `e518f23` (se va el ritual fijado, el sello corrido, el celular, los iconos
+de Por qué elegirla), publicado y cotejado** — las cinco páginas miradas (`/`, `/contacto/`,
+`/donde-comprar/`, `/vende-centenaria/`, `/variedades/original/`), `css/estilo.css`,
+`js/main.js` y `js/monte.js` 1:1 contra `HEAD`, y el sello **verificado contra producción**:
+centrado desde la carga y en los dos pases (el interceptor de `style.transform`, en el
+scratchpad). El deploy salió con `--scope` a la primera. **Falta la prueba en el iPhone
+real, que la hace Lautaro.**
