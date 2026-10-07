@@ -77,6 +77,52 @@ Ojo con lo que el modelo agrega solo:
 3. Con las fotos del cliente se retoma el depósito y se pueden hacer placas con **un solo paquete grande**,
    que hoy no salen nítidas.
 
+## Campaña Meta 4:5 para sumar distribuidores (7-oct, misma tarde)
+
+Pedido de Nahuel, que tomó como referencia un carrusel de Rei Verde. **A Lautaro no le gusta ese diseño**: de ahí solo se tomó la estructura del mensaje.
+El objetivo es que escriban por WhatsApp (en Meta, CTA «Enviar mensaje de WhatsApp»).
+
+**El filtro es la clave.** En campañas anteriores escribía mucha gente que quiere revender desde su casa. Centenaria busca distribuidores
+con estructura que compren volumen, así que las piezas tienen que dejar afuera al que solo está probando.
+
+| Tanda | Carpeta (en `contenido-centenaria/ejemplos/`) | Qué tiene | Prompt |
+|---|---|---|---|
+| 1 | `ads/` | Tradición «100 años», mano con paquete «BUSCAMOS DISTRIBUIDORES», «Llevá Centenaria a tu región». No filtra | `out/ads/base.txt` |
+| 2 | `ads-estructura/` | «SOLO DISTRIBUIDORES Y MAYORISTAS» + «Logística propia / Cartera de comercios / Compra por volumen»; «Si movés volumen, hablemos» | `out/ads2/base.txt` |
+| 3 | `ads-volumen/` | Con fotos reales del depósito: pallet, carga de camión, fardo + paquete para dar escala, foto real retocada | `out/ads3/base.txt` |
+
+- **El teléfono se sacó** de todas las imágenes a pedido de Lautaro. El botón «Escribinos por WhatsApp» quedó sin número.
+  Se borró con inpaint de OpenCV; las versiones con número siguen en `out/ads/`.
+- **Logística real** (fotos y videos del cliente en `ref-deposito/`, convertidas en `ref-fardos/`): se despacha en
+  **fardos de papel kraft** con impresión verde agua (hojas, «seleme CENTENARIA YERBA MATE», sello redondo)
+  sobre pallets con film. Hay una camioneta blanca con la marca y un camión amarillo «Ervateira Seleme».
+  Pasando esas fotos como `--image`, la escala sale bien. Los fardos generados quedan más cuadrados
+  y prolijos que los reales; la foto real retocada es la más creíble.
+- **Hay que confirmar con el cliente** frases que se escribieron sin dato: «Trabajamos por pallet», «de todo el país».
+  Lo que mejor filtraría es una **compra mínima concreta** (Rei Verde pone «desde 200 kilos»): falta pedirle el dato a Nahuel.
+
+**Estado al cierre:** a Lautaro **no le gustó el diseño de ninguna de las tres tandas**. Va a buscar referencias
+y lo retoma desde casa. Lo que sí quedó validado: GPT Image 2, las referencias reales (paquete y fardos),
+el filtro de «con estructura / por volumen» y el texto del anuncio. Lo que hay que cambiar es la dirección visual.
+
+Texto del anuncio en Meta (con filtro):
+
+> Buscamos distribuidores y mayoristas con estructura propia 🚚
+> Si tenés logística, cartera de comercios y comprás por volumen, sumá Yerba Mate Centenaria: tres variedades, sin T.A.C.C., desde 1918.
+> Escribinos por WhatsApp.
+> *Venta exclusiva a distribuidores. No vendemos por unidad ni para reventa desde casa.*
+
+Títulos: «Solo distribuidores con estructura» · «Venta mayorista por volumen» · «Sumá Centenaria a tu distribuidora».
+
+## Para seguir desde otra PC
+
+La carpeta `contenido-centenaria/` está solo en la PC de la oficina. Para seguir desde otra:
+1. Bajar del Drive `contenido-centenaria-trabajo.zip` y descomprimirlo en `Desktop/Claude/`.
+   Tiene las referencias del paquete y de los fardos, los prompts y todos los ejemplos.
+   No incluye los videos originales: están en la PC de la oficina.
+2. Instalar el CLI: `npm i -g @higgsfield/cli`, después `higgsfield auth login` y una sola vez `higgsfield workspace set <id>`.
+3. Generar desde `contenido-centenaria/` con el comando de arriba, cambiando el prompt por el de la tanda.
+
 ## Prompt base (copia textual de `contenido-centenaria/out/b/base.txt`)
 
 ```text
