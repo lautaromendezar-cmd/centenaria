@@ -68,6 +68,19 @@ Ojo con lo que el modelo agrega solo:
 - Existen **dos amarillos reales**: el «con palo» del folleto, que es el que usamos, y el
   «despalada / padrón uruguayo» de la foto del stand. No mezclarlos en una misma placa.
 
+## Sin «Consultanos para distribuir» (8-oct)
+
+El cliente pidió sacar esa línea de las 8 placas: la persona que las sube solo hace la publicidad,
+no es distribuidora, y la frase prestaba a confusión. Quedan el separador y el @.
+
+- No se regeneró nada. La línea se borró con inpaint de OpenCV y después se le devolvió el grano
+  del fondo, copiado de una franja limpia de la misma placa (si no, quedan manchas lisas en la tela y la madera).
+- Scripts en `contenido-centenaria/comp/`: `borrar-linea.py` (detecta el texto y hace el inpaint) y
+  `borrar-linea-textura.py` (le devuelve el grano). Se corren desde la carpeta de las placas
+  y reciben como argumento la carpeta de salida, que tiene que tener una subcarpeta `sin/`.
+- Entregables: `contenido-centenaria/drive/Placas distribuidores 9x16 - sin consultanos/`
+  + `Centenaria-placas-sin-consultanos.zip`, con los mismos nombres que las originales.
+
 ## Lo que sigue
 
 1. El cliente elige ambientes. Faltan las otras placas: «Hacé crecer tu góndola»,
