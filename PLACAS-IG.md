@@ -15,7 +15,7 @@ Primera placa hecha: **«Sumá Centenaria a tu negocio»** en varios ambientes.
 | Prompt base | al final de este archivo; copia local en `centenaria/material/placas-ig/` (ignorada por git) |
 | Renderizador HTML→PNG y la variante por composición | `contenido-centenaria/comp/` (`render.py`, `placa-a.html`) |
 
-Las imágenes no se suben al repo porque pesan demasiado. Están en el Drive y en la PC de la oficina.
+Las imágenes no se suben a este repo porque es público. Las placas, las referencias, los prompts y los scripts están en el repo privado `ads-latina-centenaria`, en `centenaria/placas-distribuidores-9x16/`. Lo pesado (los 2k y las descartadas) está en el Drive.
 
 ## La regla: el paquete no se toca
 
